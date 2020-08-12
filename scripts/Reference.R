@@ -35,7 +35,7 @@ tab.dir <- paste0(dir,'/tables/')
 fig.dir <- paste0(dir,'/images/')
 
 # Tables for manual edits/error checks
-tab.check.dir <- paste0(tab.dir,'/manual_check_',date(Sys.Date()),'/')
+tab.check.dir <- paste0(tab.dir,'/issues/',date(Sys.Date()),'/')
 
 # custom colors
 paper_col <- c('#DDCC77','#009988','#882255')
