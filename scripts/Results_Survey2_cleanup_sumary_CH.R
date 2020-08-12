@@ -1,0 +1,874 @@
+# Code for Cleaning Survey 2
+# Adapted by CH from Code by YL
+# 22 July 2020
+
+source(file="scripts/Reference.R")    # include the reference.r file
+
+
+#### Load Data ####
+
+csv     <- paste0(dat.dir, '/survey2_for_cleanup.csv');csv
+csv.com <- paste0(dat.dir, '/survey2_5_common_paper_selection.csv');csv.com
+
+s2_sur <- read.csv(csv,     stringsAsFactors = F) %>% select(-X)
+s2_com <- read.csv(csv.com, stringsAsFactors = F) 
+names(s2_sur)
+names(s2_com)
+
+### check col names
+names(s2_com) %in% names(s2_sur)
+tt <- names(s2_sur) %in% names(s2_com); tt
+!tt
+names(s2_sur)[!tt] ## get the col names not included in the common paper data
+
+s2_com_update <- s2_com %>%
+  mutate(
+    timestamp = 'common paper',
+    coder_id = 'common paper',
+    scale_entire = 'common paper', 
+    num_time_pd = 'common paper', 
+    year_start = 'common paper',  
+    year_end = 'common paper', 
+    temp_res = 'common paper',
+    temp_res_unk= 'common paper', 
+    b4_dur_after= 'common paper', 
+    peri_tele_flows= 'common paper',
+    peri_tele_sep= 'common paper', 
+    peri_tele_sep_unk= 'common paper', 
+    scale_biodiv= 'common paper', 
+    list_biodiv_metrics= 'common paper', 
+    further_discuss= 'common paper'
+  )
+# select(-c(num_countries))
+### reorder the col by names
+s2_com_update2 <- s2_com_update[, names(s2_sur)]
+
+### row bind two data
+survey2_cleanup <- rbind(s2_sur, s2_com_update2)
+
+
+#### Data Cleanup ####
+
+### Columns kept for analysis
+names(survey2_cleanup)
+# cols_remove <- c("timestamp", "coder_id", "author")
+df0 <- survey2_cleanup %>%
+  # dplyr::select(-cols_remove) %>%
+  dplyr::mutate(
+    taxa = gsub(',', ';', taxa_list),
+    list_countries   = gsub('India\\;\\;', 'India\\;', list_countries),
+    list_countries   = gsub(',', ';', list_countries),
+    biodiv_countries = gsub(',', ';', biodiv_countries),
+    biodiv_countries = trimws(biodiv_countries),
+  )
+
+
+
+df1 <- df0 %>%  dplyr::mutate(
+  data_type_biodiv=gsub('biological\\;', "Biological field observations;",
+                        data_type_biodiv),
+  data_type_biodiv=gsub('\\;rs', "\\;Remote sensing",
+                        data_type_biodiv),
+  data_type_biodiv=gsub('\\;aggregate', "\\;Aggregate institutional data",
+                        data_type_biodiv),
+  data_type_biodiv=gsub(';', ',', data_type_biodiv),
+  data_type_biodiv=ifelse(data_type_biodiv=="biological", 
+                          "Biological field observations",
+                          data_type_biodiv))
+
+
+
+dm_ls <- c('Field observations', 
+           'Social science field surveys',
+           'Remote sensing',
+           'Aggregate institutional data'
+)
+
+
+
+df2 <- df1 %>% dplyr::mutate(
+  data_type_meta=gsub('biological', 'Field observations', data_type_meta),
+  data_type_meta=gsub('Social science field surveys', 
+                      'social', data_type_meta),
+  data_type_meta=gsub('\\;aggregate', 
+                      '\\;Aggregate institutional data',  data_type_meta),
+  data_type_meta=gsub('social', 
+                      'Social science field surveys', data_type_meta),
+  data_type_meta=gsub(';', ',', data_type_meta),
+  data_type_meta= trimws(data_type_meta),
+  data_type_meta = ifelse(data_type_meta%in%dm_ls, data_type_meta, 'Other'),
+  
+  data_source_biodiv=gsub(';', ',', data_source_biodiv),
+  data_source_meta  =gsub(';', ',', data_source_meta),
+  
+  taxa = gsub('Plants\\/trees\\/shrubs', 'Plants', taxa),
+  taxa = gsub('Not specified|\\/global study', '', taxa),
+  taxa = trimws(taxa), ## Remove leading and/or trailing whitespace
+  taxa = ifelse(taxa == '', "Other", taxa),
+  taxa = ifelse(paper_id == 292, "Fish", taxa),
+  
+)
+
+df   <- df2
+df99 <- df
+
+# Taxa Cleanup
+unique(df$taxa_list)
+unique(df$taxa)
+
+taxa0 <- df %>% select(paper_id, taxa)
+taxa1 <- data.frame(taxa0, do.call(rbind, str_split(taxa0$taxa,';'))) 
+
+
+ls.taxa <- c(
+  "Amphibians", "Birds", "Fish", 
+  "Invertebrates", "Mammals", 
+  "Other", 
+  "Plants", "Reptiles"     
+)
+
+
+taxa2 <- taxa1 %>%
+  gather(key = 'key', value = taxa, 3:ncol(.)) %>%
+  dplyr::mutate(
+    #   taxa = gsub('Plants\\/trees\\/shrubs', 'Plants', taxa),
+    #   taxa = gsub('Not specified|\\/global study', '', taxa),
+    taxa = trimws(taxa), ## Remove leading and/or trailing whitespace
+    taxa = ifelse(taxa%in%ls.taxa, taxa, 'Other'),
+    #   taxa = ifelse(taxa == '', "Other", taxa)
+  ) %>%
+  distinct(paper_id, taxa, .keep_all = T)
+
+sort(unique(taxa2$taxa))
+
+## taxa percentage = taxa studies/total number of the papers
+n_paper <- length(unique(df$paper_id)); n_paper
+taxa2 %>%
+  group_by(taxa) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct)
+
+# Function
+
+func_update_col <- function(dt, col_name){
+  dw1 <- dt %>%
+    spread(key = 'key', value = 3)  %>% ## the 3rd column 
+    dplyr::mutate(na_col = NA) ## as an assitant col, as some data only have one col
+  
+  dw1[is.na(dw1)] <- ""         ## NA as ''
+  dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>% 
+    as.data.frame() %>%
+    dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
+                  V2 = sub('\\;$', '', V2))
+  
+  df99 <- dw2 %>% 
+    dplyr::select(2) %>%
+    rename(c('V2' = col_name)) %>%
+    cbind(., dw1) %>%
+    dplyr::select(1:2) %>%
+    right_join(., df99[, !names(df99) %in% col_name], 
+               by = 'paper_id') ## remove the old, and join
+  return(df99)
+  
+}
+
+# Continents
+
+a <- 'North America \\(includes Hawaii \\& all countries above Panama Canal\\)'
+b <- 'Oceania \\(Australia\\, New Zealand\\, Fiji\\, etc\\)'
+
+conti0 <- df %>% select(paper_id, list_continents) %>%
+  dplyr::mutate(
+    list_continents = gsub(a, 'North America', list_continents),
+    list_continents = gsub(b, 'Oceania', list_continents)
+  )
+unique(conti0$list_continents)
+unique(conti0$list_continents)
+
+conti1 <- data.frame(conti0, do.call(rbind, str_split(conti0$list_continents,','))) 
+
+conti2 <- conti1 %>%
+  gather(key = 'key', value = list_continents, 3:ncol(.)) %>%
+  dplyr::mutate(
+    list_continents = trimws(list_continents) ## Remove leading and/or trailing whitespace
+  ) %>%
+  distinct(paper_id, list_continents, .keep_all = T)
+
+conti2 %>%
+  group_by(list_continents) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+# ggplot()+
+# geom_col(aes(x=list_continents, y=pct))
+
+
+df99 <- func_update_col(dt = conti2, col_name = 'list_continents')
+
+# Habitat
+
+h0 <- df %>% select(paper_id, habitat) 
+
+unique(h0$habitat)
+
+h1 <- data.frame(h0, do.call(rbind, str_split(h0$habitat,','))) 
+
+h2 <- h1 %>%
+  gather(key = 'key', value = habitat, 3:ncol(.)) %>%
+  dplyr::mutate(
+    habitat = trimws(habitat) ## Remove leading and/or trailing whitespace
+  ) %>%
+  distinct(paper_id, habitat, .keep_all = T)
+
+h2 %>%
+  group_by(habitat) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+
+
+df99 <- func_update_col(dt = h2, col_name = 'habitat')
+
+# Data Type
+
+unique(df2$data_type_biodiv)
+unique(df2$data_type_meta)
+
+db_ls <- c('Biological field observations', 
+           'Social science field observations',
+           'Remote sensing',
+           'Aggregate institutional data'
+)
+
+db0 <- df2 %>% select(paper_id, data_type_biodiv) 
+db1 <- data.frame(db0, do.call(rbind, str_split(db0$data_type_biodiv,','))) 
+db2 <- db1 %>%
+  gather(key = 'key', value = data_type_biodiv, 3:ncol(.)) %>%
+  dplyr::mutate(
+    data_type_biodiv = trimws(data_type_biodiv),
+    data_type_biodiv = ifelse(data_type_biodiv %in% db_ls, 
+                              data_type_biodiv, 'Other')
+  ) %>%
+  distinct(paper_id, data_type_biodiv, .keep_all = T)
+
+db2 %>%
+  group_by(data_type_biodiv) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+
+
+df99 <- func_update_col(dt = db2, col_name = 'data_type_biodiv')
+
+
+# df99 <- func_update_col(dt = taxa2, col_name = 'taxa')  
+
+dm0 <- df2 %>% select(paper_id, data_type_meta) 
+# dm1 <- data.frame(dm0, do.call(rbind, str_split(dm0$data_type_meta,','))) 
+dm1 <- dm0
+
+dm_ls <- c('Field observations', 
+           'Social science field surveys',
+           'Remote sensing',
+           'Aggregate institutional data'
+)
+dm2 <- dm1 %>%
+  # gather(key = 'key', value = data_type_meta, 3:ncol(.)) %>%
+  dplyr::mutate(
+    key = 'NA',
+    data_type_meta = trimws(data_type_meta),
+    data_type_meta = ifelse(data_type_meta%in%dm_ls, data_type_meta, 'Other'),
+    
+  ) %>%
+  select(1,3,2) %>%
+  distinct(paper_id, data_type_meta, .keep_all = T)
+
+unique(dm2$data_type_meta)
+
+dm2 %>%
+  group_by(data_type_meta) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+
+
+df99 <- func_update_col(dt = dm2, col_name = 'data_type_meta')
+
+# Tele Category
+
+tc0 <- df %>% select(paper_id, tele_cat) %>%
+  dplyr::mutate(
+    tele_cat = ifelse(paper_id==1616, 'Knowledge Transfer,Investment',
+                      tele_cat))
+
+unique(df$tele_cat)
+str(tc0)
+
+tc1 <- data.frame(tc0, do.call(rbind, str_split(tc0$tele_cat,','))) %>%
+  select(-tele_cat)
+
+tc_ls <- c(
+  'Trade',
+  'Migration (human)',
+  'Migration (non-human)',
+  'Species Dispersal',
+  'Tourism',
+  'Knowledge Transfer',
+  'Technology Transfer',
+  'Investment',
+  'Water Transfer',
+  'Waste Transfer',
+  'Energy Transfer'
+)
+
+tc2 <- tc1 %>%
+  gather(key = 'key', value = tele_cat, 2:ncol(.)) %>%
+  dplyr::mutate(
+    ### based on Aurora's double-check
+    tele_cat = ifelse(paper_id==227,  'Trade', tele_cat),
+    tele_cat = ifelse(paper_id==92,  'Trade', tele_cat),
+    tele_cat = ifelse(paper_id==3697,  'Trade', tele_cat),
+    tele_cat = ifelse(paper_id==4832,  'Trade', tele_cat),
+    tele_cat = ifelse(paper_id==396,  'Tourism', tele_cat),
+    
+    tele_cat = ifelse(paper_id==292,  'Species Dispersal', tele_cat),
+    tele_cat = ifelse(paper_id==2050,  'Species Dispersal', tele_cat),
+    
+    tele_cat = ifelse(paper_id==6396,  'Waste Transfer', tele_cat),
+  ) %>%
+  
+  dplyr::mutate(
+    tele_cat = gsub('Migration nonhuman', 'Migration (non-human)', tele_cat),
+    tele_cat = gsub('.*trade.*', 'Trade', tele_cat),
+    tele_cat = gsub('.*Water.*', 'Water Transfer', tele_cat),
+    tele_cat = gsub('.*introduction.*|.*nvasive.*', 'Migration (non-human)', tele_cat),
+    
+    
+    tele_cat = trimws(tele_cat) ## Remove leading and/or trailing whitespace
+  ) %>%
+  distinct(paper_id, tele_cat, .keep_all = T) %>%
+  mutate(
+    tele_cat_ori = tele_cat,
+    tele_cat     = ifelse(tele_cat%in%tc_ls, tele_cat, 'Other')) %>%
+  ### based on Aurora's double-check
+  mutate(tele_cat = ifelse(paper_id %in% c(3335, 109, 1752, 2704, 6493, 4207), 
+                           'remove', tele_cat))
+
+### check "Other" in tc_cat
+tc2_check <- tc2 %>%
+  dplyr::filter(tele_cat     == 'Other', 
+                tele_cat_ori != 'Other')
+fname <- paste0(dat.dir, '/survey2_tc_cat_check.csv'); fname
+# write.csv(x = tc2_check, file = fname, row.names = F)
+
+
+### summarize results and update this survey response
+tc2 <- tc2 %>% dplyr::select(-tele_cat_ori)
+sort(unique(tc2$tele_cat))
+
+tc2 %>%
+  group_by(tele_cat) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+
+df99 <- func_update_col(dt = tc2, col_name = 'tele_cat')
+
+# Data Source
+
+dsb0 <- df %>% select(paper_id, data_source_biodiv) 
+
+unique(df$data_source_biodiv)
+
+dsb1 <- data.frame(
+  dsb0, do.call(rbind, str_split(dsb0$data_source_biodiv,','))) %>%
+  select(-data_source_biodiv)
+
+dsb2 <- dsb1 %>%
+  gather(key = 'key', value = data_source_biodiv, 2:ncol(.)) %>%
+  dplyr::mutate(
+    data_source_biodiv = trimws(data_source_biodiv) 
+  ) %>%
+  distinct(paper_id, data_source_biodiv, .keep_all = T)
+
+dsb2 %>%
+  group_by(data_source_biodiv) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+
+df99 <- func_update_col(dt = dsb2, col_name = 'data_source_biodiv')
+
+dsm0 <- df %>% select(paper_id, data_source_meta) 
+
+unique(df$data_source_meta)
+
+dsm1 <- data.frame(
+  dsm0, do.call(rbind, str_split(dsm0$data_source_meta,','))) %>%
+  select(-data_source_meta)
+
+dsm2 <- dsm1 %>%
+  gather(key = 'key', value = data_source_meta, 2:ncol(.)) %>%
+  dplyr::mutate(
+    data_source_meta = trimws(data_source_meta) 
+  ) %>%
+  distinct(paper_id, data_source_meta, .keep_all = T)
+
+dsm2 %>%
+  group_by(data_source_meta) %>%
+  tally() %>%
+  mutate(pct = n/n_paper * 100) %>%
+  arrange(pct) #%>%
+
+
+df99 <- func_update_col(dt = dsm2, col_name = 'data_source_meta')
+
+# List countries
+
+c0 <- df %>% select(paper_id, list_countries) %>% 
+  
+  ### contact coder and update 
+  dplyr::mutate(
+    list_countries = ifelse(paper_id==109,  'Costa Rica', list_countries),
+    list_countries = ifelse(paper_id==566,  'Nepal', list_countries),
+    list_countries = ifelse(paper_id==1893, 'China', list_countries),
+    list_countries = ifelse(paper_id==2036, 'Indonesia', list_countries),
+    list_countries = ifelse(paper_id==3081, 'Romanaia', list_countries),
+    list_countries = ifelse(paper_id==4136, 'China', list_countries),
+    list_countries = ifelse(paper_id==4427, 'Canada', list_countries),
+    list_countries = ifelse(paper_id==4772, 'Nepal', list_countries),
+    ## Anna
+    list_countries = ifelse(paper_id==5477, 'Indonesia', list_countries),
+    list_countries = ifelse(paper_id==5875, 'Brazil', list_countries),
+    ## Ciara, Emily
+    list_countries = ifelse(paper_id==6511, 'Unclear', list_countries),
+    list_countries = ifelse(paper_id==5844, 'Solomon Islands', list_countries),
+    ## Ming Lei
+    list_countries = ifelse(paper_id==713, 'Many', list_countries),
+    list_countries = ifelse(paper_id==1681, 'Bulgaria', list_countries),
+    
+    list_countries = ifelse(paper_id==6948, 'Brazil', list_countries),
+    list_countries = ifelse(paper_id==6502, 'Canada; USA', list_countries),
+    # list_countries = ifelse(paper_id==4772, 'Nepal', list_countries),
+    
+  ) #%>%
+# dplyr::filter(paper_id != 109)
+
+unique(df$list_countries)
+
+c1 <- data.frame(
+  c0, do.call(rbind, str_split(c0$list_countries,';'))) #%>%
+# select(-list_countries)
+
+c2 <- c1 %>%
+  gather(key = 'key', value = list_countries, 3:ncol(.)) %>%
+  dplyr::mutate(
+    list_countries = trimws(list_countries),
+    list_countries = str_to_title(list_countries)
+    
+  ) %>%
+  dplyr::distinct(paper_id, list_countries, .keep_all = T) %>% 
+  as.data.frame() %>%
+  # dplyr::mutate(id = paste0(paper_id, substr(list_countries, 1,3))) %>%
+  dplyr::mutate(
+    list_countries=gsub('Usa|United States', 'United States of America', list_countries),
+    list_countries=gsub('Russia', 'Russian Federation', list_countries),
+    list_countries=gsub('Romanaia', 'Romania', list_countries),
+    list_countries=gsub('Tanzania', 'United Republic of Tanzania', list_countries),
+    list_countries=gsub('Ethopia', 'Ethiopia', list_countries),
+    list_countries=gsub('St Lucia', 'Bolivia (Plurinational State of)', list_countries),
+    list_countries=gsub('Republic Of Maldives', 'Maldives', list_countries),
+    list_countries=gsub('.*Rest Of The World.*', 'Rest Of The World', list_countries),
+    list_countries=gsub('.*Bolivia.*', 
+                        'Bolivia (Plurinational State of)', list_countries),
+    list_countries=gsub('.*Brazil.*', 'Brazil', list_countries),
+    list_countries=gsub('.*Eu.*', 'EUE', list_countries),
+    list_countries=gsub('.*Antarctic.*', 'Antarctica', list_countries),
+    list_countries=gsub('.*Many.*', 'Many', list_countries),
+  )
+
+library(writexl)
+getwd()
+fname <- paste0(dat.dir)
+# write_xlsx(c2, "_list_countries_4Coding.xlsx")
+
+### read in coded coutry names
+ctr <- readxl::read_excel('_Country codes_names.xlsx', 1, "A1:B283") 
+
+### join the two data
+c3 <- merge(c2, ctr, by.x='list_countries', by.y='ctr_fao', all.x=T) %>%
+  dplyr::mutate(
+    iso_fao = ifelse(list_countries == 'Rest Of The World', 'ROW', iso_fao),
+    iso_fao = ifelse(list_countries == 'Antarctica', 'ATA', iso_fao),
+    iso_fao = ifelse(list_countries == 'EUE', 'EUE', iso_fao),
+    # iso_fao = ifelse(is.na(iso_fao), 'Unclear', iso_fao),
+  ) %>%
+  arrange(!is.na(iso_fao), iso_fao, list_countries) 
+
+### check data with coder
+c3_check <- c3 %>%
+  filter(is.na(iso_fao)) %>%
+  filter(list_countries != 'Many') %>%
+  left_join(x = ., y= df99[, c('coder_id', 'paper_id')], by = "paper_id") %>%
+  arrange(coder_id, paper_id)
+c3_check$list_countries
+fname <- paste0(dat.dir, '/survey2_list_countries_check.csv'); fname
+write.csv(x = c3_check, file = fname, row.names = F)
+
+c4 <- c3 %>%
+  dplyr::mutate(list_countries = iso_fao,
+                # key = iso_fao,
+  ) %>% 
+  dplyr::select(-iso_fao) %>%
+  dplyr::select(paper_id, key, list_countries) %>%
+  dplyr::mutate(list_countries = ifelse(
+    list_countries=='EUE', eue, list_countries))
+### 
+df99 <- func_update_col(dt = c4, col_name = 'list_countries')
+
+### List BD Countries
+
+bc0 <- df %>% select(paper_id, biodiv_countries) %>%
+  dplyr::mutate(
+    
+    ## Ruishan
+    biodiv_countries = ifelse(paper_id==109,  'Costa Rica', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==566,  'Nepal', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==854,  'USA', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==1893,  'China', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2036,  'Indonesia', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2214,  'Chile', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2402,  'Indonesia', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2504,  'China', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==3081,  'Romanaia', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4136,  'China', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4207,  'India', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4427,  'Canada', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4772,  'Nepal', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==6348,  'Germany', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==3790002,  'China', biodiv_countries),
+    
+    ## anna
+    biodiv_countries = ifelse(paper_id==5477,  'Indonesia', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==5875,  'Brazil', biodiv_countries),
+    
+    ## yuqian
+    biodiv_countries = ifelse(paper_id==4209,  'many', biodiv_countries),
+    
+    ## yingjie
+    biodiv_countries = ifelse(paper_id==2222,  'many', biodiv_countries),
+    
+    ##
+    biodiv_countries = ifelse(paper_id==45,  'Brazil', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==92,  'remove', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==332,  'Ethiopia', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==357,  'Canada', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==523,  'Many', biodiv_countries),
+    
+    biodiv_countries = ifelse(paper_id==654,  'Spain', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==897,  'Slovakia; Poland', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2546,  'EU', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2606,  'Germany', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==2704,  'Cyprus', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==3151,  'France', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==3165,  'Italy', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4087,  'USA', biodiv_countries),
+    
+    biodiv_countries = ifelse(paper_id==4132,  'Norway', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4155,  'USA', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==4841,  'remove', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==5486,  'Spain', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==5905,  'Brazil', biodiv_countries),
+    
+    biodiv_countries = ifelse(paper_id==5966,'Brazil;Paraguay;Argentina;Bolivia;Uruguay',
+                              biodiv_countries),
+    biodiv_countries = ifelse(paper_id==6396,  'Belarus; Ukraine', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==6493,  'USA', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==6502,  'USA; Canada', biodiv_countries),
+    biodiv_countries = ifelse(paper_id==6845,  'French Polynesia', biodiv_countries),
+    
+  )
+
+
+
+### xing ying
+xy     <- '/amendments and supplements from Emily Xing.xlsx'
+xy.xls <- paste0(dat.dir, xy); xy.xls
+xy <- readxl::read_excel(xy.xls) %>%
+  dplyr::select(c(1, countries_bio)) %>%
+  dplyr::filter(!is.na(countries_bio))
+names(xy) <- c('paper_id', 'biodiv_countries')
+
+
+### filter out xing ying's data
+bc01 <- bc0 %>% 
+  dplyr::filter(biodiv_countries !='no such data in Chinese survey')
+bc02 <- bc0 %>% 
+  dplyr::filter(biodiv_countries =='no such data in Chinese survey') %>%
+  dplyr::select(-biodiv_countries) %>%
+  left_join(., xy, by='paper_id')
+bc0 <- rbind(bc01, bc02) %>%
+  dplyr::mutate(
+    biodiv_countries = gsub(',', ';', biodiv_countries),
+    biodiv_countries = gsub(' and ', ';', biodiv_countries),
+    biodiv_countries = gsub('3\\; ', '', biodiv_countries),
+    biodiv_countries = gsub('25 EU countries', 'EUE', biodiv_countries)
+  )
+
+
+###
+unique(bc0$biodiv_countries)
+
+
+bc1 <- data.frame(
+  bc0, do.call(rbind, str_split(bc0$biodiv_countries,';'))) #%>%
+# dplyr::select(-biodiv_countries)
+
+bc2 <- bc1 %>%
+  gather(key = 'key', value = biodiv_countries, 3:ncol(.)) %>%
+  dplyr::mutate(
+    biodiv_countries = trimws(biodiv_countries),
+    biodiv_countries = str_to_title(biodiv_countries),
+  ) %>%
+  dplyr::distinct(paper_id, biodiv_countries, .keep_all = T) %>% 
+  as.data.frame() %>%
+  # dplyr::mutate(id = row_number())
+  dplyr::mutate(
+    biodiv_countries=gsub('Usa|United States', 'United States of America',
+                          biodiv_countries),
+    biodiv_countries=gsub('Russia', 'Russian Federation', biodiv_countries),
+    biodiv_countries=gsub('Romanaia', 'Romania', biodiv_countries),
+    biodiv_countries=gsub('Tanzania', 'United Republic of Tanzania', biodiv_countries),
+    biodiv_countries=gsub('Ethopia', 'Ethiopia', biodiv_countries),
+    biodiv_countries=gsub('Zimbabw', 'Zimbabwe', biodiv_countries),
+    biodiv_countries=gsub('St Lucia', 'Bolivia (Plurinational State of)',
+                          biodiv_countries),
+    biodiv_countries=gsub('Republic Of Maldives', 'Maldives', biodiv_countries),
+    biodiv_countries=gsub('.*Rest Of The World.*', 
+                          'Rest Of The World', biodiv_countries),
+    biodiv_countries=gsub('.*Bolivia.*', 
+                          'Bolivia (Plurinational State of)', biodiv_countries),
+    biodiv_countries=gsub('.*Brazil.*', 'Brazil', biodiv_countries),
+    biodiv_countries=gsub('.*Eu.*', 'EUE', biodiv_countries),
+    biodiv_countries=gsub('.*Antarctic.*', 'Antarctica', biodiv_countries),
+    biodiv_countries=gsub('.*Many.*', 'Many', biodiv_countries),
+  )
+
+library(writexl)
+getwd()
+fname <- paste0(dat.dir)
+# write_xlsx(bc2, "_biodiv_countries_4Coding.xlsx")
+
+bc3 <- merge(bc2, ctr, by.x='biodiv_countries', by.y='ctr_fao', all.x=T) %>%
+  dplyr::mutate(
+    iso_fao = ifelse(biodiv_countries == 'Rest Of The World', 'ROW', iso_fao),
+    iso_fao = ifelse(biodiv_countries == 'Antarctica', 'ATA', iso_fao),
+    iso_fao = ifelse(biodiv_countries == 'EUE', 'EUE', iso_fao),
+    # iso_fao = ifelse(is.na(iso_fao), 'Unclear', iso_fao),
+  ) %>%
+  arrange(!is.na(iso_fao), iso_fao, biodiv_countries) 
+
+### check data with coder
+bc3_check <- bc3 %>%
+  filter(is.na(iso_fao)) %>%
+  filter(biodiv_countries != 'Many') %>%
+  left_join(x = ., y= df99[, c('coder_id', 'paper_id')], by = "paper_id") %>%
+  arrange(coder_id, paper_id)
+fname <- paste0(dat.dir, '/survey2_biodiv_countries_check.csv'); fname
+# write.csv(x = bc3_check, file = fname, row.names = F)
+
+bc4 <- bc3 %>%
+  dplyr::mutate(bc3_check = iso_fao,
+                # key = iso_fao,
+  ) %>% 
+  dplyr::select(-iso_fao) %>%
+  dplyr::select(paper_id, key, bc3_check) %>% 
+  dplyr::mutate(bc3_check = ifelse(
+    bc3_check=='EUE', eue, bc3_check))
+### 
+df99 <- func_update_col(dt = bc4, col_name = 'biodiv_countries')
+# df99 <- func_update_col(dt = dsm2, col_name = 'data_source_meta')
+
+### Save to Local
+
+today <- format(Sys.Date(), "%Y%m%d"); today
+fname <- paste0(dat.dir, '/survey2_cleaned_', today, '.csv'); fname
+write.csv(x = df99, file = fname, row.names = F)
+
+fname <- paste0(dir, '/data/cleaned_surveys/survey2_cleaned_', today, '.csv'); fname
+write.csv(x = df99, file = fname, row.names = F)
+
+#### Map ####
+
+library(rnaturalearthdata)
+library(rnaturalearth)
+library(sf)
+shp <- ne_countries(scale = 10, returnclass = 'sf') %>% #st_as_sf() %>%
+  select(name, iso_a3) %>% ## , economy, income_grp
+  # filter(name != 'Antarctica') %>%
+  # filter(name == 'France') %>%
+  dplyr::mutate(
+    iso_a3 = if_else(name == 'France', 'FRA', iso_a3),
+    iso_a3 = if_else(name == 'Norway', 'NOR', iso_a3))
+# plot(shp[1])
+
+shp %>% filter(name == 'Norway')
+
+### add new country name that are consistant with names uned in SDG data
+# library(readxl)
+# xls.shp.info <- paste0(dir, '/update_0503_SUM_dist/_input_data/ne_10m_admin_0_countries/Table/ne_10m_admin_0_countries-Export_Output.xls')
+# 
+# nation_new_name <- 
+#   read_excel(path = xls.shp.info,
+#              sheet = "dat", col_names = T) %>%
+#   select(ADMIN, ADM0_A3, nation_name)
+# names(nation_new_name)
+# nation_new_name <- as.data.frame(nation_new_name[,-c(3,4)])
+
+### theme, font ------------------------------------------------------- #
+font      <- 'sans' ## = "TT Arial"
+font_size <- 6.5 ## max = 7; min = 5 for Nature Sustainability
+map_theme <- ggpubr::theme_transparent()+
+  theme(
+    axis.title.x=element_blank(),
+    axis.title.y=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    legend.position = c(0.09, 0.38),
+    legend.key.size = unit(0.3, "cm"),
+    # legend.key.height = unit(0.5, "cm"),
+    legend.key = element_rect(fill = NA, colour = NA, size = 0.25),
+    
+    panel.background = element_rect(fill = "transparent", colour = NA),
+    plot.background = element_rect(fill = "transparent", colour = NA),
+    legend.background = element_rect(fill = "transparent", colour = NA),
+    legend.box.background = element_rect(fill = "transparent", colour = NA),
+    text=element_text(family=font, size=font_size))
+
+# List Countries
+
+### 
+ctr_sys <- df99 %>%
+  select(paper_id, list_countries) %>%
+  data.frame(., do.call(rbind, str_split(.$list_countries,';'))) %>%
+  gather(key = 'key', value = list_countries, 3:ncol(.)) %>%
+  dplyr::mutate(list_countries = trimws(list_countries)) %>%
+  dplyr::distinct(paper_id, list_countries, .keep_all = T) %>% 
+  filter(list_countries != '') %>%
+  arrange(paper_id) %>%
+  group_by(list_countries) %>%
+  tally()%>% 
+  arrange(desc(n)) #%>%
+# str(ctr_sys)
+###
+
+
+### join new name table
+shp_df <- shp %>% 
+  left_join(., ctr_sys, by=c("iso_a3" = "list_countries"))
+
+### check the join
+shp_df_check <- merge(
+  shp, ctr_sys, by.x = "iso_a3", by.y = "list_countries", all.y=T) %>%
+  st_drop_geometry()
+
+# str(shp_df)
+unique(shp_df$n)
+
+
+### breaks and colors
+library(RColorBrewer)
+library(classInt)
+var <- shp_df$n
+max <- max(var, na.rm = T); max
+min <- min(var, na.rm = T); min
+hist(var)
+
+breaks <- seq(min, max, 2); breaks; length(breaks)
+breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
+myPalette <- colorRampPalette((brewer.pal(8, "Greens")));# myPalette; rev
+colors <- myPalette(length(breaks)); colors
+title <- 'Entire system\nNumber of papers'
+
+fig1 <- ggplot(data = shp_df) + 
+  geom_sf(aes(fill = n), color='gray50', size=0.01) + 
+  # scale_fill_manual(values = colors,
+  #                   labels = labels) +
+  
+  # scale_fill_continuous(
+  #   low="#F7FBFF", high="#084594",  guide="colorbar", na.value="gray90") +
+  
+  scale_fill_gradientn(
+    name=title,
+    colours= colors, na.value = "gray90", 
+    # values=c(0,0.19,0.2,0.5,0.8,0.81,1),
+    limits = c(min,max),
+    breaks = breaks) +
+  guides(fill = guide_legend(label.hjust = 0, label = T, 
+                             reverse = T, title = title))+
+  map_theme
+fig1
+
+dir
+fname <- paste0(dir.fig, '/Fig_map_country_sys_v0707.jpg'); fname
+ggsave(fname, fig1, width = 18, height = 9, units = 'cm', limitsize = FALSE,
+       bg = "transparent")
+
+### BD Countries
+ctr_bio <- df99 %>%
+  select(paper_id, biodiv_countries) %>%
+  data.frame(., do.call(rbind, str_split(.$biodiv_countries,';'))) %>%
+  gather(key = 'key', value = biodiv_countries, 3:ncol(.)) %>%
+  dplyr::mutate(biodiv_countries = trimws(biodiv_countries)) %>%
+  dplyr::distinct(paper_id, biodiv_countries, .keep_all = T) %>% 
+  filter(biodiv_countries != '') %>%
+  arrange(paper_id) %>%
+  group_by(biodiv_countries) %>%
+  tally()%>% 
+  arrange(desc(n)) #%>%
+# str(ctr_bio)
+
+
+### join new name table
+shp_df <- shp %>% 
+  left_join(., ctr_bio, by=c("iso_a3" = "biodiv_countries"))
+
+# str(shp_df)
+unique(shp_df$n)
+
+### check the join
+shp_df_check <- shp %>% 
+  right_join(., ctr_bio, by=c("iso_a3" = "biodiv_countries"))
+
+### breaks and colors
+var <- shp_df$n
+max <- max(var, na.rm = T); max
+min <- min(var, na.rm = T); min
+hist(var)
+
+breaks <- seq(min, max, 2); breaks; length(breaks)
+breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
+myPalette <- colorRampPalette((brewer.pal(8, "Blues")));# myPalette; rev
+colors <- myPalette(length(breaks)); colors
+title <- 'Biodiversity system\nNumber of papers'
+
+### plot
+fig2 <- ggplot(data = shp_df) + 
+  geom_sf(aes(fill = n), color='gray50', size=0.01) + 
+  scale_fill_gradientn(
+    name = title,
+    colours= colors, na.value = "gray90", 
+    limits = c(min,max), breaks = breaks) +
+  guides(fill = guide_legend(label.hjust = 0, label = T,
+                             reverse = T, title = title))+
+  map_theme
+fig2
+
+dir
+fname <- paste0(dir.fig, '/Fig_map_country_bio_v0707.jpg'); fname
+ggsave(fname, fig2, width = 18, height = 9, units = 'cm', limitsize = FALSE,
+       bg = "transparent")

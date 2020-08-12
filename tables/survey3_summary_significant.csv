@@ -1,0 +1,17 @@
+"","effect","significant","count"
+"1","Changed (e.g. species composition)","FALSE",18
+"2","Changed (e.g. species composition)","Not evaluated",4
+"3","Changed (e.g. species composition)","TRUE",94
+"4","Negative (detrimental)","FALSE",45
+"5","Negative (detrimental)","Not evaluated",59
+"6","Negative (detrimental)","TRUE",190
+"7","Neutral (only when there is absolutely no difference in metrics)","FALSE",66
+"8","Neutral (only when there is absolutely no difference in metrics)","Not evaluated",166
+"9","Neutral (only when there is absolutely no difference in metrics)","TRUE",8
+"10","Neutral (only when there is absolutely no difference in metrics)",NA,1
+"11","Positive (beneficial)","FALSE",27
+"12","Positive (beneficial)","Not evaluated",20
+"13","Positive (beneficial)","TRUE",69
+"14","Unclear","FALSE",10
+"15","Unclear","Not evaluated",6
+"16","Unclear","TRUE",1

@@ -1,0 +1,226 @@
+---
+title: "Results_5_Common_Papers"
+author: "Min"
+date: "6/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 2. R Setup
+The same as Vero's, including packages and dirs. 
+
+# 3. Load data
+
+```{r}
+# libraries
+  library("dplyr")
+  library("plyr")         # sort data
+  #library("reshape2")     # sort data
+
+# Root directory
+  dir <- paste0(getwd())
+
+# Data directory
+  dat.dir <- paste0(dir,'\\data\\')
+  
+# Final tables
+  tab.dir <- paste0(dir,'\\tables\\')
+  
+# Final figures
+  fig.dir <- paste0(dir,'\\figures\\')
+
+# survey 5 common papers
+  survey1.5p <- read.csv("survey1_common_papers.csv", header=T, stringsAsFactors=FALSE, check.names=F)
+  survey2.5p <- read.csv("survey2_common_papers.csv", header=T, stringsAsFactors=FALSE, check.names=F)
+  survey3.5p <- read.csv("survey3_common_papers.csv", header=T, stringsAsFactors=FALSE, check.names=F)
+
+```
+
+# 4. Acceptance rates and Final decision
+
+```{r}
+# get summary
+survey1.5p.rate <-	ddply(survey1.5p, .(paper_id), summarize,
+			# total count of entries
+        count=length(coder_id),
+        accept=sum(status=='accept'),
+        accept.coder = paste(coder_id[which(status=="accept")], collapse = ", "),
+        reject=sum(status=='reject'),
+        reject.coder = paste(coder_id[which(status=="reject")], collapse = ", "),
+        # percent acceptance
+        accept_rate=round(sum(status=='accept')/length(coder_id), 2),
+        final_decision=ifelse(accept > reject, 'accept', 'reject'))
+
+# write.csv(survey1.5p.rate, paste0(tab.dir,'survey1_5_common_paper_accept_rate.csv'), row.names=F)
+
+write.table(survey1.5p.rate, paste0(tab.dir,"survey1_5_common_paper_accept_rate.csv"), sep=",")
+```
+
+# 5. Select most common responses in Survey 1
+```{r}
+# select most repeated responses in each column
+detach("package:plyr", unload=TRUE)
+
+survey1.5p.sel <- survey1.5p %>% 
+	group_by(paper_id) %>% 
+	# this function works only with "dplyr" not "plyr". if you turn on both libraries, this fuction makes conflicted.
+	count(year_pub, author, C4_study, meet_all_4, status) %>% 
+	top_n(1)
+
+# change form to data.frame
+survey1.5p.sel.df <- as.data.frame(survey1.5p.sel)
+
+
+# combine all answers of explicit_distant_impacts & explain_distant_impacts
+library(plyr)
+
+survey1.5p.comb <- ddply(survey1.5p, .(paper_id), summarize,
+			
+        explicit_distant_impacts = paste(explicit_distant_impacts[!is.na(explicit_distant_impacts)], collapse = "; "),
+        
+        explain_distant_impacts = paste(explain_distant_impacts[!is.na(explain_distant_impacts)], collapse = "; ")
+        )
+
+# merge together
+survey1.5p.sel.df2 <- merge(survey1.5p.sel.df, survey1.5p.comb, by="paper_id")
+survey1.5p.sel.df2$coder_id <- "all"
+survey1.5p.sel.df2 <- survey1.5p.sel.df2[,c(10,1,2,3,4,5,8,9,6)]
+
+# input most common answers manually (col_name: explicit_distant_impacts)
+## paper id: 1488
+survey1.5p.sel.df2$explicit_distant_impacts[survey1.5p.sel.df2$paper_id==1488] <- "No"
+
+## paper id: 2577
+survey1.5p.sel.df2$explicit_distant_impacts[survey1.5p.sel.df2$paper_id==2577] <- "No"
+
+## paper id: 3456
+survey1.5p.sel.df2$explicit_distant_impacts[survey1.5p.sel.df2$paper_id==3456] <- "Yes"
+
+## paper id: 3924
+survey1.5p.sel.df2$explicit_distant_impacts[survey1.5p.sel.df2$paper_id==3924] <- "No"
+
+## paper id: 6655
+survey1.5p.sel.df2$explicit_distant_impacts[survey1.5p.sel.df2$paper_id==6655] <- "Yes"
+
+# write.csv(survey1.5p.sel.df2, paste0(tab.dir,'survey1_5_common_paper_selection.csv'), row.names=F)
+
+write.table(survey1.5p.sel.df2, paste0(dat.dir,'common_papers\\survey1_5_common_paper_selection.csv'), sep=",")
+```
+
+# 6. Select most common responses in Survey 2
+
+```{r}
+## select final 'accepted' papers (ID: 1488, 3456, 3924, 6655)
+# drop rejects
+keep.5p <-  subset(survey1.5p.rate, final_decision=='accept')
+
+## Subset only 'accepted' paper from the final decision
+survey2.5p.accept <- merge(survey2.5p, keep.5p[,c(1,8)], by="paper_id")
+
+## select most repeated responses in each column
+# select columns that are used for our analyses
+detach("package:plyr", unload=TRUE)
+
+survey2.5p.sel <- survey2.5p.accept %>% 
+	group_by(paper_id) %>% 
+	# this function works only with "dplyr" not "plyr". if you turn on both libraries, this fuction makes conflicted.
+	count(paper_id, year_pub, author, taxa_list) %>%
+	top_n(1)
+
+survey2.5p.sel2 <- survey2.5p.accept %>% 
+	group_by(paper_id) %>% 
+	# this function works only with "dplyr" not "plyr". if you turn on both libraries, this fuction makes conflicted.
+	count(paper_id, list_countries) %>%
+	top_n(1)
+
+survey2.5p.sel3 <- survey2.5p.accept %>% 
+	group_by(paper_id) %>% 
+	# this function works only with "dplyr" not "plyr". if you turn on both libraries, this fuction makes conflicted.
+	count(paper_id, habitat, list_continents, meta_var_type) %>%
+	top_n(1)
+	
+survey2.5p.sel4 <- survey2.5p.accept %>% 
+	group_by(paper_id) %>% 
+	# this function works only with "dplyr" not "plyr". if you turn on both libraries, this fuction makes conflicted.
+	count(paper_id, tele_cat, data_source_biodiv, data_type_biodiv) %>%
+	top_n(1)	
+
+survey2.5p.sel5 <- survey2.5p.accept %>% 
+	group_by(paper_id) %>% 
+	# this function works only with "dplyr" not "plyr". if you turn on both libraries, this fuction makes conflicted.
+	count(paper_id, data_source_meta, data_type_meta) %>%
+	top_n(1)
+
+# colum binds
+survey2.5p.sel.df <- as.data.frame(cbind(survey2.5p.sel, survey2.5p.sel2, survey2.5p.sel3, survey2.5p.sel4, survey2.5p.sel5[2:5,]))
+
+survey2.5p.sel.df2 <- survey2.5p.sel.df[,c(-5,-6,-8,-9,-13,-14,-18,-19,-22)]
+
+# combine all answers of comments & biodiv_countries & num_biodiv_metrics
+library(plyr)
+
+survey2.5p.comb <- ddply(survey2.5p.accept, .(paper_id), summarize,
+			
+        comments = paste(comments[!is.na(comments)], collapse = "; "),
+        
+        biodiv_countries = paste(biodiv_countries[!is.na(biodiv_countries)], collapse = "; "), 
+        
+        num_biodiv_metrics = paste(num_biodiv_metrics[!is.na(num_biodiv_metrics)], collapse = "; ")
+        )
+
+# merge together
+survey2.5p.sel.df3 <- merge(survey2.5p.sel.df2, survey2.5p.comb, by="paper_id")
+survey2.5p.sel.df3$coder_id <- "all"
+survey2.5p.sel.df3 <- survey2.5p.sel.df3[,c(16,1:15)]
+
+# input most common answers manually (col_name: biodiv_countries; num_biodiv_metrics)
+## paper id: 1488
+survey2.5p.sel.df3$biodiv_countries[survey2.5p.sel.df3$paper_id==1488] <- "Colombia"
+survey2.5p.sel.df3$num_biodiv_metrics[survey2.5p.sel.df3$paper_id==1488] <- 3
+
+## paper id: 3456
+survey2.5p.sel.df3$biodiv_countries[survey2.5p.sel.df3$paper_id==3456] <- "Argentina"
+survey2.5p.sel.df3$num_biodiv_metrics[survey2.5p.sel.df3$paper_id==3456] <- 2
+
+## paper id: 3924
+survey2.5p.sel.df3$biodiv_countries[survey2.5p.sel.df3$paper_id==3924] <- "Costa Rica"
+survey2.5p.sel.df3$num_biodiv_metrics[survey2.5p.sel.df3$paper_id==3924] <- 2
+
+## paper id: 6655
+survey2.5p.sel.df3$biodiv_countries[survey2.5p.sel.df3$paper_id==6655] <- "Peru"
+survey2.5p.sel.df3$num_biodiv_metrics[survey2.5p.sel.df3$paper_id==6655] <- 1
+
+# write.csv(survey2.5p.sel.df3, paste0(tab.dir,'survey2_5_common_paper_selection.csv'), row.names=F)
+
+write.table(survey2.5p.sel.df3, paste0(dat.dir,'common_papers\\survey2_5_common_paper_selection.csv'), sep=",")
+```
+
+# 7. Select most common responses in Survey 3
+
+```{r}
+## select final 'accepted' papers (ID: 1488, 3456, 3924, 6655)
+# drop rejects
+keep.5p <-  subset(survey1.5p.rate, final_decision=='accept')
+
+## Subset only 'accepted' paper from the final decision
+survey3.5p.accept <- merge(survey3.5p, keep.5p[,c(1,8)], by="paper_id")
+
+# paper_id : 1488, 3456, 3924, 6655
+# coder_id : A_Torres, C_Hovis, MG_Chung, C_Hovis
+survey3.5p.accept.1488 <- survey3.5p.accept[which((survey3.5p.accept$paper_id==1488) & (survey3.5p.accept$coder_id == "A_Torres")),]
+
+survey3.5p.accept.3456 <- survey3.5p.accept[which((survey3.5p.accept$paper_id==3456) & (survey3.5p.accept$coder_id == "C_Hovis")),]
+
+survey3.5p.accept.3924 <- survey3.5p.accept[which((survey3.5p.accept$paper_id==3924) & (survey3.5p.accept$coder_id == "MG_Chung")),]
+
+survey3.5p.accept.6655 <- survey3.5p.accept[which((survey3.5p.accept$paper_id==6655) & (survey3.5p.accept$coder_id == "C_Hovis")),]
+
+survey3.5p.accept.m <- rbind(survey3.5p.accept.1488, survey3.5p.accept.3456, survey3.5p.accept.3924, survey3.5p.accept.6655)
+
+# write.csv(survey3.5p.accept.m, paste0(tab.dir,'survey3_5_common_paper_selection.csv'), row.names=F)
+
+write.table(survey3.5p.accept.m, paste0(dat.dir,'common_papers\\survey3_5_common_paper_selection.csv'), sep=",")
+```
