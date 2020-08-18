@@ -1,0 +1,676 @@
+---
+title: "Results_Chinese"
+author: "Yingjie"
+date: "5/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 2. R Setup
+The same as Vero's, including packages and dirs. 
+
+# 3. Load data
+
+```{r}
+# libraries
+  library("tidyverse")    # plots and working with complex tables
+  library("RColorBrewer") # colors for graphics
+  library("plyr")         # sort data
+  library("reshape")      # sort data
+  library("reshape2")     # sort data
+  library('tmap')         # visualizing maps
+  library("sp")           # working with maps
+  library("lubridate")    # time data
+  library("gplots")       # venn diagrams
+
+
+library(readxl)
+library(here)
+here()
+dir <- dirname(rstudioapi::getActiveDocumentContext()$path); dir
+setwd(dir)
+dir.dt.cn <- paste0((dirname(dir)), '/Coding/Responses/'); dir.dt.cn
+
+xls1 <- paste0(dir.dt.cn,'EmilyX_Survey 1_0514.xlsx')
+xls2 <- paste0(dir.dt.cn,'EmilyX_Survey 2_0514.xlsx')
+xls3 <- paste0(dir.dt.cn,'EmilyX_Survey 3_0514.xlsx')
+
+# surveys
+survey1 <- read_excel(xls1, sheet = 1)
+survey2 <- read_excel(xls2, sheet = 1)
+survey3 <- read_excel(xls3, sheet = 1)
+
+# manual edits
+# s1_manual <- read.csv()
+```
+
+# 4. Data cleanup
+
+## 4.1 Survey 1
+
+### Edit columns
+
+```{r}
+### get colnames
+colnames(survey1)
+
+colnames_new1 <- c(
+  'id_sys', 'timestamp', 'time_spent', 'link_source', 'access_way', 'ip_sys',
+  
+  "coder_id", "paper_id", "year_pub", "author",
+  "sup_check", 
+  
+  "C1_biodiv",  ## biodiv impacts
+  "C2_meta",
+  "C3_quant",   ## Biodiversity Quantification
+  "C4_study",   ## Study Type
+  "meet_all_4", 
+  # "sup_check",  
+  "comments" #,
+  # "further_discuss",
+  # "explicit_distant_impacts",
+  # "explain_distant_impacts"
+  ) 
+
+length(colnames(survey1))
+length(colnames_new1)
+length(colnames(survey1)) == length(colnames_new1) ## should be *TRUE*
+### change colnames 
+colnames(survey1) <- colnames_new1
+
+survey1$comments
+survey1 <- survey1 %>%
+  dplyr::select(-c('id_sys', 'time_spent', 'link_source', 
+                   'access_way', 'ip_sys')) %>%
+  ## add cols not appeared in this Chinese version
+  mutate(
+    ### add col names not included in this version
+    further_discuss = "no such data in Chinese survey", 
+    explicit_distant_impacts = "no such data in Chinese survey", 
+    explain_distant_impacts  = "no such data in Chinese survey") %>% 
+  ### convert Chinese to English
+  mutate_all(
+    funs(str_replace(string = ., pattern = "\\(空\\)", replacement = 'na')))
+
+survey1$comments
+```
+
+Change structure (if needed)
+
+```{r}
+# check structure
+  #str(survey1)
+```
+
+
+### Data preview
+
+```{r}
+paste('number of entries:',nrow(survey1))
+paste('number of columns:',ncol(survey1))
+paste('number of papers:',length(unique(survey1$paper_id)))
+paste('number of observers:',length(unique(survey1$coder_id)))
+
+paste('observer names:')
+paste(unique(survey1$coder_id),collapse="; ")
+```
+
+### Fix answers
+
+```{r}
+# convert timestamp to POSIX format
+head(survey1$timestamp)
+survey1$timestamp <- lubridate::ymd_hms(as.character(survey1$timestamp))
+
+### numberic answer to meaningful ones
+survey1_update <- survey1
+
+survey1_update$sup_check <- 
+  mapvalues(survey1_update$sup_check,
+            from = 1:3, # original integer responses
+            to   = c('Yes',
+                     'No', 
+                     'No Supplementary Material Provided'))
+
+
+survey1_update$C4_study <- 
+  mapvalues(survey1_update$C4_study,
+            from = 1:6, # original integer responses
+            to   = c('Observational study',
+                     'Experimental study', 
+                     'Modeling study',
+                     'Review', 
+                     'Data analysis', 
+                     'Other'))
+
+survey1_update$meet_all_4 <- 
+  mapvalues(survey1_update$meet_all_4,
+            from = 1:2, # original integer responses
+            to   = c('Yes','No'))
+
+
+```
+
+
+
+
+### Save to the main data folder
+```{r}
+dir
+fname <- paste0(dir, '/data/survey_data/', 'survey1_cn_processed.csv')
+write.csv(x = survey1_update, file = fname, row.names = F)
+```
+
+
+
+
+
+## 4.2 Survey 2
+
+### Edit columns
+
+```{r}
+### get colnames
+colnames(survey2)
+
+colnames_new2 <- c(
+  'id_sys', 'timestamp', 'time_spent', 'link_source', 'access_way', 'ip_sys',
+  "coder_id", "paper_id", "year_pub", "author",
+  "scale_entire",    ## 5. Scale of Entire System
+
+  "num_countries",
+  "list_countries",  ## 7. Countries Analyzed
+  
+  ### 8. scale of biodiversity metrics --> # "scale_biodiv",
+  'scale_biodiv_subnational',     'scale_biodiv_international_1_continent',
+  'scale_biodiv_international_2_continents', 'scale_biodiv_global', 
+  
+  ### 9.continents represented 
+  # "list_continents",
+  'list_continents_North_America', 'list_continents_South_America',
+  'list_continents_Asia',          'list_continents_Europe',
+  'list_continents_Africa',        'list_continents_Antarctica', 
+  'list_continents_Oceania',       'list_continents_unknown',
+  
+  # 'habitat',
+  'habitat_Terrestrial',	'habitat_Freshwater',	
+  'habitat_Marine',       'habitat_Not_specified',
+  
+  # "taxa_list",
+  'taxa_list_Birds',	     'taxa_list_Mammals', 'taxa_list_Reptiles',
+  'taxa_list_Amphibians',  'taxa_list_Fish', 	  'taxa_list_Invertebrates',
+  'taxa_list_Plants',	     'taxa_list_Other',
+
+  "year_start",
+  "year_end",
+  "num_time_pd",
+  ### 15. temporal resolution
+  'temp_res_Daily',	      'temp_res_Weekly',	  'temp_res_Monthly',
+  'temp_res_Seasonally',	'temp_res_Annually',	
+  'temp_res_Unknown',     'temp_res_Other', 
+  ### 16. temporal resolution if unknow
+  'temporal_resolution_if_unknow', ## need to be change to "temp_res_unk",
+  
+  "b4_dur_after",
+  "peri_tele_flows", ## Specific Peri- or Telecoupled Flow(s)
+  "meta_var_type",
+  
+  # "tele_cat",
+  'tele_cat_Trade', 	            'tele_cat_Migration_human',
+  'tele_cat_Migration_nonhuman',  'tele_cat_Species_Dispersal',
+  'tele_cat_Tourism',	
+  'tele_cat_Knowledge Transfer', 	
+  'tele_cat_Technology_Transfer', 'tele_cat_Investment',
+  'tele_cat_Water_Transfer',      'tele_cat_Waste_Transfer',
+  'tele_cat_Energy_Transfer',     'tele_cat_Other',
+  
+  "peri_tele_sep",
+  "peri_tele_sep_unk",
+  
+  # "data_type_biodiv", ## 23 source of bio
+  'data_source_biodiv_Primary', 'data_source_biodiv_Secondary', 
+  'data_source_biodiv_Other',
+                       ## 24. source of mc
+  'data_source_meta_Primary', 'data_source_meta_Secondary', 
+  'data_source_meta_Other',
+
+  # "data_type_meta", ## 25. type of bio data
+  'data_type_biodiv_biological', 'data_type_biodiv_social', 
+  'data_type_biodiv_rs',         'data_type_biodiv_aggregate',
+  'data_type_biodiv_other',
+  
+  # "data_type_meta", ## 26. types of mc data
+  'data_type_meta_biological', 'data_type_meta_social', 
+  'data_type_meta_rs',         'data_type_meta_aggregate',
+  'data_type_meta_other',
+
+  ### no such data in this survey??
+  
+  # "list_biodiv_metrics",
+  # "biodiv_countries",
+  
+  "num_biodiv_metrics",
+  "further_discuss",
+  "comments") 
+
+
+colnames_new2[duplicated(colnames_new2)]
+
+
+length(colnames(survey2))
+length(colnames_new2)
+length(colnames(survey2)) == length(colnames_new2) ## should be *TRUE*
+### change colnames 
+colnames(survey2) <- colnames_new2
+
+survey2$comments
+survey2 <- survey2 %>%
+  dplyr::select(-c('id_sys', 'time_spent', 'link_source', 
+                   'access_way', 'ip_sys')) %>%
+  ## add cols not appeared in this Chinese version
+  mutate(
+    ### add col names not included in this version
+    # scale_biodiv        = "no such data in Chinese survey",
+    list_biodiv_metrics = "no such data in Chinese survey", 
+    biodiv_countries    = "no such data in Chinese survey") %>%
+    ### convert Chinese to English
+  mutate_all(
+    funs(str_replace(string = ., pattern = "\\(空\\)", replacement = 'na')))
+
+
+survey2$comments
+```
+
+
+
+### Data preview
+
+```{r}
+paste('number of entries:',nrow(survey2))
+paste('number of columns:',ncol(survey2))
+paste('number of papers:',length(unique(survey2$paper_id)))
+paste('number of observers:',length(unique(survey2$coder_id)))
+
+paste('observer names:')
+paste(unique(survey2$coder_id),collapse="; ")
+```
+
+
+
+### Change data structure
+
+```{r}
+# check structure
+#str(survey1)
+
+# cols_use <- "^(paper_id|sp_|entire_|taxa_|temp_res_|tele_cat_|data_source_biodiv_|data_source_meta_|data_type_biodiv_|data_type_meta_|conti_)"
+
+# cols_remove <- "^(sp_|entire_|taxa_|temp_res_|tele_cat_|data_source_biodiv_|data_source_meta_|data_type_biodiv_|data_type_meta_|conti_)"
+
+
+cols_ls <- c('scale_biodiv', 'habitat', 'taxa_list', 'temp_res', 'tele_cat',
+             'data_source_biodiv', 'data_source_meta','data_type_biodiv',
+             'data_type_meta', 'list_continents')
+
+cols_remove <- paste0("^(", paste(cols_ls, collapse='_|'), "_)")
+
+s20 <- survey2 %>% dplyr::select(matches(cols_remove)) ## to be processed cols
+s21 <- survey2 %>% dplyr::select(-matches(cols_remove))## reduced dataframe
+
+### copy this reduced dataframe for updating use
+survey2_update <- s21
+
+for (pt in cols_ls) {
+  mch <- paste0("^(paper_id|", pt, ')'); 
+  # print(mch)
+  si <- survey2 %>%
+    dplyr::select(matches(mch)) %>%
+    gather(key = key, value = value, starts_with(pt)) %>%
+    dplyr::group_by(paper_id) %>%
+    filter(value > 0) %>%
+    dplyr::summarise(key = paste(key, collapse = ";")) %>%
+    dplyr::mutate(key = gsub(paste0(pt, '_'), '', key)) %>%
+    dplyr::mutate(key = gsub('_', ' ', key)) #%>%
+  ### length of the records
+  print(paste0('Total rows of ', pt, '------ : ', nrow(si)))
+  ### remane the dataframe
+  names(si) <- c('paper_id', pt)
+  ### join to the reduced dataframe
+  survey2_update <- left_join(survey2_update, si, by = 'paper_id')
+}
+
+names(survey2_update)
+
+survey2_update <- survey2_update %>%
+  dplyr::rename(., temp_res_unk = temporal_resolution_if_unknow)
+
+#### Test code
+# pt <- 'taxa'  ## problem term
+# mch <- paste0("^(paper_id|", pt, ')'); mch
+# s2i <- survey2 %>%
+#   dplyr::select(matches(mch)) %>%
+#   gather(key = key, value = value, starts_with(pt)) %>%
+#   dplyr::group_by(paper_id) %>%
+#   filter(value > 0) %>%
+#   dplyr::summarise(key = paste(key, collapse = ";")) %>%
+#   dplyr::mutate(key = gsub(paste0(pt, '_'), '', key)) %>%
+#   dplyr::mutate(key = gsub('_', ' ', key)) #%>%
+```
+
+
+
+
+Merge multiple rows into one by group using R
+
+```{r}
+# df <- data.frame(id = c(1,1,1,2,3,3),
+#                  val = c('a','b','c','d','e','f'))
+# 
+# dt <- df %>%
+#   dplyr::group_by(id) %>%
+#   # dplyr::mutate(new1 = paste(unlist(val), collapse =";")) #%>%
+#   dplyr::summarise(new = paste(val, collapse = ";"))
+```
+
+
+
+### Format dates and extract unique papers
+
+
+```{r}
+# convert timestamp to POSIX format
+head(survey2_update$timestamp)
+survey2_update$timestamp <-
+  lubridate::ymd_hms(as.character(survey2_update$timestamp))
+str(survey2_update$timestamp)
+
+```
+
+
+
+### Fix answers
+```{r}
+### numberic answer to meaningful ones
+survey2_update$scale_entire <- 
+  mapvalues(survey2_update$scale_entire,
+            from = 1:4, # original integer responses
+            to   = c('Sub-national (within-country region)',
+                     'Internaitonal (within a continent; e.g., European Union)',
+                     'Intercontinental (>2 continents)',
+                     'Global (>100 countires)'))
+
+
+survey2_update$meta_var_type <- 
+  mapvalues(survey2_update$meta_var_type,
+            from = 1:3, # original integer responses
+            to   = c('Continuous',
+                     'Categorical', 
+                     'Other'))
+
+survey2_update$peri_tele_sep <- 
+  mapvalues(survey2_update$peri_tele_sep,
+            from = 1:3, # original integer responses
+            to   = c('Yes','No', 'Unclear'))
+
+
+survey2_update$further_discuss <- 
+  mapvalues(survey2_update$further_discuss,
+            from = 1:2, # original integer responses
+            to   = c('Yes','No'))
+
+# survey2_update$num_biodiv_metrics  <- 
+#   mapvalues(survey2_update$num_biodiv_metrics,
+#             from = 1:2, # original integer responses
+#             to   = c('Yes','No'))
+```
+
+
+### Save to the main data folder
+```{r}
+dir
+fname <- paste0(dir, '/data/survey_data/', 'survey2_cn_processed.csv')
+write.csv(x = survey2_update, file = fname, row.names = F)
+```
+
+
+
+
+## 4.3 Survey 3
+
+### Edit columns
+
+```{r}
+### get colnames
+colnames(survey3)
+
+colnames_new3 <- c(
+  'id_sys', 'timestamp', 'time_spent', 'link_source', 'access_way', 'ip_sys',
+  
+  "paper_id",
+  
+  # "taxa",
+  'taxa_Birds',	'taxa_Mammals',	      'taxa_Reptiles', 'taxa_Amphibians',
+  'taxa_Fish', 	'taxa_Invertebrates',	'taxa_Plants',	 'taxa_Other',
+  
+  "entry_id", ## 3、Subset ID
+  
+  # "taxon_or_func",
+  "taxon_or_func_Taxonomic",  "taxon_or_func_Functional", 
+  
+  # "biodiv_cat_1sp",
+  'biodiv_cat_1sp_Abundance', 
+  'biodiv_cat_1sp_Occurrence', 
+  'biodiv_cat_1sp_With_inspecies_diversity',
+  'biodiv_cat_1sp_Population dynamics', 
+  'biodiv_cat_1sp_NA', 
+  'biodiv_cat_1sp_Other', 
+  
+  # "biodiv_cat_multsp",
+  "biodiv_cat_multsp_Diversity", "biodiv_cat_multsp_Richness",
+  "biodiv_cat_multsp_Evenness",  "biodiv_cat_multsp_Composition",
+  "biodiv_cat_multsp_Phylogenetic","biodiv_cat_multsp_Abundance",
+  "biodiv_cat_multsp_Occurence", "biodiv_cat_multsp_NA",
+  "biodiv_cat_multsp_Other",
+  
+  # "biodiv_cat_habitat", 
+  "biodiv_cat_habitat_Amount", "biodiv_cat_habitat_Quality",
+  "biodiv_cat_habitat_NA",     "biodiv_cat_habitat_Other",
+  
+  # "scale",
+  "scale_Alpha","scale_Beta","scale_Gamma", "scale_NA",
+  
+  # "biodiv_temp_res",
+  'biodiv_temp_res_Day',    'biodiv_temp_res_Week',	  
+  'biodiv_temp_res_Month',  'biodiv_temp_res_Seasonal',	
+  'biodiv_temp_res_Annual', 'biodiv_temp_res_Unknown',         
+  'biodiv_temp_res_Other', 
+  
+  # "effect",
+  "effect_Positive", "effect_Negative", "effect_Neutral", 
+  "effect_Changed",  "effect_Unclear", 
+  
+  "significant",
+  "p_value",
+  "notes"
+  
+  ### not included
+  # "coder_id"
+  )
+
+
+length(colnames(survey3))
+length(colnames_new3)
+length(colnames(survey3)) == length(colnames_new3) ## should be *TRUE*
+### change colnames 
+names(survey3) <- colnames_new3
+
+names(survey3)
+drop.cols <- c('id_sys', 'time_spent', 'link_source', 
+               'access_way', 'ip_sys')
+
+survey31 <- survey3 %>% as.data.frame() %>%
+  select(-one_of(drop.cols)) %>%
+  ## add cols not appeared in this Chinese version
+  mutate(
+    unique_id = paste0(paper_id, entry_id), ## create an unique id
+    ### add col names not included in this version
+    coder_id        = "E_Xing") %>%
+    ### convert Chinese to English
+  mutate_all(
+    funs(str_replace(string = ., pattern = "\\(空\\)", replacement = 'na')))
+
+```
+
+
+
+### Data preview
+
+```{r}
+paste('number of entries:',nrow(survey31))
+paste('number of columns:',ncol(survey31))
+paste('number of papers:',length(unique(survey31$paper_id)))
+paste('number of observers:',length(unique(survey31$coder_id)))
+
+paste('observer names:')
+paste(unique(survey31$coder_id),collapse="; ")
+```
+
+
+
+### Change data structure
+
+```{r}
+# check structure
+#str(survey1)
+
+# cols_use <- "^(paper_id|sp_|entire_|taxa_|temp_res_|tele_cat_|data_source_biodiv_|data_source_meta_|data_type_biodiv_|data_type_meta_|conti_)"
+
+# cols_remove <- "^(sp_|entire_|taxa_|temp_res_|tele_cat_|data_source_biodiv_|data_source_meta_|data_type_biodiv_|data_type_meta_|conti_)"
+
+
+
+cols_ls <- c('taxa', 'biodiv_cat_1sp', 'biodiv_cat_multsp', 'taxon_or_func', 
+             'biodiv_cat_habitat', 'scale', 'biodiv_temp_res', 
+             'effect')
+
+cols_remove <- paste0("^(", paste(cols_ls, collapse='_|'), "_)"); cols_remove
+
+s30 <- survey31 %>% dplyr::select(matches(cols_remove)) ## to be processed cols
+s31 <- survey31 %>% dplyr::select(-matches(cols_remove))## reduced dataframe
+
+### copy this reduced dataframe for updating use
+survey3_update <- s31
+length(unique(survey3_update$unique_id))
+
+for (pt in cols_ls) {
+  mch <- paste0("^(unique_id|", pt, ')'); 
+  # print(mch)
+  si <- survey31 %>%
+    dplyr::select(matches(mch)) %>%
+    gather(key = key, value = value, starts_with(pt)) %>%
+    dplyr::group_by(unique_id) %>%
+    dplyr::filter(value > 0) %>%
+    dplyr::summarise(key = paste(key, collapse = ";")) %>%
+    dplyr::mutate(key = gsub(paste0(pt, '_'), '', key)) %>%
+    dplyr::mutate(key = gsub('_', ' ', key)) #%>%
+  ### length of the records
+  print(paste0('Total rows of ', pt, '------ : ', nrow(si)))
+  ### remane the dataframe
+  names(si) <- c('unique_id', pt)
+  ### join to the reduced dataframe
+  survey3_update <- left_join(survey3_update, si, by = 'unique_id')
+}
+
+names(survey3_update)
+
+### remove this man-made col
+survey3_update <- survey3_update %>% select(-unique_id) %>%
+  mutate()
+```
+
+
+
+
+Merge multiple rows into one by group using R
+
+```{r}
+# df <- data.frame(id = c(1,1,1,2,3,3),
+#                  val = c('a','b','c','d','e','f'))
+# 
+# dt <- df %>%
+#   dplyr::group_by(id) %>%
+#   # dplyr::mutate(new1 = paste(unlist(val), collapse =";")) #%>%
+#   dplyr::summarise(new = paste(val, collapse = ";"))
+```
+
+
+### Fix answers
+```{r}
+### numberic answer to meaningful ones
+survey3_update$significant <- 
+  mapvalues(survey3_update$significant,
+            from = 1:3, # original integer responses
+            to   = c('True',
+                     'False',
+                     'Not evaluated'))
+
+```
+
+
+### Format dates and extract unique papers
+
+We will repeat this for the other surveys, too. 
+
+```{r}
+# convert timestamp to POSIX format
+head(survey3_update$timestamp)
+survey3_update$timestamp <-
+  lubridate::ymd_hms(as.character(survey3_update$timestamp))
+str(survey3_update$timestamp)
+```
+
+
+
+### Save to the main data folder
+```{r}
+dir
+fname <- paste0(dir, '/data/survey_data/', 'survey3_cn_processed.csv')
+write.csv(x = survey3_update, file = fname, row.names = F)
+```
+
+
+# Data analysis
+## Survey 2
+```{r}
+getwd()
+
+s2 <- read.csv('./data/survey_cleanup/survey2_for_cleanup.csv', 
+               stringsAsFactors = F) %>%
+  dplyr::select(-num_countries) %>%
+  dplyr::mutate(list_countries = trimws(list_countries),
+                list_countries = gsub('35|many', 'Many', list_countries),
+                list_countries = gsub('27 EU countries', 'EU', list_countries),
+                list_countries = gsub("\\\"", '', list_countries),
+                list_countries = gsub(',| and|\\? ', ';', list_countries),
+                num_biodiv_metrics = gsub('one', '1', num_biodiv_metrics),
+                num_biodiv_metrics = as.numeric(num_biodiv_metrics)
+                # list_countries = str_to_title(list_countries)
+                )
+  
+unique(s2$list_countries)
+unique(s2$num_biodiv_metrics)
+names(s2)
+str(s2)
+
+
+### save to local drive
+dir
+fname <- ('./data/survey_cleanup/survey2_for_cleanup_completed.csv')
+write.csv(x = s2, file = fname, row.names = F)
+```
+
+

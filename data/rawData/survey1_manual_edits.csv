@@ -1,0 +1,37 @@
+Timestamp,Coder ID,Paper_ID_correction,Paper ID Code ,Year Published,First Author's Last Name,Criteria 1: Biodiversity,Criteria 2: Metacoupling,Criteria 3: Biodiversity Quantification,Criteria 4: Study Type,Were you able to explicitly indicate that the paper meets all four of our criteria for the previous questions?,Did you check for relevant information in the supplementary material?,Concerns/Comments,Does this paper need further discussion with the whole group? (Expect most answers to be no),"Did the authors explicitly reference distant impacts on biodiversity in the text of the paper? (If yes, you did not have to infer that there was a telecoupling process.)",Please explain your above answer.
+1/5/2020 9:51,R_Chen,242,240,2019,Vogdrup-Schmidt,migratory species,Transnational Conservation,habitat area,Observational study,No,Yes,,,,
+1/5/2020 9:42,R_Chen,264,180,2019,Pinna,vegetation,tourism,"the total plant cover (%), the number of species (richness),",Observational study,Yes,Yes,,No,No,"tourism is more general, not explain where they from"
+1/5/2020 9:09,R_Chen,337,57,2019,Klarenberg,plant,road development,plant species richness,Observational study,No,Yes,,,,
+1/5/2020 11:30,R_Chen,483,359,2019,Parker,songbird,elephant browsing ,songbird density and diversity,Observational study,No,Yes,,,,
+1/5/2020 10:39,R_Chen,566,310,2018,Oldekop,forest,international migration,forest cover,Observational study,Yes,Yes,,No,Yes,International migration 
+3/18/2020 18:22:57,M_Lei,6655,77,2011,Salvador,Large mammal species richness and habitat use in an upper Amazonian forest,Ecotourism ,Large mammal species richness,Observational study,Yes,No Supplementary Material Provided,,,,
+1/5/2020 11:39,R_Chen,826,364,2018,Ass?©d?©,orchid species,protected areas,orchid species number,Observational study,No,No Supplementary Material Provided,,,,
+1/5/2020 11:46,R_Chen,934,369,2018,Gibbs,venomous snake,Amazon river,venomous snake numbers,Observational study,No,No Supplementary Material Provided,,,,
+1/5/2020 12:21,R_Chen,986,374,2018,Dale,bird,urbanization,species richness,Observational study,No,Yes,,,,
+1/5/2020 9:18,R_Chen,1007,85,2018,Silva,mammals,Protected Areas,number of species,Observational study,No,Yes,,,,
+1/5/2020 10:02,R_Chen,1320,252,2017,Wraith,orchid,Tourism and recreation,the number of orchid species,Observational study,Yes,No Supplementary Material Provided,,No,No,only discussed residential and commercial development for tourism and recreation areas
+1/5/2020 12:28,R_Chen,1482,383,2017,BAUNI,Animals,transport development,number of animals,Simulation or Forecasting study (does not qualify for coding),No,No Supplementary Material Provided,,,,
+1/5/2020 10:44,R_Chen,1613,313,2017,Bek,Wildflower,Trade,Wildflower,Review (not qualified for coding),No,No Supplementary Material Provided,,,,
+1/5/2020 11:10,R_Chen,2046,332,2017,Dimobe,Habitat Fragmentation,Tourism,Habitat Fragmentation,Observational study,No,No Supplementary Material Provided,,,,
+1/5/2020 9:25,R_Chen,2048,91,2017,Parchizadeh,mammals,Protected Area,mammals numbers,Observational study,No,No Supplementary Material Provided,,,,
+1/5/2020 10:36,R_Chen,2401,301,2016,?†ilc,plant communities,tourism,connectivity,Observational study,No,No Supplementary Material Provided,,,,
+3/4/2020 10:31,R_Chen,2577,94,2016,Danna Titelboim,Abundances decreased,intracoupling,Abundances ,Observational study,Yes,No Supplementary Material Provided,not relevant to metacoupling,No,No,no external drivers were talk about
+1/5/2020 10:05,R_Chen,2800,264,2016, Okuno,Mammoth,Global Legal Framework,number of species,Review (not qualified for coding),No,No Supplementary Material Provided,,,,
+1/5/2020 10:30,R_Chen,3081,265,2015,Mikol?°?°,Capercaillie,forest management,number of Capercaillie,Observational study,Yes,Yes,,No,No,forest management is a local action
+1/5/2020 8:49,R_Chen,3210,31,2015,Marull,no,rural out-migration,no,Observational study,No,Yes,,,,
+1/5/2020 9:46,R_Chen,3361,213,2015,Faille,cave fauna,Tourism,number of species and species richness,Observational study,Yes,Yes,,No,No,not specify where the tourism is from
+1/5/2020 9:30,R_Chen,3393,152,2015,Manley,pollinating insects,Global transportation of commercial species,Prevalence ,Observational study,Yes,Yes,,No,Yes,Global transportation 
+3/4/2020 11:09,R_Chen,3456,153,2015,Gonzalo Bravo,1,recreation,structure and composition,Observational study,No,No Supplementary Material Provided,,No,No,don't mention the source of recreation
+1/5/2020 11:21,R_Chen,3744,340,2014,Schulze,Oilseed Rape,ban of import,Plant samples,Experimental study,No,Yes,,,,
+3/4/2020 10:52,R_Chen,3924,109,2014,Michael V. Cove,1,fragmentation,species‚Äô  occurrence,Observational study,Yes,No,,No,No,"fragmentation is a local effects, and drivers were not discussed"
+1/5/2020 9:34,R_Chen,4180,161,2014,Kowalewski,Clam,tourism,abundance of mollusk shells,Observational study,Yes,Yes,,No,Yes,Tourism impacts
+1/5/2020 9:14,R_Chen,4427,71,2013,Ellis,Migratory Birds,Marine Commercial Fisheries and Offshore Oil and Gas Production,number of migratory birds,Observational study,Yes,No Supplementary Material Provided,,No,No,human marine development
+1/5/2020 8:57,R_Chen,4772,42,2013,Shrestha,caterpillar fungus,telecoupling,mean annual harvest,Observational study,Yes,Yes,,No,Yes,Trade
+1/5/2020 9:03,R_Chen,5680,47,2012,Aggemyr,plant,land use change,species richness,Observational study,No,Yes,,,,
+3/4/2020 10:05,R_Chen,6655,77,2011,Salvador Salvador,Large mammal species,ecotourism,species richness and habitat use,Observational study,Yes,No Supplementary Material Provided,no metacoupling effects mentioned,No,Yes,186 km of walk censuses
+4/16/2020 16:39:39,C_Hovis,1026,1206,2018,Tsutsui,Arthorpod diversity,NA,Richness,Observational study,No,Yes,"Studied impact of Organic farming on arth div, but no apparent distant impact related to organic transition",,,
+4/30/2020 16:33:43,K_Kapsar,5773,4831,2012,Chepinoga,Vascular plants,Tourism,Species richness,Observational study,Yes,No,,No,No,"""Tourists"" are mentioned, but it is unspecified exactly where they came from. These seem like remote islands though, so I think it's safe to assume a telecoupling of at least some scale. "
+4/30/2020 20:52:51,Y_Zhang,6005,6005,2012,Denac,Scops Owl,"Unclear (habitat selection only, about environmental conditions)",Probability of occupancy,Observational study,No,No Supplementary Material Provided,,No,No,
+4/30/2020 9:24:21,E_Dean,6406,3790003,2011,Lucas-Borja,Plant communities,"Tourism, however this is briefly mentioned and not connected to any external process or place.",Plant cover and diversity,Observational study,No,Yes,,No,No,Authors describe tourism but there is no link to external processes.
+4/30/2020 9:39:41,E_Dean,5982,3790004,2012,Kaisanlahti-Jokimaki,Bird communities,Tourism,Bird abundance and diversity,"Used a study with artificial nests which may fall under ""simulation""",No,Yes,,No,No,Authors mentioned tourism but did not identify relationship between biodiversity and external places/processes affecting biodiversity
+4/30/2020 20:36:15,Y_Zhang,5010001,5010001,2018,Aune,marine mammals and sea birds,Oil and gas exploration impact on marine mammals and sea birds,Unclear (no quantitative metrics measured),Observational study,No,No Supplementary Material Provided,,No,No,

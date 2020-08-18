@@ -1,0 +1,198 @@
+"","metric_type","metric","tele_cat","effect","count"
+"1","single species","Abundance/Density","Energy Transfer","Negative (detrimental)",10
+"2","single species","Abundance/Density","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",8
+"3","single species","Abundance/Density","Energy Transfer","Positive (beneficial)",6
+"4","single species","Abundance/Density","Investment","Negative (detrimental)",4
+"5","single species","Abundance/Density","Knowledge Transfer","Changed (e.g. species composition)",41
+"6","single species","Abundance/Density","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",11
+"7","single species","Abundance/Density","Knowledge Transfer","Positive (beneficial)",1
+"8","single species","Abundance/Density","Knowledge Transfer","Unclear",1
+"9","single species","Abundance/Density","Migration (human)","Negative (detrimental)",5
+"10","single species","Abundance/Density","Migration (human)","Neutral (only when there is absolutely no difference in metrics)",1
+"11","single species","Abundance/Density","Migration (human)","Positive (beneficial)",3
+"12","single species","Abundance/Density","Migration (non-human)","Negative (detrimental)",2
+"13","single species","Abundance/Density","Migration (non-human)","Positive (beneficial)",1
+"14","single species","Abundance/Density","Other","Negative (detrimental)",1
+"15","single species","Abundance/Density","remove","Changed (e.g. species composition)",1
+"16","single species","Abundance/Density","remove","Positive (beneficial)",2
+"17","single species","Abundance/Density","Species Dispersal","Changed (e.g. species composition)",11
+"18","single species","Abundance/Density","Species Dispersal","Negative (detrimental)",4
+"19","single species","Abundance/Density","Species Dispersal","Positive (beneficial)",3
+"20","single species","Abundance/Density","Technology Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"21","single species","Abundance/Density","Tourism","Changed (e.g. species composition)",1
+"22","single species","Abundance/Density","Tourism","Negative (detrimental)",38
+"23","single species","Abundance/Density","Tourism","Neutral (only when there is absolutely no difference in metrics)",4
+"24","single species","Abundance/Density","Tourism","Positive (beneficial)",7
+"25","single species","Abundance/Density","Tourism","Unclear",3
+"26","single species","Abundance/Density","Trade","Negative (detrimental)",29
+"27","single species","Abundance/Density","Trade","Neutral (only when there is absolutely no difference in metrics)",4
+"28","single species","Abundance/Density","Waste Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"29","single species","Detection",NA,"Negative (detrimental)",2
+"30","single species","Detection",NA,"Positive (beneficial)",2
+"31","single species","Movement","Tourism","Negative (detrimental)",2
+"32","single species","Movement","Tourism","Neutral (only when there is absolutely no difference in metrics)",2
+"33","single species","Movement","Tourism","Unclear",1
+"34","single species","Occurrence","Investment","Negative (detrimental)",1
+"35","single species","Occurrence","Investment","Positive (beneficial)",1
+"36","single species","Occurrence","Migration (human)","Positive (beneficial)",1
+"37","single species","Occurrence","Migration (non-human)","Negative (detrimental)",1
+"38","single species","Occurrence","Migration (non-human)","Positive (beneficial)",1
+"39","single species","Occurrence","Tourism","Negative (detrimental)",5
+"40","single species","Occurrence","Tourism","Positive (beneficial)",1
+"41","single species","Occurrence","Trade","Negative (detrimental)",2
+"42","single species","Occurrence","Trade","Neutral (only when there is absolutely no difference in metrics)",155
+"43","single species","Occurrence","Trade","Positive (beneficial)",4
+"44","single species","Occurrence",NA,"Negative (detrimental)",1
+"45","single species","Occurrence",NA,"Positive (beneficial)",2
+"46","single species","Occurrence",NA,"Unclear",1
+"47","single species","Population Dynamics","Investment","Negative (detrimental)",1
+"48","single species","Population Dynamics","Knowledge Transfer","Negative (detrimental)",1
+"49","single species","Population Dynamics","Tourism","Positive (beneficial)",1
+"50","single species","Population Dynamics","Trade","Negative (detrimental)",3
+"51","single species","Within Species Diversity","Energy Transfer","Changed (e.g. species composition)",8
+"52","single species","Within Species Diversity","Energy Transfer","Negative (detrimental)",2
+"53","single species","Within Species Diversity","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",11
+"54","single species","Within Species Diversity","Energy Transfer","Positive (beneficial)",1
+"55","single species","Within Species Diversity","remove","Negative (detrimental)",2
+"56","single species","Within Species Diversity","Species Dispersal","Changed (e.g. species composition)",6
+"57","single species","Within Species Diversity","Tourism","Negative (detrimental)",1
+"58","single species","Within Species Diversity","Trade","Negative (detrimental)",1
+"59","multiple species","Abundance/Density","Energy Transfer","Changed (e.g. species composition)",1
+"60","multiple species","Abundance/Density","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"61","multiple species","Abundance/Density","Energy Transfer","Positive (beneficial)",1
+"62","multiple species","Abundance/Density","Investment","Negative (detrimental)",3
+"63","multiple species","Abundance/Density","Investment","Positive (beneficial)",4
+"64","multiple species","Abundance/Density","Knowledge Transfer","Negative (detrimental)",1
+"65","multiple species","Abundance/Density","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"66","multiple species","Abundance/Density","Knowledge Transfer","Positive (beneficial)",9
+"67","multiple species","Abundance/Density","Migration (human)","Negative (detrimental)",2
+"68","multiple species","Abundance/Density","Migration (human)","Positive (beneficial)",1
+"69","multiple species","Abundance/Density","Migration (non-human)","Changed (e.g. species composition)",2
+"70","multiple species","Abundance/Density","Migration (non-human)","Positive (beneficial)",1
+"71","multiple species","Abundance/Density","remove","Changed (e.g. species composition)",1
+"72","multiple species","Abundance/Density","remove","Negative (detrimental)",1
+"73","multiple species","Abundance/Density","Species Dispersal","Negative (detrimental)",1
+"74","multiple species","Abundance/Density","Species Dispersal","Positive (beneficial)",1
+"75","multiple species","Abundance/Density","Species Dispersal","Unclear",1
+"76","multiple species","Abundance/Density","Tourism","Changed (e.g. species composition)",1
+"77","multiple species","Abundance/Density","Tourism","Negative (detrimental)",31
+"78","multiple species","Abundance/Density","Tourism","Neutral (only when there is absolutely no difference in metrics)",4
+"79","multiple species","Abundance/Density","Tourism","Positive (beneficial)",4
+"80","multiple species","Abundance/Density","Tourism","Unclear",1
+"81","multiple species","Abundance/Density","Trade","Negative (detrimental)",17
+"82","multiple species","Abundance/Density","Trade","Neutral (only when there is absolutely no difference in metrics)",2
+"83","multiple species","Abundance/Density","Trade","Positive (beneficial)",7
+"84","multiple species","Abundance/Density","Trade","Unclear",1
+"85","multiple species","Abundance/Density","Waste Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"86","multiple species","Abundance/Density",NA,"Changed (e.g. species composition)",1
+"87","multiple species","Abundance/Density",NA,"Negative (detrimental)",16
+"88","multiple species","Abundance/Density",NA,"Positive (beneficial)",3
+"89","multiple species","Composition","Migration (human)","Changed (e.g. species composition)",1
+"90","multiple species","Composition","remove","Changed (e.g. species composition)",1
+"91","multiple species","Composition","Species Dispersal","Changed (e.g. species composition)",3
+"92","multiple species","Composition","Species Dispersal","Negative (detrimental)",1
+"93","multiple species","Composition","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",1
+"94","multiple species","Composition","Species Dispersal","Positive (beneficial)",2
+"95","multiple species","Composition","Tourism","Changed (e.g. species composition)",20
+"96","multiple species","Composition","Tourism","Negative (detrimental)",1
+"97","multiple species","Composition","Tourism","Neutral (only when there is absolutely no difference in metrics)",4
+"98","multiple species","Composition","Tourism","Unclear",1
+"99","multiple species","Composition","Trade","Changed (e.g. species composition)",2
+"100","multiple species","Composition","Trade","Negative (detrimental)",1
+"101","multiple species","Composition","Trade","Unclear",1
+"102","multiple species","Composition","Waste Transfer","Negative (detrimental)",1
+"103","multiple species","Composition","Water Transfer","Negative (detrimental)",2
+"104","multiple species","Composition",NA,"Changed (e.g. species composition)",2
+"105","multiple species","Diversity Index","Energy Transfer","Changed (e.g. species composition)",3
+"106","multiple species","Diversity Index","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"107","multiple species","Diversity Index","Knowledge Transfer","Negative (detrimental)",2
+"108","multiple species","Diversity Index","Knowledge Transfer","Positive (beneficial)",1
+"109","multiple species","Diversity Index","Migration (non-human)","Negative (detrimental)",1
+"110","multiple species","Diversity Index","Migration (non-human)","Positive (beneficial)",2
+"111","multiple species","Diversity Index","remove","Negative (detrimental)",1
+"112","multiple species","Diversity Index","Species Dispersal","Positive (beneficial)",1
+"113","multiple species","Diversity Index","Species Dispersal","Unclear",1
+"114","multiple species","Diversity Index","Tourism","Changed (e.g. species composition)",1
+"115","multiple species","Diversity Index","Tourism","Negative (detrimental)",10
+"116","multiple species","Diversity Index","Tourism","Neutral (only when there is absolutely no difference in metrics)",1
+"117","multiple species","Diversity Index","Tourism","Positive (beneficial)",7
+"118","multiple species","Diversity Index","Trade","Changed (e.g. species composition)",1
+"119","multiple species","Diversity Index","Trade","Negative (detrimental)",6
+"120","multiple species","Diversity Index","Trade","Neutral (only when there is absolutely no difference in metrics)",1
+"121","multiple species","Diversity Index","Trade","Positive (beneficial)",3
+"122","multiple species","Diversity Index","Waste Transfer","Neutral (only when there is absolutely no difference in metrics)",2
+"123","multiple species","Diversity Index","Water Transfer","Negative (detrimental)",1
+"124","multiple species","Evenness","Migration (non-human)","Negative (detrimental)",1
+"125","multiple species","Evenness","Species Dispersal","Negative (detrimental)",1
+"126","multiple species","Evenness","Tourism","Unclear",1
+"127","multiple species","Evenness","Trade","Negative (detrimental)",1
+"128","multiple species","Evenness","Trade","Positive (beneficial)",2
+"129","multiple species","Movement","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"130","multiple species","Occurrence","Energy Transfer","Changed (e.g. species composition)",2
+"131","multiple species","Occurrence","Migration (human)","Negative (detrimental)",2
+"132","multiple species","Occurrence","Other","Positive (beneficial)",1
+"133","multiple species","Occurrence","remove","Positive (beneficial)",2
+"134","multiple species","Occurrence","Tourism","Negative (detrimental)",1
+"135","multiple species","Occurrence","Tourism","Positive (beneficial)",1
+"136","multiple species","Occurrence","Trade","Negative (detrimental)",1
+"137","multiple species","Occurrence","Water Transfer","Changed (e.g. species composition)",2
+"138","multiple species","Population Dynamics","Energy Transfer","Changed (e.g. species composition)",1
+"139","multiple species","Population Dynamics","Knowledge Transfer","Changed (e.g. species composition)",1
+"140","multiple species","Population Dynamics","Species Dispersal","Negative (detrimental)",1
+"141","multiple species","Population Dynamics","Tourism","Negative (detrimental)",9
+"142","multiple species","Population Dynamics","Tourism","Neutral (only when there is absolutely no difference in metrics)",1
+"143","multiple species","Population Dynamics","Trade","Neutral (only when there is absolutely no difference in metrics)",2
+"144","multiple species","Population Dynamics","Water Transfer","Changed (e.g. species composition)",1
+"145","multiple species","Richness","Energy Transfer","Changed (e.g. species composition)",3
+"146","multiple species","Richness","Energy Transfer","Negative (detrimental)",1
+"147","multiple species","Richness","Energy Transfer","Positive (beneficial)",3
+"148","multiple species","Richness","Investment","Negative (detrimental)",2
+"149","multiple species","Richness","Investment","Positive (beneficial)",2
+"150","multiple species","Richness","Knowledge Transfer","Negative (detrimental)",1
+"151","multiple species","Richness","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",2
+"152","multiple species","Richness","Knowledge Transfer","Positive (beneficial)",1
+"153","multiple species","Richness","Migration (human)","Negative (detrimental)",1
+"154","multiple species","Richness","Migration (human)","Neutral (only when there is absolutely no difference in metrics)",1
+"155","multiple species","Richness","Migration (non-human)","Negative (detrimental)",4
+"156","multiple species","Richness","Other","Positive (beneficial)",1
+"157","multiple species","Richness","remove","Negative (detrimental)",2
+"158","multiple species","Richness","remove","Neutral (only when there is absolutely no difference in metrics)",2
+"159","multiple species","Richness","remove","Positive (beneficial)",1
+"160","multiple species","Richness","Species Dispersal","Negative (detrimental)",11
+"161","multiple species","Richness","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",1
+"162","multiple species","Richness","Species Dispersal","Positive (beneficial)",1
+"163","multiple species","Richness","Species Dispersal","Unclear",1
+"164","multiple species","Richness","Technology Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"165","multiple species","Richness","Tourism","Changed (e.g. species composition)",1
+"166","multiple species","Richness","Tourism","Negative (detrimental)",23
+"167","multiple species","Richness","Tourism","Neutral (only when there is absolutely no difference in metrics)",8
+"168","multiple species","Richness","Tourism","Positive (beneficial)",10
+"169","multiple species","Richness","Trade","Changed (e.g. species composition)",2
+"170","multiple species","Richness","Trade","Negative (detrimental)",20
+"171","multiple species","Richness","Trade","Neutral (only when there is absolutely no difference in metrics)",4
+"172","multiple species","Richness","Trade","Positive (beneficial)",10
+"173","multiple species","Richness","Waste Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"174","multiple species","Richness","Water Transfer","Negative (detrimental)",2
+"175","multiple species","Richness","Water Transfer","Positive (beneficial)",1
+"176","multiple species","Richness",NA,"Negative (detrimental)",4
+"177","multiple species","Richness",NA,"Unclear",2
+"178","multiple species","Other","Trade","Negative (detrimental)",1
+"179","multiple species","Other","Trade","Unclear",1
+"180","habitat","Amount","Investment","Negative (detrimental)",1
+"181","habitat","Amount","Migration (human)","Neutral (only when there is absolutely no difference in metrics)",1
+"182","habitat","Amount","Migration (human)","Positive (beneficial)",1
+"183","habitat","Amount","Migration (non-human)","Negative (detrimental)",2
+"184","habitat","Amount","Technology Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"185","habitat","Amount","Tourism","Negative (detrimental)",8
+"186","habitat","Amount","Tourism","Neutral (only when there is absolutely no difference in metrics)",1
+"187","habitat","Amount","Tourism","Positive (beneficial)",3
+"188","habitat","Amount","Trade","Negative (detrimental)",8
+"189","habitat","Amount","Trade","Positive (beneficial)",2
+"190","habitat","Quality","Investment","Negative (detrimental)",2
+"191","habitat","Quality","Other","Positive (beneficial)",1
+"192","habitat","Quality","remove","Changed (e.g. species composition)",1
+"193","habitat","Quality","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",3
+"194","habitat","Quality","Tourism","Negative (detrimental)",3
+"195","habitat","Quality","Tourism","Neutral (only when there is absolutely no difference in metrics)",1
+"196","habitat","Quality","Waste Transfer","Negative (detrimental)",1
+"197","habitat","Quality","Water Transfer","Negative (detrimental)",1

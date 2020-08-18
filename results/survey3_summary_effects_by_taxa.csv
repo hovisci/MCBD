@@ -1,0 +1,32 @@
+"","taxa","effect","count","perc_per_taxa"
+"1","Amphibians","Changed (e.g. species composition)",1,1
+"2","Birds","Changed (e.g. species composition)",47,0.124668435013263
+"3","Birds","Negative (detrimental)",86,0.228116710875332
+"4","Birds","Neutral (only when there is absolutely no difference in metrics)",188,0.49867374005305
+"5","Birds","Positive (beneficial)",50,0.13262599469496
+"6","Birds","Unclear",6,0.0159151193633952
+"7","Fish","Changed (e.g. species composition)",19,0.22093023255814
+"8","Fish","Negative (detrimental)",31,0.36046511627907
+"9","Fish","Neutral (only when there is absolutely no difference in metrics)",17,0.197674418604651
+"10","Fish","Positive (beneficial)",18,0.209302325581395
+"11","Fish","Unclear",1,0.0116279069767442
+"12","Invertebrates","Changed (e.g. species composition)",36,0.229299363057325
+"13","Invertebrates","Negative (detrimental)",83,0.528662420382166
+"14","Invertebrates","Neutral (only when there is absolutely no difference in metrics)",21,0.133757961783439
+"15","Invertebrates","Positive (beneficial)",12,0.0764331210191083
+"16","Invertebrates","Unclear",5,0.0318471337579618
+"17","Mammals","Changed (e.g. species composition)",2,0.0408163265306122
+"18","Mammals","Negative (detrimental)",37,0.755102040816326
+"19","Mammals","Neutral (only when there is absolutely no difference in metrics)",1,0.0204081632653061
+"20","Mammals","Positive (beneficial)",8,0.163265306122449
+"21","Mammals","Unclear",1,0.0204081632653061
+"22","Multiple","Negative (detrimental)",15,0.789473684210526
+"23","Multiple","Positive (beneficial)",3,0.157894736842105
+"24","Multiple","Unclear",1,0.0526315789473684
+"25","Plants/Trees/Shrubs","Changed (e.g. species composition)",11,0.142857142857143
+"26","Plants/Trees/Shrubs","Negative (detrimental)",34,0.441558441558442
+"27","Plants/Trees/Shrubs","Neutral (only when there is absolutely no difference in metrics)",7,0.0909090909090909
+"28","Plants/Trees/Shrubs","Positive (beneficial)",25,0.324675324675325
+"29","Reptiles","Negative (detrimental)",5,0.454545454545455
+"30","Reptiles","Neutral (only when there is absolutely no difference in metrics)",3,0.272727272727273
+"31","Reptiles","Unclear",3,0.272727272727273
