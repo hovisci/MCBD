@@ -19,6 +19,7 @@ library("writexl")
 library("rnaturalearthdata")
 library("rnaturalearth")
 library("sf")
+library("psych")
 
 ### Directories & Set up ###
 
