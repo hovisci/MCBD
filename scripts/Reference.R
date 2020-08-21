@@ -1,6 +1,8 @@
 rm(list=ls())                         # clear Console Window
 options(show.error.locations = TRUE); # show line numbers on error
 
+# test
+
 ### libraries ###
 library("ggplot2")      # include all GGPlot2 functions
 library("tidyverse")    # plots and working with complex tables
@@ -19,6 +21,7 @@ library("writexl")
 library("rnaturalearthdata")
 library("rnaturalearth")
 library("sf")
+library("psych")
 
 ### Directories & Set up ###
 
