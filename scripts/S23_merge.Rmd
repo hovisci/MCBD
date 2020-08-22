@@ -1,0 +1,156 @@
+---
+title: 'MCBD: Survey 2 and 3 Merge for Metacoupled Effects on Biodiversity'
+author: "Veronica F. Frans, CSIS Lab, Michigan State University"
+date: "May 30, 2020 (Updated: August 21, 2020)"
+output: 
+  html_document:
+    keep_tex: yes
+    toc: yes
+    toc_depth: 4
+    toc_float: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
+                      warning = FALSE, message = FALSE, results='hold')
+```
+
+# 1. Methods summary
+
+Synthesis of survey 2 and 3 results for metacoupling/biodiversity systematic review. It consists of error checks, response summaries, and visualizations of the accepted papers.
+
+# 2. R Setup
+
+The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
+
+Load libraries, directories, and custom functions from source file.
+
+```{r}
+# Source file
+  source('Reference.R')
+```
+
+Data is stored here:
+
+```{r, echo=FALSE}
+# Data directory
+  dat.dir
+```
+
+Final tables are stored here:
+
+```{r, echo=FALSE}
+# Final tables
+  tab.dir
+```
+
+Final figures are stored here:
+
+```{r, echo=FALSE}
+# Final figures
+  fig.dir
+```
+
+For **this run** of the script, tables for manual checks will be stored in the following folder:
+
+```{r, echo=FALSE}
+tab.check.dir
+```
+
+# 3. Load data
+
+```{r}
+# load previous workspace (if needed)
+  #load("synthesisResults.RData")
+
+# surveys
+  survey2 <- read.csv(paste0(dat.dir,'survey2_cleaned_20200707.csv'))
+  survey3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
+```
+
+# 4. Data formatting
+
+## 4.1 Merge tables
+
+Merge tables. The expected length of this merge should be the same as survey 3, with fields from survey 2 repeated across entries for each paper id. 
+
+```{r}
+# left join survey 2 to survey 3
+  s23 <- left_join(survey3,survey2,by=c("paper_id","coder_id"))
+```
+
+Show column names
+
+```{r}
+# get col names
+  colnames(s23)
+```
+
+Drop columns.
+
+```{r}
+unwanted <- c(# survey 3 fields
+              'timestamp.x','notes','taxa.x',
+              # survey 2 fields
+              'coder_id','entry','final_decision','X',
+              'taxa.y', 'timestamp.y', 'year_pub', 'author',
+              'taxa_list', 'num_time_pd', 'year_start',
+              'year_end','temp_res','temp_res_unk',
+              'b4_dur_after','comments','further_discuss'
+              )
+
+s23$taxa <- s23$taxa.x
+s23$sig_effect <- '' #adding column now because there are errors below
+
+s23 <- s23 %>%
+        select(-one_of(unwanted))
+```
+
+## 4.2 Quick cleanup of levels
+
+Next, show levels of couplings
+
+```{r}
+levels(as.factor(s23$tele_cat))
+```
+
+**IMPORTANT STEP HERE:** 
+
+Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well!!!!!!!!!!!!!!!!!!!!!!!!!
+
+```{r}
+# set as character
+  s23$tele_cat <- as.character(s23$tele_cat)
+
+# show original length of rows
+  print(paste('Original number of rows:',nrow(s23)))
+
+# split multiple flows listed in a row into other new rows
+  s23 <- separate_rows(s23, tele_cat, sep=";", convert = TRUE)
+  s23$tele_cat <- as.factor(s23$tele_cat)
+  
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(s23)))
+
+# show levels
+  summary(s23$tele_cat)
+```
+
+Some have NA's. Let's see which ones they are.
+
+```{r}
+s23[is.na(s23$tele_cat),]
+```
+
+These items above are the **common survey** responses from Survey 2. This **needs to be addressed by the Survey 2 sub-team.**
+
+# 5. Export table
+
+The table to be exported here will be used in another script for synthesis, data summaries and figures.
+
+```{r}
+# save as csv
+  write.csv(s23, paste0(dat.dir,'s23.csv'), row.names = FALSE)
+```
+
