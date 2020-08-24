@@ -1,7 +1,7 @@
 ---
 title: "MCBD Raw Survey Prep"
 author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 7, 2020 (Updated: August 17, 2020)"
+date: "May 7, 2020 (Updated: August 21, 2020)"
 output:
   html_document:
     keep_tex: yes
@@ -227,11 +227,12 @@ We also found an article mistakenly surveyed. This will be removed from all anal
   survey1 <- survey1[!survey1$Paper.ID.Code==6005,]
 ```
 
-We will also remove an observer from survey 1, who only did part of one of the common surveys. This prevents skewing agreement across those surveys.
+We will also remove an observer from survey 1, who only did part of one of the common surveys, and another observer whose papers were full of errors and had to be completely redone. This prevents skewing agreement across the common surveys, and from using other invalidated surveys that have been redone.
 
 ```{r}
 # drop entries completely (invalid papers)
   survey1 <- survey1[!survey1$Coder.ID=='V_Frans',]
+  survey1 <- survey1[!survey1$Coder.ID=='R_Chen',]
 ```
 
 
@@ -419,7 +420,7 @@ Here, we are also including manual rejections from team meeting discussions of p
                 5497, 4528, 4733, 2723, # K_Kapsar papers
                 6276, 5589,             # M_Lei papers
                 6535, 3502,             # MG_Chung papers
-                4352, 2036, 7010,2800,  # R_Chen papers
+                #4352, 2036, 7010,2800,  # R_Chen papers
                 92,                     # Y_Dou papers
                 1,94,203,770,           # Y_Li papers
                 64,225, 619, 718,
@@ -550,7 +551,14 @@ Edit survey ID numbers
 
 ```{r}
 # R_Chen paper ID error
-  survey2$Paper.ID.Code[survey2$Paper.ID.Code==109] <- 3924
+  #survey2$Paper.ID.Code[survey2$Paper.ID.Code==109] <- 3924
+```
+
+Remove observer whose papers were completely redone by another observer (similar to Survey 1).
+
+```{r}
+# drop entries completely (invalid papers)
+  survey2 <- survey2[!survey2$Coder.ID=='R_Chen',]
 ```
 
 ### 4.2.2 Edit columns
@@ -737,7 +745,7 @@ Then, we make edits for wrong paper IDs (found while coding below, but edits mad
 
 ```{r}
 # fix wrong paper ID
-  survey2$paper_id[survey2$paper_id==77 & survey2$coder_id=='R_Chen'] <- 6655
+  #survey2$paper_id[survey2$paper_id==77 & survey2$coder_id=='R_Chen'] <- 6655
 ```
 
 We will also investigate the differences in paper IDs, to ensure no other errors in data entry.
@@ -910,6 +918,13 @@ The 'both' section is fine and no need to investigate. They would be more of an 
 # list of observers
   paste('observer names:')
   paste(unique(survey3$Coder.ID),collapse="; ")
+```
+
+Remove observer whose papers were completely redone by another observer (similar to Survey 1).
+
+```{r}
+# drop entries completely (invalid papers)
+  survey3 <- survey3[!survey3$Coder.ID=='R_Chen',]
 ```
 
 ### 4.3.2 Edit columns
@@ -1126,8 +1141,8 @@ Then, we nake edit for observer errors (found while coding below, but edits made
 
 # R_Chen errors
   # paper ID 6655 (from survey 1 correction)
-    survey3$paper_id[survey3$coder_id=='R_Chen' & survey3$paper_id==77] <- 6655
-    survey3$paper_id[survey3$coder_id=='R_Chen' & survey3$paper_id==109] <- 3924
+    # survey3$paper_id[survey3$coder_id=='R_Chen' & survey3$paper_id==77] <- 6655
+    # survey3$paper_id[survey3$coder_id=='R_Chen' & survey3$paper_id==109] <- 3924
 
 # X_Wu errors
   # fill blank paper ID
