@@ -1,0 +1,6 @@
+"paper_id","count","accept","accept.coder","reject","reject.coder","accept_rate","final_decision"
+"1",1488,12,10,"A_Herzberger, A_Torres, C_Hovis, E_Dean, E_Xing, K_Kapsar, M_Lei, MG_Chung, X_Wu, Y_Dou",2,"Y_Li, Y_Zhang",0.83,"accept"
+"2",2577,11,3,"A_Herzberger, M_Lei, X_Wu",8,"A_Torres, C_Hovis, E_Dean, E_Xing, K_Kapsar, MG_Chung, Y_Dou, Y_Zhang",0.27,"reject"
+"3",3456,11,11,"A_Herzberger, A_Torres, C_Hovis, E_Dean, E_Xing, K_Kapsar, M_Lei, MG_Chung, X_Wu, Y_Dou, Y_Zhang",0,"",1,"accept"
+"4",3924,12,6,"A_Torres, C_Hovis, E_Dean, K_Kapsar, M_Lei, MG_Chung",6,"A_Herzberger, E_Xing, X_Wu, Y_Dou, Y_Li, Y_Zhang",0.5,"accept"
+"5",6655,12,7,"A_Herzberger, C_Hovis, E_Dean, E_Xing, K_Kapsar, M_Lei, Y_Li",5,"A_Torres, MG_Chung, X_Wu, Y_Dou, Y_Zhang",0.58,"accept"
