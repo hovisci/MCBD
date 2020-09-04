@@ -167,6 +167,24 @@ Move these entries to 'notes' and provide unique entry ID number.
   survey3 <- rbind(survey3,nonnum)
 ```
 
+Change entry ID numbers for paper ID 5905 (all 1's)
+
+```{r}
+# subset out paper ID 5905
+  s3_sub <- survey3[survey3$paper_id==5905,]
+
+# antijoin from survey3
+  survey3 <- anti_join(survey3,s3_sub)
+  
+# assign numbers
+  s3_sub <- s3_sub %>% 
+              mutate(entry_id = seq_along(entry_id))
+  
+# rejoin to survey 3
+  survey3 <- rbind(survey3,s3_sub)
+```
+
+
 ### 4.2.3 taxonomic or functional field
 
 ```{r}
@@ -218,11 +236,14 @@ Export the remaining entry/entries for edits.
   taxfun_NA <- taxfun[taxfun$taxon_or_func=='',]
 
 # save as csv (conditional)
-  if (nrow(taxfun_NA) >1){
+  if (nrow(taxfun_NA) >=1){
   write.csv(taxfun_NA,paste0(tab.check.dir,
                              'survey3_cleanup_tax_fun_missing_v2.csv'),
             row.names = FALSE)
   }
+
+# preview
+  taxfun_NA
 ```
 
 Rejoin entries.
@@ -300,9 +321,9 @@ Subset for each paper ID and extract to send to coder.
   survey3 <- anti_join(survey3,eff)
   
 # visually inspect each paper
-  # for (i in 1:length(efIDs)){
-  #   print(eff[eff$paper_id==efIDs[[i]],])
-  # }
+  for (i in 1:length(efIDs)){
+    #print(eff[eff$paper_id==efIDs[[i]],])
+  }
 ```
 
 Make edits.
@@ -319,10 +340,13 @@ Export the remaining entry/entries for edits.
   eff_NA <- eff[eff$effect=='',]
 
 # save as csv (conditional)
-  if (nrow(eff_NA)>1){
-  write.csv(eff,paste0(tab.check.dir,'survey3_cleanup_effect_missing.csv'),
+  if (nrow(eff_NA)>=1){
+  write.csv(eff_NA,paste0(tab.check.dir,'survey3_cleanup_effect_missing.csv'),
             row.names = TRUE)
   }
+
+# preview
+  eff_NA
 ```
 
 Rejoin edited entries.
@@ -373,10 +397,13 @@ Export entries for edits.
   sig_NA <- sig[sig$significant=='',]
 
 # save as csv (conditional)
-  if (nrow(sig_NA)>1){
+  if (nrow(sig_NA)>=1){
       write.csv(sig_NA,paste0(tab.check.dir,'survey3_cleanup_sig_missing.csv'),
                 row.names = TRUE)
   }
+
+# preview
+  sig_NA
 ```
 
 Append edited entries.
@@ -402,11 +429,16 @@ Export these data fields for coders.
 
 ```{r}
 # extract and save as CSV (conditional)
-  no_scale <- survey3[is.na(survey3$scale) & is.na(survey3$biodiv_cat_habitat),]
-  if (nrow(no_scale)>1){
+  no_scale <- survey3[is.na(survey3$scale) & !is.na(survey3$biodiv_cat_habitat),]
+
+# conditional save
+  if (nrow(no_scale)>=1){
   write.csv(no_scale,paste0(tab.check.dir,'survey3_cleanup_scale_missing.csv'),
             row.names = TRUE)
   }
+
+# preview
+  no_scale
 ```
 
 ## 4.3 Editing Categorical Responses
@@ -433,8 +465,7 @@ Change multiple species to 'multiple'.
                  "Mammals, Reptiles, Amphibians, Invertebrates, Plants/trees/shrubs",
                  "Multiple, unspecified",
                  "Reptiles;Amphibians",
-                 "Birds, Mammals",
-                 "habitat" #### <--- PAPER 854 DOESN'T SPECIFY SPECIES
+                 "Birds, Mammals"
                   )
 
 # change to multiple
@@ -482,7 +513,8 @@ Extract the odd entries.
 # make list of items
   taxa_list <- c("Other",
                  "not clear",
-                 "bio-geodiversity"
+                 "bio-geodiversity",
+                 "habitat"
                  )
 
 # subset
@@ -501,7 +533,7 @@ Export entries for edits.
 
 ```{r}
 # save as csv (conditional)
-  if (nrow(weird_tx)>1){
+  if (nrow(weird_tx)>=1){
   write.csv(weird_tx,paste0(tab.check.dir,'survey3_cleanup_weird_taxa.csv'),
             row.names = TRUE)
   }
@@ -527,6 +559,7 @@ Append edited entries and drop levels.
   survey3$taxon_or_func <- droplevels(survey3$taxon_or_func)
   levels(survey3$taxon_or_func)
 ```
+
 Quick edit
 
 ```{r}
@@ -557,19 +590,6 @@ Change blank to NA
   survey3$biodiv_cat_1sp[survey3$biodiv_cat_1sp==''] <- NA 
 ```
 
-Change height/weight to 'within species diversity', as these relate to specific characteristics.
-
-```{r}
-# make list of entries to change
-  div_list <- c("Height",
-                 "Weight")
-
-# change
-  survey3$biodiv_cat_1sp[grepl(paste(div_list,collapse="|"),
-               survey3$biodiv_cat_1sp,
-               ignore.case = TRUE)] <- 'Within species diversity (genetic diversity, age structure, etc.)'
-```
-
 Change risk to 'population dynamics'.
 
 ```{r}
@@ -587,7 +607,7 @@ Change 'occurrence' to match others.
 
 ```{r}
 # make list of entries to change
-  div_list <- c("Occurrence")
+  div_list <- c("*Occurrence*","*detection*")
 
 # change
   survey3$biodiv_cat_1sp[grepl(paste(div_list,collapse="|"),
@@ -703,8 +723,7 @@ Change to 'population dynamics' (not in the original Google Form).
                 "Total fisheries production",
                 "reproduction",
                 "*index of coral health*",
-                "*regeneration*", #### <----- NOT REALLY SURE ABOUT THIS ONE!
-                'coral reef size/age'#### <----- OR IS THIS COMPOSITION?! 
+                "*regeneration*"
                 )
 
 # change to pop dynamics
@@ -719,7 +738,7 @@ Change to 'occurrence'
   survey3$biodiv_cat_multsp <- as.character(survey3$biodiv_cat_multsp)
 
 # make list of entries to change
-  div_list <- c("*occur*")
+  div_list <- c("*occur*","*detection*")
 
 # change to occurrence
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
@@ -727,20 +746,14 @@ Change to 'occurrence'
                ignore.case = TRUE)] <- 'Occurrence'
 ```
 
-Make a new category for movement.
+Delete entries with "migration strategy'.
 
 ```{r}
-# make list of entries to change
-  div_list <- c("migration strategy")
-
-# change to movement
-  survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
-               survey3$biodiv_cat_multsp)] <- 'Movement'
+# subset out paper ID 5905
+  survey3 <- survey3[!(survey3$paper_id==2546 & survey3$entry_id==2),]
 ```
 
-Change an odd entry to "other" (as per email correspondence).
-
-Make a new category for movement.
+Change to diversity index
 
 ```{r}
 # make list of entries to change
@@ -748,7 +761,7 @@ Make a new category for movement.
 
 # change to other
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
-               survey3$biodiv_cat_multsp)] <- 'Other'
+               survey3$biodiv_cat_multsp)] <- "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"
 ```
 
 Change specific entries (based on email correspondence)
@@ -759,6 +772,17 @@ Change specific entries (based on email correspondence)
                             survey3$paper_id==3668] <- 'Population dynamics (survival, fitness, reproduction, mortality, etc.)'
   survey3$biodiv_cat_multsp[survey3$biodiv_cat_multsp=='Other' & 
                             survey3$paper_id==3485] <- 'Abundance/Density (biomass, mass, number of individuals, individuals/unit area)'
+  
+# 'coral reef size/age' fixes
+  survey3$biodiv_cat_1sp[survey3$biodiv_cat_multsp=='coral reef size/age' & 
+                         survey3$paper_id==1376 &
+                         survey3$entry_id==3] <- 'With-in species diversity (genetic diversity, age structure, etc.)'
+  survey3$biodiv_cat_1sp[survey3$biodiv_cat_multsp=='coral reef size/age' & 
+                         survey3$paper_id==1376 &
+                         survey3$entry_id==1] <- 'Abundance/Density (number of individuals, individuals/unit area, biomass)'
+  survey3$biodiv_cat_multsp[survey3$biodiv_cat_multsp=='coral reef size/age' & 
+                         survey3$paper_id==1376 &
+                         (survey3$entry_id==1|survey3$entry_id==3)] <- NA
 ```
 
 Drop levels and inspect.
@@ -791,7 +815,7 @@ Export entries for edits.
 
 ```{r}
 # save as csv (conditional on if there are entries)
-  if (nrow(weird_div)>1){
+  if (nrow(weird_div)>=1){
       write.csv(weird_div,paste0(tab.check.dir,
                                  'survey3_cleanup_weird_biodiv_multi.csv'),
                 row.names = TRUE)
@@ -815,11 +839,7 @@ Change to amounts.
 
 ```{r}
 # make list of entries to change
-  div_list <- c("habitat density",
-                "habitat height",
-                "habitat temperature",
-                "area",
-                "island area",
+  div_list <- c("island area",
                 "Suitable habitat loss")
 
 # change
@@ -841,12 +861,35 @@ Change to quality
 
 ```{r}
 # make list of entries to change
-  div_list <- c("*compared birds*")
+  div_list <- c("habitat density",
+                "habitat height",
+                "habitat temperature")
 
 # change
   survey3$biodiv_cat_habitat[grepl(paste(div_list,collapse="|"),
         survey3$biodiv_cat_habitat,
         ignore.case = TRUE)] <- 'Quality (pollution, connectence, disturbance, etc.)'
+```
+                
+Change to NA and move to notes
+
+```{r}
+# make list of entries to change
+  div_list <- c("*compared birds*")
+
+# change to notes
+  note <- survey3$biodiv_cat_habitat[grepl(paste(div_list,collapse="|"),
+              survey3$biodiv_cat_habitat,
+              ignore.case = TRUE)]
+  
+  survey3$notes[grepl(paste(div_list,collapse="|"),
+                survey3$biodiv_cat_habitat,
+                ignore.case = TRUE)] <- paste0(note)
+  
+# change to NA
+  survey3$biodiv_cat_habitat[grepl(paste(div_list,collapse="|"),
+              survey3$biodiv_cat_habitat,
+              ignore.case = TRUE)] <- NA
 ```
 
 Drop levels and inspect
@@ -882,7 +925,7 @@ Export entries for edits.
 
 ```{r}
 # save as csv (conditional)
-  if (nrow(weird_div)>1){
+  if (nrow(weird_div)>=1){
       write.csv(weird_div,paste0(tab.check.dir,
                                  'survey3_cleanup_weird_biodiv_hab.csv'),
                 row.names = TRUE)
@@ -1000,7 +1043,7 @@ Export entries for edits.
 
 ```{r}
 # save as csv (conditional)
-  if (nrow(weird_eff)>1){
+  if (nrow(weird_eff)>=1){
       write.csv(weird_eff,paste0(tab.check.dir,
                                  'survey3_cleanup_weird_effects.csv'),
                 row.names = TRUE)
