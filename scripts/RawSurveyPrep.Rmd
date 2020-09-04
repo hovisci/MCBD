@@ -1,7 +1,7 @@
 ---
 title: "MCBD Raw Survey Prep"
 author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 7, 2020 (Updated: August 21, 2020)"
+date: "May 7, 2020 (Updated: September 4, 2020)"
 output:
   html_document:
     keep_tex: yes
@@ -166,7 +166,7 @@ How many are there, and are all values unique? Duplicates would be a little more
   length(unique(s1_manual$Paper.ID.Code))
 ```
 
-Next, extract these entries from survey 1 as a new subset, based on timestamp
+Next, extract these entries from survey 1 as a new subset.
 
 ```{r}
 # subset
@@ -175,7 +175,8 @@ Next, extract these entries from survey 1 as a new subset, based on timestamp
               filter(Coder.ID %in% s1_manual$Coder.ID) %>% 
               # manually remove some extras
               filter(First.Author.s.Last.Name!='Pour') %>% 
-              filter(First.Author.s.Last.Name!='Gallant')
+              filter(First.Author.s.Last.Name!='Gallant') %>% 
+              filter(Timestamp!='8/31/2020 14:35:40')
 
 
 # ensure list of s1_sub matches list of s1_manual
@@ -217,7 +218,8 @@ Quick edit of Paper ID mismatch from A_Herzberger and R_Chen.
 ```{r}
 # paper ID manual edits
   survey1$Paper.ID.Code[survey1$Paper.ID.Code==2001] <- 2201
-  survey1$Paper.ID.Code[survey1$Paper.ID.Code==264] <- 2800
+  # survey1$Paper.ID.Code[survey1$Paper.ID.Code==264 & 
+  #                         survey1$Coder.ID=='R_Chen'] <- 2800
 ```
 
 We also found an article mistakenly surveyed. This will be removed from all analyses, as of a decision on 5-15-2020.
@@ -420,7 +422,7 @@ Here, we are also including manual rejections from team meeting discussions of p
                 5497, 4528, 4733, 2723, # K_Kapsar papers
                 6276, 5589,             # M_Lei papers
                 6535, 3502,             # MG_Chung papers
-                #4352, 2036, 7010,2800,  # R_Chen papers
+                #4352, 2036, 7010,2800, # R_Chen papers
                 92,                     # Y_Dou papers
                 1,94,203,770,           # Y_Li papers
                 64,225, 619, 718,
@@ -806,7 +808,25 @@ We should also check the ones not in survey 1 at all.
   survey2[survey2$paper_id %in% onlysecond,]
 ```
 
+```{r}
+# we compare with the entire survey 1, not just the keep list
+  #survey1[survey1$paper_id %in% onlyfirst,]
 
+# save list as csv (if there are entries)
+  s1_missing <- survey2[survey2$paper_id %in% onlysecond,]
+  s1_missing <- s1_missing %>%
+                   arrange(coder_id, paper_id, desc(paper_id)) %>%
+                   subset(select=c(coder_id,paper_id,year_pub,author))
+  # conditional save
+    if (nrow(s1_missing)>=1){
+        write.csv(s1_missing,
+                  paste0(tab.check.dir,'survey1_missing.csv'),
+                  row.names = FALSE)  
+      }
+  
+# show list
+  s1_missing
+```
 
 **Error check: which papers have a survey 1 but no survey 2???**
 
@@ -829,7 +849,7 @@ Whose papers are they so we can contact the observers?
                    arrange(coder_id, paper_id, desc(paper_id)) %>%
                    subset(select=c(coder_id,paper_id,year_pub,author,status))
   # conditional save
-    if (nrow(s2_missing)>1){
+    if (nrow(s2_missing)>=1){
         write.csv(s2_missing,
                   paste0(tab.check.dir,'survey2_missing.csv'),
                   row.names = FALSE)  
@@ -869,12 +889,12 @@ The 'both' section is fine and no need to investigate. They would be more of an 
                  num_s1_no_s2=length(unique(paper_id)))
   
 # add to table (conditional on whether there are entries)
-  if (nrow(only1)>1){
+  if (nrow(only1)>=1){
     t2 <- left_join(t2,only1,by="coder_id")
     } else {
       t2$num_s1_no_s2 <- NA # no entries, so leave blank
     }
-  if (nrow(only2)>1){
+  if (nrow(only2)>=1){
     t2 <- left_join(t2,only2,by="coder_id")
     } else {
       t2$num_s2_no_s1 <- NA # no entries, so leave blank
@@ -1257,7 +1277,7 @@ We should also check the ones not in survey 1 at all.
                    arrange(coder_id, paper_id) %>%
                    subset(select=c(coder_id,paper_id,entry_id))
   # conditional save
-    if (nrow(s31_missing)>1){
+    if (nrow(s31_missing)>=1){
         write.csv(s31_missing,
                   paste0(tab.check.dir,'survey3_missing_survey1.csv'),
                   row.names = FALSE)  
@@ -1289,7 +1309,7 @@ Whose papers are they so we can contact the observers?
                    subset(select=c(coder_id,paper_id,year_pub,author,status))
   
   # conditional save
-    if (nrow(s3_missing)>1){
+    if (nrow(s3_missing)>=1){
         write.csv(s3_missing,
                   paste0(tab.check.dir,'survey3_missing_from_1.csv'),
                   row.names = FALSE)  
@@ -1370,7 +1390,7 @@ We should also check the ones not in survey 2 at all.
                    arrange(coder_id, paper_id) %>%
                    subset(select=c(coder_id,paper_id,entry_id))
   # conditional save
-    if (nrow(s32_missing)>1){
+    if (nrow(s32_missing)>=1){
     write.csv(s32_missing,
               paste0(tab.check.dir,'survey3_missing_survey2.csv'),
               row.names = FALSE)
@@ -1402,7 +1422,7 @@ Export list to contact observers.
                    arrange(coder_id, paper_id, desc(paper_id)) %>%
                    subset(select=c(coder_id,paper_id,year_pub,author,status))
     # conditional save
-    if (nrow(s3_missing)>1){
+    if (nrow(s3_missing)>=1){
         write.csv(s3_missing,
                   paste0(tab.check.dir,'survey3_missing_from_2.csv'),
                   row.names = FALSE)
@@ -1496,22 +1516,22 @@ Check survey assignments from previous surveys to get coder ID. This was especia
                  num_s2_no_s3=length(unique(paper_id)))
    
 # add to table (conditional on whether there are entries)
-  if (nrow(only1)>1){
+  if (nrow(only1)>=1){
     t3 <- left_join(t3,only1,by="coder_id")
     } else {
       t3$num_s1_no_s3 <- NA # no entries, so leave blank
     }
-  if (nrow(only3)>1){
+  if (nrow(only3)>=1){
     t3 <- left_join(t3,only3,by="coder_id")
     } else {
       t3$num_s3_no_s1 <- NA # no entries, so leave blank
     }
-  if (nrow(s3no2)>1){
+  if (nrow(s3no2)>=1){
     t3 <- left_join(t3,s3no2,by="coder_id")
     } else {
       t3$num_s3_no_s2 <- NA # no entries, so leave blank
     }
-  if (nrow(s2no3)>1){
+  if (nrow(s2no3)>=1){
     t3 <- left_join(t3,s2no3,by="coder_id")
     } else {
       t3$num_s2_no_s3 <- NA # no entries, so leave blank

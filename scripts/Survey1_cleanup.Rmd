@@ -1,7 +1,7 @@
 ---
 title: "MCBD Survey 1 Cleanup and Summaries"
 author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 19, 2020 (Updated: August 17, 2020)"
+date: "May 19, 2020 (Updated: September 4, 2020)"
 output: 
   html_document:
     keep_tex: yes
@@ -69,7 +69,7 @@ tab.check.dir
 
 # 5 common surveys (no changes since version 4)
   survey1.5 <- read.csv(paste0(dat.dir,
-                        'common_papers\\survey1_5_common_paper_selection.csv'))
+                        'common_papers\\survey1_5_common_paper_selection_090120.csv'))
 
 # assignment sheet
   assignments <- read.csv(paste0(dat.dir,
