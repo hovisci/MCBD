@@ -411,9 +411,13 @@ Export for inquiry with coders.
 ```{r}
 # export missing entries
   missing_explicit <- keep[keep$explicit_distant_impacts==''|keep$explicit_distant_impacts=='no such data in Chinese survey',]
+
+# conditional save
+  if (nrow(missing_explicit)>=1){
   write.csv(missing_explicit,
-            paste0(tab.check.dir,'survey1_cleanup_inferred_columns_v4.csv'),
+            paste0(tab.check.dir,'survey1_cleanup_inferred_columns.csv'),
                    row.names=FALSE)
+  }
 ```
 
 
@@ -579,14 +583,14 @@ Acceptance rate for abstract screening.
   sum(ab_all$INCLUDE=='YES')/nrow(ab_all)
 ```
 
-Acceptance rate for paper review (**NOTE:** this excludes the 5 common surveys).
+Acceptance rate for papers that were reviewed (**NOTE:** this includes the 5 common surveys).
 
 ```{r}
 # get total paper acceptance rate
   sum(survey1$status=='accept')/nrow(survey1)
 ```
 
-Acceptance rate per person (**NOTE:** this excludes the 5 common surveys).
+Acceptance rate per person (**NOTE:** this excludes the 5 common surveys per person, but has a rate for it on its own as "all").
 
 ```{r}
 # get summary
