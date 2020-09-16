@@ -1,7 +1,7 @@
 ---
 title: 'MCBD: Survey 2 and 3 Merge for Metacoupled Effects on Biodiversity'
 author: "Ciara Hovis & Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 30, 2020 (Updated: September 9, 2020)"
+date: "May 30, 2020 (Updated: September 16, 2020)"
 output: 
   html_document:
     keep_tex: yes
@@ -222,33 +222,13 @@ table(s23$sig_effect)
 
 ```
 
-# 7. Standardization
 
-Some papers/studies reported multiple metrics. If left as is, our results may be misleading as some studies only reported 1 or 2 biodiversity metric impacts, while others reported many (>100). To address this, we will create a "majority" effect value for each unique study ID.
-
-```{r}
-
-# what is the range of number of metric/entries?
-num.entry <- as.data.frame(x= table(s23$paper_id) )
-mean(num.entry$Freq)
-median(num.entry$Freq)
-max(num.entry$Freq)
-
-# how many instances are paper_id & entry_id repeated due to separating the TC.Flow
-
-flow.rep <- paste(s23$paper_id, s23$entry_id, sep="_")
-flow.rep <- as.data.frame(table(flow.rep))
-flow.rep[flow.rep$freq > 1,]
-
-```
-
-
-# 5. Export table
+# 7. Export table
 
 The table to be exported here will be used in another script for synthesis, data summaries and figures.
 
 ```{r}
 # save as csv
-  #write.csv(s23, paste0(dat.dir,'s23.csv'), row.names = FALSE)
+  write.csv(s23, paste0(dat.dir,'s23.csv'), row.names = FALSE)
 ```
 
