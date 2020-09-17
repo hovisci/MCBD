@@ -9,6 +9,8 @@ output:
     toc_depth: 4
     toc_float: true
     df_print: paged
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -23,82 +25,38 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
 
 The script presented here was done using R (version 3.6.0; R Core Team 2019) and its packages.
 
-## 2.1 Libraries
-
-Call all libraries that you use here instead of immediately before your code chunks.
 
 ```{r include=FALSE}
-### To clear your environment 
-# remove(list = ls())
-# libraries
-  library("tidyverse")    # plots and working with complex tables
-  library("RColorBrewer") # colors for graphics
-  library("plyr")         # sort data
-  library("reshape")      # sort data
-  library("reshape2")     # sort data
-  library('tmap')         # visualizing maps
-  library("sp")           # working with maps
-  library("lubridate")    # time data
-  library("gplots")       # venn diagrams
-
-  library(dplyr)
-  library(psych)
+# getwd()
+# setwd('./scripts')
+# Source file
+  source('./scripts/Reference.R')
 ``` 
-
-## 2.2 Directories
-
-We create and use multiple folders to organize our inputs and outputs. Similar directories can be made anywhere by only changing the root directory object, `dir`. 
-
-```{r, warning=FALSE,results='hide'}
-# rm(list = ls())
-
-path <- rstudioapi::getSourceEditorContext()$path
-dir  <- dirname(rstudioapi::getSourceEditorContext()$path); dir
-setwd(dir)
-# setwd('./data/survey_cleanup')
-
-
-# Root directory
-dir
-
-# Data directory
-## dir of survey papers
-dat.dir <- paste0(dir,'/data/survey_cleanup_v4'); dat.dir
-## dir of common papers
-dir.com <- paste0(dir,'/data/common_papers_v4'); dir.com
-list.files(path = dat.dir)
-
-# Final figures
-# dir.create(paste0(dir,'\\figures'),recursive=TRUE)
-dir.fig <- paste0(dir,'/figures'); dir.fig
-
-```
-
-
 
 
 # 3. Load data
 
 ```{r}
+csv     <- paste0(dat.dir, 'survey_cleanup/survey2_for_cleanup.csv');csv                 ### all coded data, except the 5 common papers
+csv.com <- paste0(dat.dir, 'common_papers/survey2_5_common_paper_selection.csv');csv.com ### the 5 common papers
 
-csv     <- paste0(dat.dir, '/survey2_for_cleanup_v4.csv');csv
-csv.com <- paste0(dir.com, '/survey2_5_common_paper_selection.csv');csv.com
-
-s2_sur <- read.csv(csv,     stringsAsFactors = F) %>% select(-X)
+s2_sur <- read.csv(csv,     stringsAsFactors = F) # %>% select(-X)
 s2_com <- read.csv(csv.com, stringsAsFactors = F) 
 names(s2_sur)
 names(s2_com)
 
-### check col names
+### check col names in two df
 names(s2_com) %in% names(s2_sur)
 tt <- names(s2_sur) %in% names(s2_com); tt
 !tt
 names(s2_sur)[!tt] ## get the col names not included in the common paper data
 
+### add those cols that were missing
 s2_com_update <- s2_com %>%
   mutate(
     timestamp = 'common paper',
     coder_id = 'common paper',
+    num_countries = 'common paper',
     scale_entire = 'common paper', 
     num_time_pd = 'common paper', 
     year_start = 'common paper',  
@@ -111,7 +69,7 @@ s2_com_update <- s2_com %>%
     peri_tele_sep_unk= 'common paper', 
     scale_biodiv= 'common paper', 
     list_biodiv_metrics= 'common paper', 
-    further_discuss= 'common paper'
+    further_discuss= 'common paper',
   )
   # select(-c(num_countries))
 ### reorder the col by names
@@ -126,7 +84,7 @@ survey2_cleanup <- rbind(s2_sur, s2_com_update2)
 
 ## 4.2 Survey 2
 
-### data cleaning
+### 4.2.1 Pre-cleaning
 
 ```{r}
 ### Columns kept for analysis
@@ -143,7 +101,7 @@ df0 <- survey2_cleanup %>%
     )
 
 
-
+### unify the answers
 df1 <- df0 %>%  dplyr::mutate(
   data_type_biodiv=gsub('biological\\;', "Biological field observations;",
                         data_type_biodiv),
@@ -163,7 +121,6 @@ dm_ls <- c('Field observations',
            'Remote sensing',
            'Aggregate institutional data'
            )
-
 
 
 df2 <- df1 %>% dplyr::mutate(
@@ -189,13 +146,70 @@ df2 <- df1 %>% dplyr::mutate(
   
   )
 
+### an easy-to-use name for the following analysis
 df   <- df2
+
+### a copy for updating the df, will be the final result dataframe
 df99 <- df
 ```
 
 
+### 4.2.2 Deep-clean
+```{r for test use, eval=FALSE, include=FALSE}
+############ test code ############################
+# # col_name <- 'list_continents'
+# dt <- conti2
+# 
+# dw1 <- dt %>%
+#   spread(key = 'key', value = 3) %>%
+#   dplyr::mutate(na_col = NA) 
+# ## as an assistant col, as some data only have one col
+# 
+# dw1[is.na(dw1)] <- ""  ## NA as ''
+# dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
+#                 V2 = sub('\\;$', '', V2))
+# 
+# df99 <- dw2 %>%
+#   dplyr::select(2) %>%
+#   rename(c('V2' = col_name)) %>%
+#   cbind(., dw1) %>%
+#   dplyr::select(1:2) %>%
+#   right_join(., df[, !names(df) %in% col_name],
+#              by = 'paper_id') ## remove the old, and join
+```
 
-### taxa
+
+```{r function}
+func_update_col <- function(dt, col_name){
+  ### 1st, long table to wide one
+  dw1 <- dt %>%
+    spread(key = 'key', value = 3)  %>% ## the 3rd column 
+    dplyr::mutate(na_col = NA)          ## as an assistant col, as some data only have one col
+  
+  dw1[is.na(dw1)] <- ""                 ## NA as ''
+  dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>% 
+    as.data.frame() %>%
+    dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
+                  V2 = sub('\\;$', '', V2))
+  ### to update the df
+  df99 <- dw2 %>% 
+    dplyr::select(2) %>%
+    rename(c('V2' = col_name)) %>%
+    cbind(., dw1) %>%
+    dplyr::select(1:2) %>%
+    right_join(., df99[, !names(df99) %in% col_name], 
+               by = 'paper_id') ## remove the old, and join
+  return(df99)
+  
+}
+  
+
+# df99 <- func_update_col(dt = taxa2, col_name = 'taxa')  
+```
+
+#### - taxa
 ```{r}
 ### taxa ---------------------------------------------------------------------
 unique(df$taxa_list)
@@ -237,64 +251,7 @@ taxa2 %>%
 ```
 
 
-
-# Function
-```{r test, eval=FALSE, include=FALSE}
-############ test code ############################
-# col_name <- 'list_continents'
-dt <- conti2
-
-dw1 <- dt %>%
-  spread(key = 'key', value = 3) %>%
-  dplyr::mutate(na_col = NA) 
-## as an assistant col, as some data only have one col
-
-dw1[is.na(dw1)] <- ""  ## NA as ''
-dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>%
-  as.data.frame() %>%
-  dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
-                V2 = sub('\\;$', '', V2))
-
-df99 <- dw2 %>%
-  dplyr::select(2) %>%
-  rename(c('V2' = col_name)) %>%
-  cbind(., dw1) %>%
-  dplyr::select(1:2) %>%
-  right_join(., df[, !names(df) %in% col_name],
-             by = 'paper_id') ## remove the old, and join
-```
-
-
-```{r function}
-func_update_col <- function(dt, col_name){
-  dw1 <- dt %>%
-    spread(key = 'key', value = 3)  %>% ## the 3rd column 
-    dplyr::mutate(na_col = NA) ## as an assitant col, as some data only have one col
-  
-  dw1[is.na(dw1)] <- ""         ## NA as ''
-  dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>% 
-    as.data.frame() %>%
-    dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
-                  V2 = sub('\\;$', '', V2))
-  
-  df99 <- dw2 %>% 
-    dplyr::select(2) %>%
-    rename(c('V2' = col_name)) %>%
-    cbind(., dw1) %>%
-    dplyr::select(1:2) %>%
-    right_join(., df99[, !names(df99) %in% col_name], 
-               by = 'paper_id') ## remove the old, and join
-  return(df99)
-  
-}
-  
-
-# df99 <- func_update_col(dt = taxa2, col_name = 'taxa')  
-```
-
-
-
-### continents
+#### - continents
 ```{r}
 a <- 'North America \\(includes Hawaii \\& all countries above Panama Canal\\)'
 b <- 'Oceania \\(Australia\\, New Zealand\\, Fiji\\, etc\\)'
@@ -331,7 +288,7 @@ df99 <- func_update_col(dt = conti2, col_name = 'list_continents')
 
 
 
-### habitat
+#### - habitat
 ```{r}
 h0 <- df %>% select(paper_id, habitat) 
 
@@ -358,8 +315,8 @@ df99 <- func_update_col(dt = h2, col_name = 'habitat')
 
 
 
-### data type
-#### - data_type_biodiv
+####    - data type
+#####   -- data_type_biodiv
 ```{r}
 ### data_type_biodiv --------------------------------------------------------
 unique(df2$data_type_biodiv)
@@ -392,7 +349,7 @@ db2 %>%
 df99 <- func_update_col(dt = db2, col_name = 'data_type_biodiv')
 ```
 
-#### - data_type_meta
+#####   -- data_type_meta
 ```{r}
 ### data_type_meta --------------------------------------------------------
 dm0 <- df2 %>% select(paper_id, data_type_meta) 
@@ -428,13 +385,13 @@ df99 <- func_update_col(dt = dm2, col_name = 'data_type_meta')
 
 ```
 
-### tele_cat
+
+####    - tele_cat
 ```{r}
 tc0 <- df %>% select(paper_id, tele_cat) %>%
   dplyr::mutate(
     tele_cat = ifelse(paper_id==1616, 'Knowledge Transfer,Investment',
                       tele_cat))
-
 unique(df$tele_cat)
 str(tc0)
 
@@ -486,7 +443,8 @@ tc2 <- tc1 %>%
     tele_cat     = ifelse(tele_cat%in%tc_ls, tele_cat, 'Other')) %>%
   ### based on Aurora's double-check
   mutate(tele_cat = ifelse(paper_id %in% c(3335, 109, 1752, 2704, 6493, 4207), 
-                            'remove', tele_cat))
+                            'remove', tele_cat)) %>%
+  dplyr::filter(tele_cat != 'remove')
 
 ### check "Other" in tc_cat
 tc2_check <- tc2 %>%
@@ -504,14 +462,14 @@ tc2 %>%
   group_by(tele_cat) %>%
   tally() %>%
   mutate(pct = n/n_paper * 100) %>%
-  arrange(pct) #%>%
+  arrange(desc(pct)) #%>%
 
 df99 <- func_update_col(dt = tc2, col_name = 'tele_cat')
 ```
 
 
-### data source
-#### - data_source_biodiv
+####    - data source
+#####   -- data_source_biodiv
 
 ```{r}
 
@@ -542,7 +500,7 @@ df99 <- func_update_col(dt = dsb2, col_name = 'data_source_biodiv')
 
 
 
-#### - data_source_meta
+#####    -- data_source_meta
 ```{r}
 dsm0 <- df %>% select(paper_id, data_source_meta) 
 
@@ -564,13 +522,15 @@ dsm2 %>%
   tally() %>%
   mutate(pct = n/n_paper * 100) %>%
   arrange(pct) #%>%
-
-
 df99 <- func_update_col(dt = dsm2, col_name = 'data_source_meta')
-
 
 ```
 
+
+
+
+
+####    - list_countries
 
 ```{r EU}
 eu <- c(
@@ -583,16 +543,12 @@ length(eu)
 eue <- "'AUT';	'BEL';	'BGR';	'HRV';	'CYP';	'CZE';	'DNK';	'EST';	'FIN';	'FRA';	'DEU';	'GRC';	'HUN';	'IRL';	'ITA';	'LVA';	'LTU';	'LUX';	'MLT';	'NLD';	'POL';	'PRT';	'ROU';	'SVK';	'SVN';	'ESP';	'SWE';	'GBR'"
 
 eue <- gsub("\t|\\'", '', eue); eue
-
-
 ```
 
 
 
-### list_countries
 ```{r}
 c0 <- df %>% select(paper_id, list_countries) %>% 
-  
   ### contact coder and update 
   dplyr::mutate(
     list_countries = ifelse(paper_id==109,  'Costa Rica', list_countries),
@@ -655,11 +611,11 @@ c2 <- c1 %>%
 
 library(writexl)
 getwd()
-fname <- paste0(dat.dir)
+fname <- paste0(dat.dir); fname
 # write_xlsx(c2, "_list_countries_4Coding.xlsx")
 
 ### read in coded coutry names
-ctr <- readxl::read_excel('_Country codes_names.xlsx', 1, "A1:B283") 
+ctr <- readxl::read_excel(paste0(dat.dir, '_Country codes_names.xlsx'), 1, "A1:B283") 
 
 ### join the two data
 c3 <- merge(c2, ctr, by.x='list_countries', by.y='ctr_fao', all.x=T) %>%
@@ -697,7 +653,7 @@ df99 <- func_update_col(dt = c4, col_name = 'list_countries')
 
 
 
-### biodiv_countries
+####    - biodiv_countries
 ```{r}
 bc0 <- df %>% select(paper_id, biodiv_countries) %>%
   dplyr::mutate(
@@ -763,7 +719,7 @@ bc0 <- df %>% select(paper_id, biodiv_countries) %>%
 
 
 ### xing ying
-xy     <- '/amendments and supplements from Emily Xing.xlsx'
+xy     <- 'amendments and supplements from Emily Xing.xlsx'
 xy.xls <- paste0(dat.dir, xy); xy.xls
 xy <- readxl::read_excel(xy.xls) %>%
   dplyr::select(c(1, countries_bio)) %>%
@@ -789,7 +745,6 @@ bc0 <- rbind(bc01, bc02) %>%
 
 ###
 unique(bc0$biodiv_countries)
-
 
 bc1 <- data.frame(
   bc0, do.call(rbind, str_split(bc0$biodiv_countries,';'))) #%>%
@@ -825,7 +780,6 @@ bc2 <- bc1 %>%
     biodiv_countries=gsub('.*Many.*', 'Many', biodiv_countries),
   )
 
-library(writexl)
 getwd()
 fname <- paste0(dat.dir)
 # write_xlsx(bc2, "_biodiv_countries_4Coding.xlsx")
@@ -864,26 +818,25 @@ df99 <- func_update_col(dt = bc4, col_name = 'biodiv_countries')
 
 
 
-# Save to local
+# 5. Save cleaned data to local
 ```{r}
 today <- format(Sys.Date(), "%Y%m%d"); today
-fname <- paste0(dat.dir, '/survey2_cleaned_', today, '.csv'); fname
-write.csv(x = df99, file = fname, row.names = F)
-
-fname <- paste0(dir, '/data/cleaned_surveys/survey2_cleaned_', today, '.csv'); fname
+fname <- paste0(dat.dir, 'survey2_cleaned_', today, '.csv'); fname; survey2_cleaned = fname
 write.csv(x = df99, file = fname, row.names = F)
 ```
 
 
 
-
-# Map
+# 6. Data viz
+## Map
 ```{r}
+# devtools::install_github("ropensci/rnaturalearthdata")
+# install.packages("rnaturalearthhires", repos = "http://packages.ropensci.org", type = "source")
 
 library(rnaturalearthdata)
 library(rnaturalearth)
 library(sf)
-shp <- ne_countries(scale = 10, returnclass = 'sf') %>% #st_as_sf() %>%
+shp <- ne_countries(scale = 50, returnclass = 'sf') %>% #st_as_sf() %>%
   select(name, iso_a3) %>% ## , economy, income_grp
   # filter(name != 'Antarctica') %>%
   # filter(name == 'France') %>%
@@ -905,12 +858,10 @@ shp %>% filter(name == 'Norway')
 # names(nation_new_name)
 # nation_new_name <- as.data.frame(nation_new_name[,-c(3,4)])
 
-```
 
 
 
-```{r}
-### theme, font ------------------------------------------------------- #
+### theme, font --------------------------------------------------------------------------------------
 font      <- 'sans' ## = "TT Arial"
 font_size <- 6.5 ## max = 7; min = 5 for Nature Sustainability
 map_theme <- ggpubr::theme_transparent()+
@@ -938,7 +889,8 @@ map_theme <- ggpubr::theme_transparent()+
 ```
 
 
-## list_countries
+
+### - list_countries
 ```{r}
 ### 
 ctr_sys <- df99 %>%
@@ -1002,13 +954,13 @@ fig1 <- ggplot(data = shp_df) +
   map_theme
 fig1
 dir
-fname <- paste0(dir.fig, '/Fig_map_country_sys_v0707.jpg'); fname
+fname <- paste0(fig.dir, '/Fig_map_country_sys_', today, '.jpg'); fname
 ggsave(fname, fig1, width = 18, height = 9, units = 'cm', limitsize = FALSE,
        bg = "transparent")
 ```
 
 
-## biodiv_countries
+### - biodiv_countries
 ```{r}
 ctr_bio <- df99 %>%
   select(paper_id, biodiv_countries) %>%
@@ -1059,15 +1011,15 @@ fig2 <- ggplot(data = shp_df) +
   map_theme
 fig2
 dir
-fname <- paste0(dir.fig, '/Fig_map_country_bio_v0707.jpg'); fname
+fname <- paste0(fig.dir, '/Fig_map_country_bio_', today, '.jpg'); fname
 ggsave(fname, fig2, width = 18, height = 9, units = 'cm', limitsize = FALSE,
        bg = "transparent")
 ```
 
 
-# Percentage of tc
+## Percentage of tc
 ```{r}
-s2_cled <- paste0(dir, '/data/cleaned_surveys/survey2_cleaned_20200707.csv')
+s2_cled <- survey2_cleaned
 
 s2_dt <- read.csv(s2_cled, stringsAsFactors = F)
 names(s2_dt)
@@ -1127,6 +1079,7 @@ tc_by_ctr6 <- tc_by_ctr5 %>%
          tc != 'remove')
 
 str(tc_by_ctr6)
+
 ### count by ctr and tc
 tc_by_ctr7 <- tc_by_ctr6 %>%
   dplyr::select(ctr, tc) %>%
@@ -1146,7 +1099,7 @@ tc_by_ctr7_check <-  tc_by_ctr7 %>%
   dplyr::group_by(ctr) %>%
   dplyr::summarise(sum = sum(pct_tc, na.rm = T))
 
-fname <- paste0(dir, '/data/cleaned_surveys/pct_of_tc_by_country.csv'); fname
+fname <- paste0(dat.dir, 'pct_of_tc_by_country.csv'); fname
 write.csv(x = tc_by_ctr7, file = fname, row.names = F)
 
 ```

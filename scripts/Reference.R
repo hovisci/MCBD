@@ -26,8 +26,8 @@ library("psych")
 ### Directories & Set up ###
 
 # Root directory
-  setwd('..')           # set directory by one folder up
-  dir <- paste0(getwd())
+  # setwd('..')           # set directory by one folder up
+  dir <- paste0(getwd()); dir
 
 # Data directory
   dat.dir <- paste0(dir,'/data/')
