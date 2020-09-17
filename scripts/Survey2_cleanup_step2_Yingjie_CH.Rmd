@@ -26,14 +26,14 @@ The script presented here was done using R (version 3.6.0; R Core Team 2019) and
 
 ```{r include=FALSE}
 # Source file
-  source('Reference.R')
+source('Reference.R')
 ``` 
 
 
 # 3. Load data
 
+test
 ```{r}
-
 csv     <- paste0(dat.dir, 'survey_cleanup/survey2_for_cleanup.csv');csv
 csv.com <- paste0(dat.dir, 'common_papers/survey2_5_common_paper_selection.csv');csv.com
 
