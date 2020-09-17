@@ -23,68 +23,21 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
 
 The script presented here was done using R (version 3.6.0; R Core Team 2019) and its packages.
 
-## 2.1 Libraries
-
-Call all libraries that you use here instead of immediately before your code chunks.
 
 ```{r include=FALSE}
-### To clear your environment 
-# remove(list = ls())
-# libraries
-  library("tidyverse")    # plots and working with complex tables
-  library("RColorBrewer") # colors for graphics
-  library("plyr")         # sort data
-  library("reshape")      # sort data
-  library("reshape2")     # sort data
-  library('tmap')         # visualizing maps
-  library("sp")           # working with maps
-  library("lubridate")    # time data
-  library("gplots")       # venn diagrams
-
-  library(dplyr)
-  library(psych)
+# Source file
+source('Reference.R')
 ``` 
-
-## 2.2 Directories
-
-We create and use multiple folders to organize our inputs and outputs. Similar directories can be made anywhere by only changing the root directory object, `dir`. 
-
-```{r, warning=FALSE,results='hide'}
-# rm(list = ls())
-
-path <- rstudioapi::getSourceEditorContext()$path
-dir  <- dirname(rstudioapi::getSourceEditorContext()$path); dir
-setwd(dir)
-# setwd('./data/survey_cleanup')
-
-
-# Root directory
-dir
-
-# Data directory
-## dir of survey papers
-dat.dir <- paste0(dir,'/data/survey_cleanup_v4'); dat.dir
-## dir of common papers
-dir.com <- paste0(dir,'/data/common_papers_v4'); dir.com
-list.files(path = dat.dir)
-
-# Final figures
-# dir.create(paste0(dir,'\\figures'),recursive=TRUE)
-dir.fig <- paste0(dir,'/figures'); dir.fig
-
-```
-
-
 
 
 # 3. Load data
 
+test
 ```{r}
+csv     <- paste0(dat.dir, 'survey_cleanup/survey2_for_cleanup.csv');csv
+csv.com <- paste0(dat.dir, 'common_papers/survey2_5_common_paper_selection.csv');csv.com
 
-csv     <- paste0(dat.dir, '/survey2_for_cleanup_v4.csv');csv
-csv.com <- paste0(dir.com, '/survey2_5_common_paper_selection.csv');csv.com
-
-s2_sur <- read.csv(csv,     stringsAsFactors = F) %>% select(-X)
+s2_sur <- read.csv(csv,     stringsAsFactors = F) # %>% select(-X)
 s2_com <- read.csv(csv.com, stringsAsFactors = F) 
 names(s2_sur)
 names(s2_com)
@@ -99,6 +52,7 @@ s2_com_update <- s2_com %>%
   mutate(
     timestamp = 'common paper',
     coder_id = 'common paper',
+    num_countries = 'common paper',
     scale_entire = 'common paper', 
     num_time_pd = 'common paper', 
     year_start = 'common paper',  
@@ -111,7 +65,7 @@ s2_com_update <- s2_com %>%
     peri_tele_sep_unk= 'common paper', 
     scale_biodiv= 'common paper', 
     list_biodiv_metrics= 'common paper', 
-    further_discuss= 'common paper'
+    further_discuss= 'common paper',
   )
   # select(-c(num_countries))
 ### reorder the col by names
@@ -238,30 +192,30 @@ taxa2 %>%
 
 
 
-# Function
+# Function ????????
 ```{r test, eval=FALSE, include=FALSE}
 ############ test code ############################
-# col_name <- 'list_continents'
-dt <- conti2
-
-dw1 <- dt %>%
-  spread(key = 'key', value = 3) %>%
-  dplyr::mutate(na_col = NA) 
-## as an assistant col, as some data only have one col
-
-dw1[is.na(dw1)] <- ""  ## NA as ''
-dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>%
-  as.data.frame() %>%
-  dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
-                V2 = sub('\\;$', '', V2))
-
-df99 <- dw2 %>%
-  dplyr::select(2) %>%
-  rename(c('V2' = col_name)) %>%
-  cbind(., dw1) %>%
-  dplyr::select(1:2) %>%
-  right_join(., df[, !names(df) %in% col_name],
-             by = 'paper_id') ## remove the old, and join
+# # col_name <- 'list_continents'
+# dt <- conti2
+# 
+# dw1 <- dt %>%
+#   spread(key = 'key', value = 3) %>%
+#   dplyr::mutate(na_col = NA) 
+# ## as an assistant col, as some data only have one col
+# 
+# dw1[is.na(dw1)] <- ""  ## NA as ''
+# dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>%
+#   as.data.frame() %>%
+#   dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
+#                 V2 = sub('\\;$', '', V2))
+# 
+# df99 <- dw2 %>%
+#   dplyr::select(2) %>%
+#   rename(c('V2' = col_name)) %>%
+#   cbind(., dw1) %>%
+#   dplyr::select(1:2) %>%
+#   right_join(., df[, !names(df) %in% col_name],
+#              by = 'paper_id') ## remove the old, and join
 ```
 
 
@@ -659,7 +613,7 @@ fname <- paste0(dat.dir)
 # write_xlsx(c2, "_list_countries_4Coding.xlsx")
 
 ### read in coded coutry names
-ctr <- readxl::read_excel('_Country codes_names.xlsx', 1, "A1:B283") 
+ctr <- readxl::read_excel(paste0(dat.dir, '_Country codes_names.xlsx'), 1, "A1:B283") 
 
 ### join the two data
 c3 <- merge(c2, ctr, by.x='list_countries', by.y='ctr_fao', all.x=T) %>%
@@ -763,7 +717,7 @@ bc0 <- df %>% select(paper_id, biodiv_countries) %>%
 
 
 ### xing ying
-xy     <- '/amendments and supplements from Emily Xing.xlsx'
+xy     <- 'amendments and supplements from Emily Xing.xlsx'
 xy.xls <- paste0(dat.dir, xy); xy.xls
 xy <- readxl::read_excel(xy.xls) %>%
   dplyr::select(c(1, countries_bio)) %>%
