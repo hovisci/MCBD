@@ -1,7 +1,12 @@
 ---
 title: 'MCBD: Survey 2 and 3 Merge for Metacoupled Effects on Biodiversity'
+<<<<<<< HEAD
 author: "Veronica F. Frans, CSIS Lab, Michigan State University"
 date: "May 30, 2020 (Updated: September 4, 2020)"
+=======
+author: "Ciara Hovis & Veronica F. Frans, CSIS Lab, Michigan State University"
+date: "May 30, 2020 (Updated: September 16, 2020)"
+>>>>>>> 816b281376cfaedda9499d772ff39ab6853d6784
 output: 
   html_document:
     keep_tex: yes
@@ -60,6 +65,8 @@ tab.check.dir
 
 # 3. Load data
 
+THE SURVEY 2 NEEDS TO BE UPDATED --- CURRENTLY USING VERSION FROM 7/7
+
 ```{r}
 # load previous workspace (if needed)
   #load("synthesisResults.RData")
@@ -87,11 +94,11 @@ Show column names
   colnames(s23)
 ```
 
-Drop columns.
+Drop columns. Includes s3 notes now.
 
 ```{r}
 unwanted <- c(# survey 3 fields
-              'timestamp.x','notes','taxa.x',
+              'timestamp.x','taxa.x',
               # survey 2 fields
               'coder_id','entry','final_decision','X',
               'taxa.y', 'timestamp.y', 'year_pub', 'author',
@@ -117,7 +124,9 @@ levels(as.factor(s23$tele_cat))
 
 **IMPORTANT STEP HERE:** 
 
-Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well!!!!!!!!!!!!!!!!!!!!!!!!!
+Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well!!!!!!!!!!!!!!!!!!!!!!!!! 
+
+The reason for doing this is so that we can attribute biodiversity impacts to the specific flows that may have been studied together, and whose individual impacts cannot be decoupled.
 
 ```{r}
 # set as character
@@ -145,7 +154,81 @@ s23[is.na(s23$tele_cat),]
 
 These items above are the **common survey** responses from Survey 2. This **needs to be addressed by the Survey 2 sub-team.**
 
-# 5. Export table
+# 6. Classify Impact and Significance Category
+
+To simplify our results, we opted classify impacts into 4 categories:  Positive, Negative, Comp. Change, No relation or unclear.
+
+## 6.1 Investigate Significance Not Evaluated
+
+No action taken yet, need to discuss with group
+
+```{r}
+# Check how many entries were "not evaluated" n=259
+table(s23$significant)
+
+# subset and drop last row (all NAs)
+not.eval <- s23[s23$significant == "Not evaluated",]
+not.eval <- not.eval[-nrow(not.eval),]
+  
+# How many paper IDs? n=57
+length(unique(not.eval$paper_id))
+unique(not.eval$paper_id)
+
+# Look at impacts and metric type
+table(not.eval$biodiv_cat_1sp)
+table(not.eval$biodiv_cat_multsp)
+table(not.eval$biodiv_cat_habitat)
+table(not.eval$effect)
+
+```
+
+
+## 6.2  Classification Code
+
+```{r}
+
+  for(i in 1:nrow(s23)) {
+  
+    # positive impact AND True/NotEval Sig == POSITIVE
+    if(s23$effect[i] == 'Positive (beneficial)' &&
+       (s23$significant[i] == 'TRUE' || s23$significant[i] == 'Not evaluated') )
+    {
+    s23$sig_effect[i] = 'Positive';
+    }
+
+    # negative impact AND True/NotEval Sig == NEGATIVE
+    else if(s23$effect[i] == 'Negative (detrimental)' &&
+       (s23$significant[i] == 'TRUE' || s23$significant[i] == 'Not evaluated') )
+    {
+    s23$sig_effect[i] = 'Negative';
+    }
+
+    # changed impact AND True/NotEval Sig == CHANGED
+    else if(s23$effect[i] == 'Changed (e.g. species composition)' &&
+    (s23$significant[i] == 'TRUE' || s23$significant[i] == 'Not evaluated') )
+    {
+    s23$sig_effect[i] = 'Changed';
+    }
+
+    else
+    {
+    s23$sig_effect[i] = 'No relation or unclear';
+    }
+
+  }
+
+# Check if loop worked
+
+check_sig_effect <- as.data.frame(cbind(s23$effect, s23$significant, s23$sig_effect))
+
+# Look at distribution
+
+table(s23$sig_effect)
+
+```
+
+
+# 7. Export table
 
 The table to be exported here will be used in another script for synthesis, data summaries and figures.
 

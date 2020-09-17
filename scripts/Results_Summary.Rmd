@@ -1,12 +1,7 @@
 ---
 title: 'MCBD: Synthesis of Metacoupled Effects on Biodiversity'
-<<<<<<< HEAD
-author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 30, 2020 (Updated: September 4, 2020)"
-=======
-author: "Ciara Hovis & Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 30, 2020 (Updated: September 16, 2020)"
->>>>>>> 816b281376cfaedda9499d772ff39ab6853d6784
+author: "Ciara Hovis, CSIS Lab, Michigan State University"
+date: "September 16, 2020"
 output: 
   html_document:
     keep_tex: yes
@@ -67,7 +62,12 @@ tab.check.dir
 
 ```{r}
 # surveys
+  s1 <- read.csv(paste0(dat.dir,'survey1_cleaned.csv'))
+  s2 <- read.csv(paste0(dat.dir,'survey2_cleaned_20200707.csv'))
+  s3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
+
   s23 <- read.csv(paste0(dat.dir,'s23.csv'))
+  
 ```
 
 Show column names
@@ -76,6 +76,148 @@ Show column names
 # get col names
   colnames(s23)
 ```
+
+# 4. Survey 1 Summary
+
+
+
+
+
+
+# 5. Survey 2 & 3 Summary
+
+## 5.1 Habitat Frequency 
+
+By study
+
+```{r}
+# By study 
+
+habitat.study <- count(s2, 'habitat')
+print(habitat.study)
+prop.table(table(s2$habitat))
+
+# By entry (REPLICATED FLOW ID NOT RMVD YET)
+
+habitat.entry <- count(s23, 'habitat')
+print(habitat.entry)
+prop.table(table(s23$habitat))
+
+
+```
+
+
+
+## 5.2 Taxa Frequency 
+
+
+```{r}
+# By study 
+desired_length <- 8 
+empty_list <- vector(mode = "list", length = desired_length)
+
+taxa <- (s2$taxa)
+taxa.list <- c('Mammals', 'Plants', 'Reptiles', 'Amphibians', 'Birds', 'Fish', 'Invertebrates', 'Other')
+taxa.count <- empty_list
+
+for (i in 1:length(taxa.list)) {
+  
+  taxa.count[i] <- sum(str_count(taxa, taxa.list[i]))
+    }
+
+taxa.count <- rbind(taxa.list,taxa.count)
+taxa.count
+
+multiple <- str_count(taxa, ';')
+multiple <- multiple != 0
+multiple <- table(multiple) ["TRUE"]
+
+
+# By entry (REPLICATED FLOW ID NOT RMVD YET)
+
+taxa.entry <- count(s23, 'taxa')
+print(habitat.entry)
+prop.table(table(s23$taxa))
+
+
+```
+
+## 5.3 Telecoupling Flow Category Frequency
+
+```{r}
+count(s2$tele_cat)
+
+tc.list <- c("Energy Transfer", "Investment", "Knowledge Transfer", "Migration (human)", 
+             "Migration (non-human)","Other", "remove", "Species Dispersal", "Technology Transfer",
+             "Tourism", "Trade", "Water Transfer", "Waste Transfer")
+
+desired_length <- length(tc.list)
+empty_list <- vector(mode = "list", length = desired_length)
+
+
+tc.cat <- (s2$tele_cat)
+tc.count <- empty_list
+
+for (i in 1:length(tc.list)) {
+  
+  tc.count[i] <- sum(str_count(tc.cat, tc.list[i]))
+  
+}
+
+tc.count
+tc.count <- as.data.frame(rbind(tc.list,tc.count))
+tc.count
+
+# Can't get loop to count the migration values for some reason, manual input code below
+
+tc.table <- table(s2$tele_cat)
+
+tc.count[2,4] <- tc.table[4] + tc.table[15]      # Migration (human) n=6
+tc.count[2,5] <- tc.table[5]                     # Migration (non-human) n-7
+
+tc.count
+
+gather(tc.count)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+Habitat vs sig_effect 
+
+
+```{r}
+# get summary
+a <- ddply(s23, .(habitat, sig_effect), summarize,
+           # total count of entries     
+           count=length(habitat)) %>%
+  # percents of effects within totals per hab
+  group_by(habitat) %>%
+  nest() %>% 
+  mutate(perc_per_hab=map(data, function(x) x$count/sum(x$count))) %>% 
+  unnest()
+
+
+a
+
+quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_hab, x=habitat)) + 
+  geom_bar(position="stack", stat="identity") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  xlab("")
+
+quick_plot
+
+```
+
 
 # 4. First synthesis: Effects of coupling categories across taxa 
 
