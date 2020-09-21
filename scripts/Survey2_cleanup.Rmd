@@ -548,7 +548,7 @@ eue <- gsub("\t|\\'", '', eue); eue
 
 
 ```{r}
-c0 <- df %>% select(paper_id, list_countries) %>% 
+c0 <- df %>% select(paper_id, coder_id, list_countries) %>% 
   ### contact coder and update 
   dplyr::mutate(
     list_countries = ifelse(paper_id==109,  'Costa Rica', list_countries),
@@ -571,6 +571,7 @@ c0 <- df %>% select(paper_id, list_countries) %>%
     
     list_countries = ifelse(paper_id==6948, 'Brazil', list_countries),
     list_countries = ifelse(paper_id==6502, 'Canada; USA', list_countries),
+    list_countries = gsub(' and ', ';', list_countries),
     # list_countries = ifelse(paper_id==4772, 'Nepal', list_countries),
  
   ) #%>%
@@ -578,12 +579,13 @@ c0 <- df %>% select(paper_id, list_countries) %>%
 
 unique(df$list_countries)
 
+### split the country names to multiple columns 
 c1 <- data.frame(
   c0, do.call(rbind, str_split(c0$list_countries,';'))) #%>%
   # select(-list_countries)
 
 c2 <- c1 %>%
-  gather(key = 'key', value = list_countries, 3:ncol(.)) %>%
+  gather(key = 'key', value = list_countries, 4:ncol(.)) %>%
   dplyr::mutate(
     list_countries = trimws(list_countries),
     list_countries = str_to_title(list_countries)
@@ -609,12 +611,15 @@ c2 <- c1 %>%
     list_countries=gsub('.*Many.*', 'Many', list_countries),
   )
 
+c2_unique <- c2 %>%
+  distinct(list_countries, .keep_all = T) %>%
+  arrange(list_countries)
 library(writexl)
 getwd()
 fname <- paste0(dat.dir); fname
-# write_xlsx(c2, "_list_countries_4Coding.xlsx")
+# write_xlsx(c2_unique, "_list_countries_4Coding.xlsx")
 
-### read in coded coutry names
+### read in coded country names
 ctr <- readxl::read_excel(paste0(dat.dir, '_Country codes_names.xlsx'), 1, "A1:B283") 
 
 ### join the two data
@@ -623,18 +628,21 @@ c3 <- merge(c2, ctr, by.x='list_countries', by.y='ctr_fao', all.x=T) %>%
     iso_fao = ifelse(list_countries == 'Rest Of The World', 'ROW', iso_fao),
     iso_fao = ifelse(list_countries == 'Antarctica', 'ATA', iso_fao),
     iso_fao = ifelse(list_countries == 'EUE', 'EUE', iso_fao),
+    iso_fao = ifelse(list_countries == '2', 'Many', iso_fao),
+    iso_fao = ifelse(list_countries == '35', 'Many', iso_fao),
     # iso_fao = ifelse(is.na(iso_fao), 'Unclear', iso_fao),
   ) %>%
   arrange(!is.na(iso_fao), iso_fao, list_countries) 
 
 ### check data with coder
 c3_check <- c3 %>%
+  dplyr::select(-coder_id) %>%
   filter(is.na(iso_fao)) %>%
   filter(list_countries != 'Many') %>%
   left_join(x = ., y= df99[, c('coder_id', 'paper_id')], by = "paper_id") %>%
   arrange(coder_id, paper_id)
 c3_check$list_countries
-fname <- paste0(dat.dir, '/survey2_list_countries_check.csv'); fname
+fname <- paste0(dat.dir, 'CHECK_THIS_MANUALLY--survey2_list_countries_check.csv'); fname
 write.csv(x = c3_check, file = fname, row.names = F)
 
 c4 <- c3 %>%
@@ -719,7 +727,7 @@ bc0 <- df %>% select(paper_id, biodiv_countries) %>%
 
 
 ### xing ying
-xy     <- 'amendments and supplements from Emily Xing.xlsx'
+xy     <- 'amendments and supplements from Emily Xing_v4.xlsx'
 xy.xls <- paste0(dat.dir, xy); xy.xls
 xy <- readxl::read_excel(xy.xls) %>%
   dplyr::select(c(1, countries_bio)) %>%
@@ -799,8 +807,8 @@ bc3_check <- bc3 %>%
   filter(biodiv_countries != 'Many') %>%
   left_join(x = ., y= df99[, c('coder_id', 'paper_id')], by = "paper_id") %>%
   arrange(coder_id, paper_id)
-fname <- paste0(dat.dir, '/survey2_biodiv_countries_check.csv'); fname
-# write.csv(x = bc3_check, file = fname, row.names = F)
+fname <- paste0(dat.dir, 'CHECK_THIS_MANUALLY--survey2_biodiv_countries_check.csv'); fname
+write.csv(x = bc3_check, file = fname, row.names = F)
 
 bc4 <- bc3 %>%
   dplyr::mutate(bc3_check = iso_fao,
