@@ -1,5 +1,4 @@
 "ctr","total_tc","tc","n_tc","pct_tc"
-"",2,"Tourism",2,100
 "ALB",1,"Tourism",1,100
 "ARG",3,"Tourism",2,66.6666666666667
 "ARG",3,"Water Transfer",1,33.3333333333333
@@ -25,11 +24,11 @@
 "BLR",1,"Waste Transfer",1,100
 "BOL",2,"Tourism",1,50
 "BOL",2,"Water Transfer",1,50
-"BRA",19,"Energy Transfer",2,10.5263157894737
-"BRA",19,"Species Dispersal",3,15.7894736842105
-"BRA",19,"Tourism",8,42.1052631578947
-"BRA",19,"Trade",4,21.0526315789474
-"BRA",19,"Water Transfer",2,10.5263157894737
+"BRA",21,"Energy Transfer",2,9.52380952380952
+"BRA",21,"Species Dispersal",3,14.2857142857143
+"BRA",21,"Tourism",10,47.6190476190476
+"BRA",21,"Trade",4,19.047619047619
+"BRA",21,"Water Transfer",2,9.52380952380952
 "BTN",1,"Tourism",1,100
 "BWA",2,"Tourism",2,100
 "CAF",2,"Migration (human)",1,50
@@ -39,10 +38,10 @@
 "CAN",5,"Tourism",1,20
 "CAN",5,"Trade",2,40
 "CHL",1,"Trade",1,100
-"CHN",10,"Energy Transfer",1,10
-"CHN",10,"Investment",1,10
-"CHN",10,"Tourism",7,70
-"CHN",10,"Trade",1,10
+"CHN",11,"Energy Transfer",1,9.09090909090909
+"CHN",11,"Investment",1,9.09090909090909
+"CHN",11,"Tourism",7,63.6363636363636
+"CHN",11,"Trade",2,18.1818181818182
 "COL",1,"Trade",1,100
 "CRI",1,"Trade",1,100
 "CUB",1,"Investment",1,100
@@ -60,22 +59,22 @@
 "DNK",3,"Investment",1,33.3333333333333
 "DNK",3,"Knowledge Transfer",2,66.6666666666667
 "ECU",1,"Trade",1,100
-"ESP",8,"Investment",1,12.5
-"ESP",8,"Knowledge Transfer",3,37.5
-"ESP",8,"Species Dispersal",1,12.5
-"ESP",8,"Tourism",3,37.5
+"ESP",9,"Investment",1,11.1111111111111
+"ESP",9,"Knowledge Transfer",3,33.3333333333333
+"ESP",9,"Species Dispersal",2,22.2222222222222
+"ESP",9,"Tourism",3,33.3333333333333
 "EST",4,"<NA>",1,25
 "EST",4,"Investment",1,25
 "EST",4,"Knowledge Transfer",2,50
 "FIN",4,"Investment",1,25
 "FIN",4,"Knowledge Transfer",2,50
 "FIN",4,"Tourism",1,25
-"FRA",7,"Investment",1,14.2857142857143
-"FRA",7,"Knowledge Transfer",2,28.5714285714286
-"FRA",7,"Migration (non-human)",1,14.2857142857143
-"FRA",7,"Species Dispersal",1,14.2857142857143
-"FRA",7,"Tourism",1,14.2857142857143
-"FRA",7,"Trade",1,14.2857142857143
+"FRA",8,"Investment",1,12.5
+"FRA",8,"Knowledge Transfer",2,25
+"FRA",8,"Migration (non-human)",1,12.5
+"FRA",8,"Species Dispersal",2,25
+"FRA",8,"Tourism",1,12.5
+"FRA",8,"Trade",1,12.5
 "GBR",3,"Investment",1,33.3333333333333
 "GBR",3,"Knowledge Transfer",2,66.6666666666667
 "GRC",4,"Investment",2,50
@@ -88,9 +87,9 @@
 "HUN",5,"Trade",1,20
 "IDN",5,"Tourism",1,20
 "IDN",5,"Trade",4,80
-"IND",4,"Species Dispersal",1,25
-"IND",4,"Tourism",2,50
-"IND",4,"Trade",1,25
+"IND",5,"Species Dispersal",1,20
+"IND",5,"Tourism",2,40
+"IND",5,"Trade",2,40
 "IRL",3,"Investment",1,33.3333333333333
 "IRL",3,"Knowledge Transfer",2,66.6666666666667
 "IRN",1,"Tourism",1,100
@@ -117,6 +116,7 @@
 "MLT",3,"Investment",1,33.3333333333333
 "MLT",3,"Knowledge Transfer",2,66.6666666666667
 "MNE",1,"Tourism",1,100
+"MNG",1,"Trade",1,100
 "MWI",1,"Migration (non-human)",1,100
 "MYS",2,"Investment",1,50
 "MYS",2,"Trade",1,50
@@ -155,17 +155,22 @@
 "SWE",5,"Knowledge Transfer",2,40
 "SWE",5,"Species Dispersal",1,20
 "SWE",5,"Water Transfer",1,20
-"THA",1,"Energy Transfer",1,100
+"THA",2,"Energy Transfer",1,50
+"THA",2,"Tourism",1,50
 "TZA",1,"Trade",1,100
 "UKR",1,"Waste Transfer",1,100
 "URY",1,"Water Transfer",1,100
-"USA",13,"<NA>",1,7.69230769230769
-"USA",13,"Energy Transfer",2,15.3846153846154
-"USA",13,"Knowledge Transfer",2,15.3846153846154
-"USA",13,"Migration (human)",1,7.69230769230769
-"USA",13,"Species Dispersal",3,23.0769230769231
-"USA",13,"Tourism",1,7.69230769230769
-"USA",13,"Trade",3,23.0769230769231
-"ZAF",4,"Species Dispersal",1,25
-"ZAF",4,"Tourism",2,50
-"ZAF",4,"Trade",1,25
+"USA",16,"<NA>",1,6.25
+"USA",16,"Energy Transfer",2,12.5
+"USA",16,"Knowledge Transfer",2,12.5
+"USA",16,"Migration (human)",1,6.25
+"USA",16,"Migration (non-human)",1,6.25
+"USA",16,"Other",2,12.5
+"USA",16,"Species Dispersal",3,18.75
+"USA",16,"Tourism",1,6.25
+"USA",16,"Trade",3,18.75
+"ZAF",6,"Other",1,16.6666666666667
+"ZAF",6,"Species Dispersal",1,16.6666666666667
+"ZAF",6,"Tourism",3,50
+"ZAF",6,"Trade",1,16.6666666666667
+"ZWE",1,"Tourism",1,100

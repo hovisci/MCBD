@@ -568,6 +568,9 @@ c0 <- df %>% select(paper_id, coder_id, list_countries) %>%
     ## Ming Lei
     list_countries = ifelse(paper_id==713, 'Many', list_countries),
     list_countries = ifelse(paper_id==1681, 'Bulgaria', list_countries),
+    list_countries = ifelse(paper_id==396, 'Australia', list_countries),
+    list_countries = ifelse(paper_id==2284, 'Botswana; South Africa; Zimbabwe', list_countries),
+    list_countries = ifelse(paper_id==4574, 'Mongolia; India; China', list_countries),
     
     list_countries = ifelse(paper_id==6948, 'Brazil', list_countries),
     list_countries = ifelse(paper_id==6502, 'Canada; USA', list_countries),
