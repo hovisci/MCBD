@@ -1,68 +1,33 @@
----
-title: "MCBD survey 3 Cleanup and Summaries"
-author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 30, 2020 (Updated: September 4, 2020)"
-output: 
-  html_document:
-    keep_tex: yes
-    toc: yes
-    toc_depth: 4
-    toc_float: true
-    df_print: paged
-editor_options: 
-  chunk_output_type: console
----
-
-```{r setup, include=FALSE}
+## ----setup, include=FALSE---------------------------------------------------------------------------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
                       warning = FALSE, message = FALSE, results='hold')
-```
 
-# 1. Methods summary
 
-Synthesis of survey 3 results for metacoupling/biodiversity systematic review. It consists of error checks, response summaries, and visualizations of the accepted papers.
-
-# 2. R Setup
-
-The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
-
-Load libraries, directories, and custom functions from source file.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Source file
   source('./scripts/Reference.R')
-```
 
-Data is stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Data directory
   dat.dir
-```
 
-Final tables are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Final tables
   tab.dir
-```
 
-Final figures are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Final figures
   fig.dir
-```
 
-For **this run** of the script, tables for manual checks will be stored in the following folder:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 tab.check.dir
-```
 
-# 3. Load data
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # load previous workspace (if needed)
   #load("survey3Results.RData")
 
@@ -72,15 +37,9 @@ tab.check.dir
 # 5 common surveys
   survey3.5 <- read.csv(paste0(dat.dir,
                        'common_papers\\survey3_5_common_paper_selection_090120.csv'))
-```
 
-# 4. Data cleanup
 
-## 4.1 Data preview
-
-Merge survey 3 with the 5 common paper survey result (note that the structures have to match).
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop columns
   survey3.5 <- subset(survey3.5,
                       select=-c(entry,final_decision))
@@ -91,11 +50,9 @@ Merge survey 3 with the 5 common paper survey result (note that the structures h
   
 # bind rows
   survey3 <- bind_rows(survey3,survey3.5)
-```
 
-Quick summary of the dataset. 
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # number entries
   paste('number of entries:',nrow(survey3))
   
@@ -115,43 +72,31 @@ Quick summary of the dataset.
 # list of observers
   paste('observer names:')
   paste(unique(survey3$coder_id),collapse="; ")
-```
 
-The expected number of papers surveyed should be **149**, based on the number of accepted papers in Survey 1 (as of 6/23/2020).
 
-## 4.2 Editing empty fields
-
-### 4.2.1 Paper ID numbers
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check for blank paper ID number fields
   survey3[survey3$paper_id=='',]
   survey3[is.na(survey3$paper_id),]
-```
 
-### 4.2.2 Entry ID numbers
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check for blank entry ID number fields
   survey3[survey3$entry_id=='',]
   survey3[is.na(survey3$entry_id),]
-```
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check structure
   str(survey3$entry_id)
-```
- 
-Find the entry IDs that are non-numeric and edit
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract non-numeric entry IDs
   subset(survey3, !grepl('^\\d+$', survey3$entry_id))
-```
 
-Move these entries to 'notes' and provide unique entry ID number.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract non-numeric entry IDs
   nonnum <- subset(survey3, !grepl('^\\d+$', survey3$entry_id))
   
@@ -167,11 +112,9 @@ Move these entries to 'notes' and provide unique entry ID number.
   
 # rejoin to survey 3
   survey3 <- rbind(survey3,nonnum)
-```
 
-Change entry ID numbers for paper ID 5905 (all 1's)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # subset out paper ID 5905
   s3_sub <- survey3[survey3$paper_id==5905,]
 
@@ -184,20 +127,15 @@ Change entry ID numbers for paper ID 5905 (all 1's)
   
 # rejoin to survey 3
   survey3 <- rbind(survey3,s3_sub)
-```
 
 
-### 4.2.3 taxonomic or functional field
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check for blank data fields
   survey3[survey3$taxon_or_func=='',]
   #survey3[is.na(survey3$taxon_or_func),]
-```
 
-Subset for each paper ID and edit accordingly.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract paper ID numbers
   tfIDs <- unique(survey3$paper_id[survey3$taxon_or_func==''])
 
@@ -211,11 +149,9 @@ Subset for each paper ID and edit accordingly.
   # for (i in 1:length(tfIDs)){
   #   print(taxfun[taxfun$paper_id==tfIDs[[i]],])
   # }
-```
 
-Manually edit those with the same category across all entries.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # manual edits 
   taxfun$taxon_or_func[taxfun$paper_id==292 & taxfun$entry_id==2] <- 'Taxonomic'
   taxfun$taxon_or_func[taxfun$paper_id==479 & taxfun$entry_id==3] <- 'Taxonomic'
@@ -223,17 +159,13 @@ Manually edit those with the same category across all entries.
   taxfun$taxon_or_func[taxfun$paper_id==5844 & taxfun$entry_id==11] <- 'Functional'
   taxfun$taxon_or_func[taxfun$paper_id==713 & taxfun$entry_id==2] <- 'Functional'
   taxfun$taxon_or_func[taxfun$paper_id==479 & taxfun$entry_id==3] <- 'Taxonomic'
-```
 
-Manual edits of those confirmed via email
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   taxfun$taxon_or_func[taxfun$paper_id==4087 & taxfun$entry_id==1] <- 'Functional'
-```
 
-Export the remaining entry/entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # subset
   taxfun_NA <- taxfun[taxfun$taxon_or_func=='',]
 
@@ -246,26 +178,20 @@ Export the remaining entry/entries for edits.
 
 # preview
   taxfun_NA
-```
 
-Rejoin entries.
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # rejoin to survey 3
   survey3 <- rbind(survey3,taxfun)
-```
 
-### 4.2.4 empty taxa fields
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check for blank data fields
   survey3[survey3$taxa==''|survey3$taxa=='Other',]
   #survey3[is.na(survey3$taxa),]
-```
 
-Subset for each paper ID and edit accordingly.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract paper ID numbers
   txIDs <- unique(survey3$paper_id[survey3$taxa==''|survey3$taxa=='Other'])
 
@@ -279,40 +205,30 @@ Subset for each paper ID and edit accordingly.
   for (i in 1:length(txIDs)){
     #print(tax[tax$paper_id==txIDs[[i]],])
   }
-```
 
-Manually edit those with the same category across all entries.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # manual edits 
   tax$taxa[tax$paper_id==6502 & tax$entry_id==18] <- 'Birds'
   tax$taxa[tax$paper_id==2050 & tax$entry_id==3] <- 'Plants/trees/shrubs'
-```
 
-Manually edit entries based on email edits. 
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   tax$taxa[tax$paper_id==3485 |tax$paper_id==5804] <- 'Invertebrates'
-```
 
-Rejoin. 
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # rejoin to survey 3
   survey3 <- rbind(survey3,tax)
-```
 
-### 4.2.5 Empty effects
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check for blank data fields
   survey3[survey3$effect=='',]
   #survey3[is.na(survey3$effect),]
-```
 
-Subset for each paper ID and extract to send to coder.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract paper ID numbers
   efIDs <- unique(survey3$paper_id[survey3$effect==''])
 
@@ -326,20 +242,16 @@ Subset for each paper ID and extract to send to coder.
   for (i in 1:length(efIDs)){
     #print(eff[eff$paper_id==efIDs[[i]],])
   }
-```
 
-Make edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # manual edits 
   eff$effect[eff$paper_id==6502 & eff$entry_id==13] <- 'Negative (detrimental)'  # EmilyD, paper 6502
   eff$effect[eff$paper_id==826 & eff$entry_id==2] <- 'Negative (detrimental)'  # CiaraH, paper 826 (CLH 9/23/2020)
 
-```
 
-Export the remaining entry/entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # subset
   eff_NA <- eff[eff$effect=='',]
 
@@ -351,28 +263,20 @@ Export the remaining entry/entries for edits.
 
 # preview
   eff_NA
-```
 
-Rejoin edited entries.
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # rejoin to survey 3
   survey3 <- rbind(survey3,eff)
-```
 
-### 4.2.6 Empty significance
 
-Check data fields
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check for blank data fields
   survey3[survey3$significant=='',]
   #survey3[is.na(survey3$significant),]
-```
 
-Subset for each paper ID and extract to send to coders.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract paper ID numbers
   sigIDs <- unique(survey3$paper_id[survey3$significant==''])
 
@@ -381,22 +285,18 @@ Subset for each paper ID and extract to send to coders.
 
 # antijoin from survey3
   survey3 <- anti_join(survey3,sig)
-```
 
-Make edits according to the p-value provided.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # manual edits 
   sig$significant[sig$paper_id==3989 & sig$entry_id==5] <- 'TRUE'
   #sig$significant[sig$paper_id==411 & sig$entry_id==25] <- 'TRUE'
   sig$significant[sig$paper_id==5844 & sig$entry_id==10] <- 'TRUE'
   sig$significant[sig$paper_id==6502 & sig$entry_id==9] <- 'TRUE'
   sig$significant[sig$paper_id==713 & sig$entry_id==2] <- 'TRUE'
-```
 
-Export entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # subset
   sig_NA <- sig[sig$significant=='',]
 
@@ -408,30 +308,22 @@ Export entries for edits.
 
 # preview
   sig_NA
-```
 
-Append edited entries.
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # rejoin to survey 3
   survey3 <- rbind(survey3,sig)
-```
 
-### 4.2.6 empty scale fields
 
-This field should only be blank or NA if the biodiversity metric is a habitat.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change all blanks to NAs
   survey3$biodiv_cat_habitat[survey3$biodiv_cat_habitat==''] <- NA
 # check for blank data fields
   #survey3[survey3$scale=='',]
   survey3[is.na(survey3$scale) & is.na(survey3$biodiv_cat_habitat),]
-```
 
-Export these data fields for coders.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # extract and save as CSV (conditional)
   no_scale <- survey3[is.na(survey3$scale) & !is.na(survey3$biodiv_cat_habitat),]
 
@@ -443,24 +335,16 @@ Export these data fields for coders.
 
 # preview
   no_scale
-```
 
-## 4.3 Editing Categorical Responses
 
-### 4.3.1 Taxa
-
-Get levels of taxa
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get levels
   survey3$taxa <- as.factor(survey3$taxa)
   survey3$taxa <- droplevels(survey3$taxa)
   levels(survey3$taxa)
-```
 
-Change multiple species to 'multiple'.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character
   survey3$taxa <- as.character(survey3$taxa)
 
@@ -474,46 +358,36 @@ Change multiple species to 'multiple'.
 
 # change to multiple
   survey3$taxa[grepl(paste(mult_list,collapse="|"),survey3$taxa)] <- 'Multiple'
-```
 
-Change plants to plants/trees/shrubs.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   survey3$taxa[grepl('*plants*',
               survey3$taxa,ignore.case = TRUE)] <- 'Plants/trees/shrubs'
 
   survey3$taxa <- gsub('Plants/trees/shrubs','Plants/Trees/Shrubs',
                        survey3$taxa)
-```
 
-Change to invertebrates
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   mult_list <- c("echinoderm","Clams"
                   )
 
 # change to inverts
   survey3$taxa[grepl(paste(mult_list,collapse="|"),survey3$taxa)] <- 'Invertebrates'
-```
 
-Remove space from Birds
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # replace semi-colon to comma
   survey3$taxa <- gsub('^Birds $','Birds',survey3$taxa)
-```
 
-Change notation for one of the levels
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # replace semi-colon to comma
   survey3$taxa <- gsub(';',', ',survey3$taxa)
-```
 
-Extract the odd entries.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of items
   taxa_list <- c("Other",
                  "not clear",
@@ -531,21 +405,17 @@ Extract the odd entries.
   
 # show entries
   weird_tx
-```
 
-Export entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save as csv (conditional)
   if (nrow(weird_tx)>=1){
   write.csv(weird_tx,paste0(tab.check.dir,'survey3_cleanup_weird_taxa.csv'),
             row.names = TRUE)
   }
-```
 
-Append edited entries and drop levels.
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # rejoin to survey 3
   survey3 <- rbind(survey3,weird_tx)
 
@@ -553,20 +423,16 @@ Append edited entries and drop levels.
   survey3$taxa <- as.factor(survey3$taxa)
   survey3$taxa <- droplevels(survey3$taxa)
   levels(survey3$taxa)
-```
 
-### 4.3.2 Taxonomic or functional
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get levels
   survey3$taxon_or_func <- as.factor(survey3$taxon_or_func)
   survey3$taxon_or_func <- droplevels(survey3$taxon_or_func)
   levels(survey3$taxon_or_func)
-```
 
-Quick edit
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # edit
   survey3$taxon_or_func <- gsub('Taxanomic','Taxonomic',survey3$taxon_or_func)
 
@@ -574,29 +440,23 @@ Quick edit
   survey3$taxon_or_func <- as.factor(survey3$taxon_or_func)
   survey3$taxon_or_func <- droplevels(survey3$taxon_or_func)
   levels(survey3$taxon_or_func)
-```
 
-### 4.3.3 Biodiversity category (one species)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get levels
   survey3$biodiv_cat_1sp <- as.factor(survey3$biodiv_cat_1sp)
   levels(survey3$biodiv_cat_1sp)
-```
 
-Change blank to NA
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character
   survey3$biodiv_cat_1sp <- as.character(survey3$biodiv_cat_1sp)
 
 # edit blanks
   survey3$biodiv_cat_1sp[survey3$biodiv_cat_1sp==''] <- NA 
-```
 
-Change risk to 'population dynamics'.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("bird extinction risks")
 
@@ -605,11 +465,9 @@ Change risk to 'population dynamics'.
                survey3$biodiv_cat_1sp,
                ignore.case = TRUE)
                ] <- 'Population dynamics (survival, fitness, reproduction, mortality, etc.)'
-```
 
-Change 'occurrence' to match others.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("*Occurrence*","*detection*")
 
@@ -618,11 +476,9 @@ Change 'occurrence' to match others.
                survey3$biodiv_cat_1sp,
                ignore.case = TRUE)
                ] <- 'Occurrence (presence, range, persistence, etc., NOT detection)'
-```
 
-Move 'Suitable habitat loss' to habitat column and edit later.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change multiple field to character
   survey3$biodiv_cat_habitat <- as.character(survey3$biodiv_cat_habitat)
 
@@ -633,11 +489,9 @@ Move 'Suitable habitat loss' to habitat column and edit later.
 # erase
   survey3$biodiv_cat_1sp[
       survey3$biodiv_cat_1sp=="Suitable habitat loss"] <- NA
-```
 
-Edit abundance. 
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("*number of*",
                  "*abundance*")
@@ -647,20 +501,16 @@ Edit abundance.
                survey3$biodiv_cat_1sp,
                ignore.case = TRUE)
                ] <- as.character('Abundance/Density (number of individuals, individuals/unit area, biomass)')
-```
 
-Drop levels and inspect.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get levels
   survey3$biodiv_cat_1sp <- as.factor(survey3$biodiv_cat_1sp)
   survey3$biodiv_cat_1sp <- droplevels(survey3$biodiv_cat_1sp)
   levels(survey3$biodiv_cat_1sp)
-```
 
-### 4.3.4 Biodiversity category (multiple species)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character
   survey3$biodiv_cat_multsp <- as.character(survey3$biodiv_cat_multsp)
 
@@ -669,11 +519,9 @@ Drop levels and inspect.
 
 # get levels
   levels(as.factor(survey3$biodiv_cat_multsp))
-```
 
-Change to 'Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)'.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("*taxonomic distinctness",
                 "composite index*",
@@ -683,11 +531,9 @@ Change to 'Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)'
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
                survey3$biodiv_cat_multsp,
                ignore.case = TRUE)] <- "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"
-```
 
-Change to 'Abundance/Density'
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("^Abundance$",
                 "all herbivore biomass",
@@ -705,11 +551,9 @@ Change to 'Abundance/Density'
         survey3$biodiv_cat_multsp,
         ignore.case = TRUE)
         ] <- 'Abundance/Density (biomass, mass, number of individuals, individuals/unit area)'
-```
 
-Change to 'Richness (number of species)'.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("*richness*")
 
@@ -717,11 +561,9 @@ Change to 'Richness (number of species)'.
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
                survey3$biodiv_cat_multsp,
                ignore.case = TRUE)] <- 'Richness (number of species)'
-```
 
-Change to 'population dynamics' (not in the original Google Form).
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("Mortality",
                 "Total fisheries production",
@@ -733,11 +575,9 @@ Change to 'population dynamics' (not in the original Google Form).
 # change to pop dynamics
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
                survey3$biodiv_cat_multsp)] <- 'Population dynamics (survival, fitness, reproduction, mortality, etc.)'
-```
 
-Change to 'occurrence'
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character 
   survey3$biodiv_cat_multsp <- as.character(survey3$biodiv_cat_multsp)
 
@@ -748,29 +588,23 @@ Change to 'occurrence'
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
                survey3$biodiv_cat_multsp,
                ignore.case = TRUE)] <- 'Occurrence'
-```
 
-Delete entries with "migration strategy'.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # subset out paper ID 5905
   survey3 <- survey3[!(survey3$paper_id==2546 & survey3$entry_id==2),]
-```
 
-Change to diversity index
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("*Vulnearability*")
 
 # change to other
   survey3$biodiv_cat_multsp[grepl(paste(div_list,collapse="|"),
                survey3$biodiv_cat_multsp)] <- "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"
-```
 
-Change specific entries (based on email correspondence)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # E_Xing entries
   survey3$biodiv_cat_multsp[survey3$biodiv_cat_multsp=='Other' & 
                             survey3$paper_id==3668] <- 'Population dynamics (survival, fitness, reproduction, mortality, etc.)'
@@ -787,20 +621,16 @@ Change specific entries (based on email correspondence)
   survey3$biodiv_cat_multsp[survey3$biodiv_cat_multsp=='coral reef size/age' & 
                          survey3$paper_id==1376 &
                          (survey3$entry_id==1|survey3$entry_id==3)] <- NA
-```
 
-Drop levels and inspect.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get levels
   survey3$biodiv_cat_multsp <- as.factor(survey3$biodiv_cat_multsp)
   survey3$biodiv_cat_multsp <- droplevels(survey3$biodiv_cat_multsp)
   levels(survey3$biodiv_cat_multsp)
-```
 
-Extract the odd entries.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of items
   div_list <- c("Other"
                  )
@@ -813,22 +643,18 @@ Extract the odd entries.
 
 # show entries
   weird_div
-```
 
-Export entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save as csv (conditional on if there are entries)
   if (nrow(weird_div)>=1){
       write.csv(weird_div,paste0(tab.check.dir,
                                  'survey3_cleanup_weird_biodiv_multi.csv'),
                 row.names = TRUE)
   }
-```
 
-### 4.3.4 Biodiversity category (habitat)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character
   survey3$biodiv_cat_habitat <- as.character(survey3$biodiv_cat_habitat)
 
@@ -837,11 +663,9 @@ Export entries for edits.
 
 # get levels
   levels(as.factor(survey3$biodiv_cat_habitat))
-```
 
-Change to amounts.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("island area",
                 "Suitable habitat loss")
@@ -850,20 +674,16 @@ Change to amounts.
   survey3$biodiv_cat_habitat[grepl(paste(div_list,collapse="|"),
         survey3$biodiv_cat_habitat,
         ignore.case = TRUE)] <- 'Amount (e.g. land use change from non-habitat to habitat)'
-```
 
-Change 'other' for paper ID 44 only, based on emailed edits ('Habitat intactness').
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change other
   survey3$biodiv_cat_habitat[survey3$biodiv_cat_habitat=='Other' &
       survey3$paper_id==44] <- 'Quality (pollution, connectence, disturbance, etc.)'
 
-```
 
-Change to quality
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("habitat density",
                 "habitat height",
@@ -873,11 +693,9 @@ Change to quality
   survey3$biodiv_cat_habitat[grepl(paste(div_list,collapse="|"),
         survey3$biodiv_cat_habitat,
         ignore.case = TRUE)] <- 'Quality (pollution, connectence, disturbance, etc.)'
-```
-                
-Change to NA and move to notes
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of entries to change
   div_list <- c("*compared birds*")
 
@@ -894,11 +712,9 @@ Change to NA and move to notes
   survey3$biodiv_cat_habitat[grepl(paste(div_list,collapse="|"),
               survey3$biodiv_cat_habitat,
               ignore.case = TRUE)] <- NA
-```
 
-Drop levels and inspect
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to factor
   survey3$biodiv_cat_habitat <- as.factor(survey3$biodiv_cat_habitat)
 
@@ -907,11 +723,9 @@ Drop levels and inspect
   
 # show levels
   levels(survey3$biodiv_cat_habitat)
-```
 
-Export odd categories to contact coders.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of items
   div_list <- c("Other")
 
@@ -923,24 +737,18 @@ Export odd categories to contact coders.
   
 # show entries
   weird_div
-```
 
-Export entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save as csv (conditional)
   if (nrow(weird_div)>=1){
       write.csv(weird_div,paste0(tab.check.dir,
                                  'survey3_cleanup_weird_biodiv_hab.csv'),
                 row.names = TRUE)
   }
-```
 
-### 4.3.5 Duplicate metric entries
 
-Some have entries with multiple metrics. Only one metric is allowed per entry. These were extracted and manually edited. The manual edits are entered here.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # A_Herzberger errors
   # Paper ID 2546
     survey3$biodiv_cat_multsp[survey3$paper_id==2546 & 
@@ -987,11 +795,9 @@ Some have entries with multiple metrics. Only one metric is allowed per entry. T
     
   # Paper ID 654
     survey3$biodiv_cat_habitat[survey3$paper_id==813] <- NA
-```
 
-### 4.3.6 Effect
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character
   survey3$effect <- as.character(survey3$effect)
 
@@ -1000,11 +806,9 @@ Some have entries with multiple metrics. Only one metric is allowed per entry. T
 
 # get levels
   levels(as.factor(survey3$effect))
-```
 
-Batch changes
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # batch changes
   survey3$effect[grepl("*changed*",
                 survey3$effect,
@@ -1016,20 +820,16 @@ Batch changes
   survey3$effect[grepl("*Neutral*",
                 survey3$effect,ignore.case = TRUE)] <-
     'Neutral (only when there is absolutely no difference in metrics)'
-```
 
-Drop levels and inspect
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show levels
   survey3$effect <- as.factor(survey3$effect)
   survey3$effect <- droplevels(survey3$effect)
   levels(survey3$effect)
-```
 
-Export odd categories to contact coders.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make list of items
   eff_list <- c("Unclear")
 
@@ -1041,23 +841,18 @@ Export odd categories to contact coders.
   
 # show entries
   weird_eff
-```
 
-Export entries for edits.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save as csv (conditional)
   if (nrow(weird_eff)>=1){
       write.csv(weird_eff,paste0(tab.check.dir,
                                  'survey3_cleanup_weird_effects.csv'),
                 row.names = TRUE)
   }
-```
 
 
-### 4.3.7 Significant
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to character
   survey3$significant <- as.character(survey3$significant)
 
@@ -1066,71 +861,24 @@ Export entries for edits.
 
 # get levels
   levels(as.factor(survey3$significant))
-```
 
-Batch changes
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # batch changes
   survey3$significant[grepl("*True*|*yes*",
                 survey3$significant,ignore.case = TRUE)] <- 'TRUE'
   survey3$significant[grepl("*False*|^no$",
                 survey3$significant,ignore.case = TRUE)] <- 'FALSE'
-```
 
-Drop levels and inspect
 
-```{r}  
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show levels
   survey3$significant <- as.factor(survey3$significant)
   survey3$significant <- droplevels(survey3$significant)
   levels(survey3$significant)
-```
-
-No need for any exports for this one.
-
-### 4.3.7 P-value
-
-**THIS IS BEING SKIPPED FOR NOW SINCE WE HAVEN'T DECIDED WHETHER TO USE IT YET**
 
 
-### 4.4 Data Fixes (CLH 9/23/2020)
-
-```{r}
-# 4551
-survey3$biodiv_cat_multsp[survey3$paper_id == '4551' & survey3$entry_id == 3] <- "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"
-survey3$biodiv_cat_multsp[survey3$paper_id == '4551' & survey3$entry_id == 4] <- "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"
-
-# 5905
-survey3$effect[survey3$paper_id == '5905' & survey3$entry_id == 1] <- "Changed (e.g. species composition)"
-
-# 5966
-survey3$effect[survey3$paper_id == '5966' & survey3$entry_id == 1] <- "Changed (e.g. species composition)"
-
-# 510
-survey3$biodiv_cat_multsp[survey3$paper_id == '510' & survey3$entry_id == 2] <- "Abundance/Density (biomass, mass, number of individuals, individuals/unit area)"
-
-# 4257
-survey3 <- survey3[which(survey3$paper_id != '4257'),]                          # drop old entry for paper 4257
-kelly_fix <- read.csv(paste0(dir,'/issues/dataFixes/KellySppCompEntryAdd.csv')) # read in Kelly's fixes
-colnames(kelly_fix) <- colnames(survey3)                                        # make col names match
-survey3 <- rbind(survey3, kelly_fix)                                            # Add kelly's entries (total in survey 3 should be 797)
-
-
-
-```
-
-
-
-
-
-# 5 Data summaries
-
-## 5.1 Number of entries per paper
-
-Get number of papers and percent of the dataset each paper covers. This can give an idea on the weight of the papers on our results.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get summary
   ddply(survey3, .(paper_id), summarize,
         # total count of entries     
@@ -1138,11 +886,9 @@ Get number of papers and percent of the dataset each paper covers. This can give
         perc_dataset=length(entry_id)/nrow(survey3),
         num_taxa=length(unique(taxa))) %>% 
     arrange(desc(perc_dataset))
-```
 
-## 5.2 Summary of taxa across papers
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get summary
   a <- ddply(survey3, .(taxa), summarize,
         # total count of entries     
@@ -1158,11 +904,9 @@ Get number of papers and percent of the dataset each paper covers. This can give
   
 # view
   a
-```
 
-## 5.3 Summary of biodiversity metrics
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get summary
   a <- ddply(survey3, .(taxa), summarize,
           # total count of entries     
@@ -1183,11 +927,9 @@ Get number of papers and percent of the dataset each paper covers. This can give
   
 # view
   a
-```
 
-## 5.3 Summary of effects and their significance 
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get summary
   a <- ddply(survey3, .(effect, significant), summarize,
           # total count of entries     
@@ -1210,11 +952,9 @@ Get number of papers and percent of the dataset each paper covers. This can give
   
 # view
   a
-```
 
-## 5.4 Summary of effects by taxa
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get summary
   a <- ddply(survey3, .(taxa, effect), summarize,
           # total count of entries     
@@ -1230,11 +970,9 @@ Get number of papers and percent of the dataset each paper covers. This can give
 
 # view
   a
-```
 
-Quick data visualization
 
-```{r, fig.height = 6, fig.width = 11}
+## ---- fig.height = 6, fig.width = 11----------------------------------------------------------------------------------------------------------------------------------------
 # Stack plot
   quick_plot <- ggplot(a, aes(fill=effect, y=perc_per_taxa, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
@@ -1248,11 +986,9 @@ Quick data visualization
   
 # view
   quick_plot
-```
 
-Numbers instead of percents
 
-```{r, fig.height = 6, fig.width = 11}
+## ---- fig.height = 6, fig.width = 11----------------------------------------------------------------------------------------------------------------------------------------
 # Stack plot
   quick_plot <- ggplot(a, aes(fill=effect, y=count, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
@@ -1266,14 +1002,10 @@ Numbers instead of percents
   
 # view
   quick_plot
-```
 
-# 6. Cleaned survey export
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # export
   write.csv(survey3,paste0(dat.dir,'survey3_cleaned.csv'),row.names=FALSE)
 
-```
 
--------------------------------------------------------------

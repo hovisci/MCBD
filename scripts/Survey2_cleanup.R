@@ -1,70 +1,33 @@
----
-title: "Results_Survey2_cleanup"
-author: "Yingjie Li"
-date: "6/4/2020"
-output:
-  html_document:
-    keep_tex: yes
-    toc: yes
-    toc_depth: 4
-    toc_float: true
-    df_print: paged
-editor_options: 
-  chunk_output_type: console
----
-
-```{r setup, include=FALSE}
+## ----setup, include=FALSE---------------------------------------------------------------------------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
                       warning = FALSE, message = FALSE, results='hold')
-```
 
-# 1. Methods summary
 
-Synthesis of survey 3 results for metacoupling/biodiversity systematic review. It consists of error checks, response summaries, and visualizations of the accepted papers.
-
-# 2. R Setup
-
-The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
-
-Load libraries, directories, and custom functions from source file.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Source file
   source('./scripts/Reference.R')
-```
 
-Data is stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Data directory
   dat.dir
-```
 
-Final tables are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Final tables
   tab.dir
-```
 
-Final figures are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Final figures
   fig.dir
-```
 
-For **this run** of the script, tables for manual checks will be stored in the following folder:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 tab.check.dir
-```
 
 
-
-# 3. Load data
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 csv     <- paste0(dat.dir, 'survey_cleanup/survey2_for_cleanup.csv');csv  ### all coded data, except the 5 common papers
 csv.com <- paste0(dat.dir, 'common_papers/survey2_5_common_paper_selection_090120.csv');csv.com ### the 5 common papers
 
@@ -105,16 +68,9 @@ s2_com_update2 <- s2_com_update[, names(s2_sur)]
 
 ### row bind two data
 survey2_cleanup <- rbind(s2_sur, s2_com_update2)
-```
 
 
-# 4. Data cleanup
-
-## 4.2 Survey 2
-
-### 4.2.1 Pre-Cleaning
-  
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### Columns kept for analysis
 names(survey2_cleanup)
 # cols_remove <- c("timestamp", "coder_id", "author")
@@ -179,37 +135,34 @@ df   <- df2
 
 ### a copy for updating the df, will be the final result dataframe
 df99 <- df
-```
 
 
-### 4.2.2 Deep-clean
-```{r for test use, eval=FALSE, include=FALSE}
-############ test code ############################
-# # col_name <- 'list_continents'
-# dt <- conti2
-# 
-# dw1 <- dt %>%
-#   spread(key = 'key', value = 3) %>%
-#   dplyr::mutate(na_col = NA) 
-# ## as an assistant col, as some data only have one col
-# 
-# dw1[is.na(dw1)] <- ""  ## NA as ''
-# dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>%
-#   as.data.frame() %>%
-#   dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
-#                 V2 = sub('\\;$', '', V2))
-# 
-# df99 <- dw2 %>%
-#   dplyr::select(2) %>%
-#   rename(c('V2' = col_name)) %>%
-#   cbind(., dw1) %>%
-#   dplyr::select(1:2) %>%
-#   right_join(., df[, !names(df) %in% col_name],
-#              by = 'paper_id') ## remove the old, and join
-```
+## ----for test use, eval=FALSE, include=FALSE--------------------------------------------------------------------------------------------------------------------------------
+## ############ test code ############################
+## # # col_name <- 'list_continents'
+## # dt <- conti2
+## #
+## # dw1 <- dt %>%
+## #   spread(key = 'key', value = 3) %>%
+## #   dplyr::mutate(na_col = NA)
+## # ## as an assistant col, as some data only have one col
+## #
+## # dw1[is.na(dw1)] <- ""  ## NA as ''
+## # dw2 <- matrix(apply(dw1[,2:ncol(dw1)],1,paste,collapse=";"),ncol=1) %>%
+## #   as.data.frame() %>%
+## #   dplyr::mutate(V2 = gsub('\\;\\;', '', V1),
+## #                 V2 = sub('\\;$', '', V2))
+## #
+## # df99 <- dw2 %>%
+## #   dplyr::select(2) %>%
+## #   rename(c('V2' = col_name)) %>%
+## #   cbind(., dw1) %>%
+## #   dplyr::select(1:2) %>%
+## #   right_join(., df[, !names(df) %in% col_name],
+## #              by = 'paper_id') ## remove the old, and join
 
 
-```{r function}
+## ----function---------------------------------------------------------------------------------------------------------------------------------------------------------------
 func_update_col <- function(dt, col_name){
   ### 1st, long table to wide one
   dw1 <- dt %>%
@@ -235,10 +188,9 @@ func_update_col <- function(dt, col_name){
   
 
 # df99 <- func_update_col(dt = taxa2, col_name = 'taxa')  
-```
 
-#### - taxa
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### taxa ---------------------------------------------------------------------
 unique(df$taxa_list)
 unique(df$taxa)
@@ -275,11 +227,9 @@ taxa2 %>%
   tally() %>%
   mutate(pct = n/n_paper * 100) %>%
   arrange(pct)
-```
 
 
-#### - continents
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 a <- 'North America \\(includes Hawaii \\& all countries above Panama Canal\\)'
 b <- 'Oceania \\(Australia\\, New Zealand\\, Fiji\\, etc\\)'
 
@@ -311,12 +261,9 @@ conti2 %>%
 
 df99 <- func_update_col(dt = conti2, col_name = 'list_continents')
 
-```
 
 
-
-#### - habitat
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 h0 <- df %>% select(paper_id, habitat) 
 
 unique(h0$habitat)
@@ -338,13 +285,9 @@ h2 %>%
 
 
 df99 <- func_update_col(dt = h2, col_name = 'habitat')
-```
 
 
-
-####    - data type
-#####   -- data_type_biodiv
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### data_type_biodiv --------------------------------------------------------
 unique(df2$data_type_biodiv)
 unique(df2$data_type_meta)
@@ -374,10 +317,9 @@ db2 %>%
 
 
 df99 <- func_update_col(dt = db2, col_name = 'data_type_biodiv')
-```
 
-#####   -- data_type_meta
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### data_type_meta --------------------------------------------------------
 dm0 <- df2 %>% select(paper_id, data_type_meta) 
 # dm1 <- data.frame(dm0, do.call(rbind, str_split(dm0$data_type_meta,','))) 
@@ -410,11 +352,9 @@ dm2 %>%
 
 df99 <- func_update_col(dt = dm2, col_name = 'data_type_meta')
 
-```
 
 
-####    - tele_cat
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 tc0 <- df %>% select(paper_id, tele_cat) %>%
   dplyr::mutate(
@@ -422,6 +362,7 @@ tc0 <- df %>% select(paper_id, tele_cat) %>%
                       tele_cat))
 
 # Apply Animal migration tele_cat fix - CLH (9/23/2020)
+
 tc0$tele_cat[tc0$paper_id == '4518'] <- 'Trade, Knowledge Transfer' # Remove 'Migration (non-human)'
 tc0$tele_cat[tc0$paper_id == '2642'] <- 'Species Dispersal' 
 tc0$tele_cat[tc0$paper_id == '3151'] <- 'Energy Transfer'
@@ -429,10 +370,6 @@ tc0$tele_cat[tc0$paper_id == '3511'] <- 'Species Dispersal'
 tc0$tele_cat[tc0$paper_id == '5804'] <- 'Species Dispersal'
 
 
-# Fix lingering "other" categories (based on CLH recommendation - 9/23/2020)
-tc0$tele_cat[tc0$paper_id == '44'] <- 'Knowledge Transfer, Investment' # conservation program/policy
-tc0$tele_cat[tc0$paper_id == '1040'] <- 'Energy Transfer' # oil spil
-tc0$tele_cat[tc0$paper_id == '5175'] <- 'Knowledge Transfer, Investment' # conservation program/policy
 
 
 unique(df$tele_cat)
@@ -508,13 +445,9 @@ tc2 %>%
   arrange(desc(pct)) #%>%
 
 df99 <- func_update_col(dt = tc2, col_name = 'tele_cat')
-```
 
 
-####    - data source
-#####   -- data_source_biodiv
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 dsb0 <- df %>% select(paper_id, data_source_biodiv) 
 
@@ -538,13 +471,9 @@ dsb2 %>%
   arrange(pct) #%>%
 
 df99 <- func_update_col(dt = dsb2, col_name = 'data_source_biodiv')
-```
 
 
-
-
-#####    -- data_source_meta
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 dsm0 <- df %>% select(paper_id, data_source_meta) 
 
 unique(df$data_source_meta)
@@ -567,15 +496,9 @@ dsm2 %>%
   arrange(pct) #%>%
 df99 <- func_update_col(dt = dsm2, col_name = 'data_source_meta')
 
-```
 
 
-
-
-
-####    - list_countries
-
-```{r EU}
+## ----EU---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 eu <- c(
   'AUT',	'BEL',	'BGR',	'HRV',	'CYP',	'CZE',	'DNK',	'EST',	'FIN',	'FRA',	'DEU',
   'GRC',	'HUN',	'IRL',	'ITA',	'LVA',	'LTU',	'LUX',	'MLT',	'NLD',	'POL',	'PRT',
@@ -586,11 +509,9 @@ length(eu)
 eue <- "'AUT';	'BEL';	'BGR';	'HRV';	'CYP';	'CZE';	'DNK';	'EST';	'FIN';	'FRA';	'DEU';	'GRC';	'HUN';	'IRL';	'ITA';	'LVA';	'LTU';	'LUX';	'MLT';	'NLD';	'POL';	'PRT';	'ROU';	'SVK';	'SVN';	'ESP';	'SWE';	'GBR'"
 
 eue <- gsub("\t|\\'", '', eue); eue
-```
 
 
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 c0 <- df %>% select(paper_id, coder_id, list_countries) %>% 
   ### contact coder and update 
   dplyr::mutate(
@@ -701,13 +622,9 @@ c4 <- c3 %>%
 ### 
 df99 <- func_update_col(dt = c4, col_name = 'list_countries')
 
-```
 
 
-
-
-####    - biodiv_countries
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bc0 <- df %>% select(paper_id, biodiv_countries) %>%
   dplyr::mutate(
     
@@ -867,289 +784,10 @@ bc4 <- bc3 %>%
 df99 <- func_update_col(dt = bc4, col_name = 'biodiv_countries')
 # df99 <- func_update_col(dt = dsm2, col_name = 'data_source_meta')
 
-```
 
 
-
-# 5. Save cleaned data to local
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 today <- format(Sys.Date(), "%Y%m%d"); today
 fname <- paste0(dat.dir, 'survey2_cleaned.csv'); fname; survey2_cleaned = fname
 write.csv(x = df99, file = fname, row.names = F)
-```
-
-
-COMMENT OUT FOR NOW...SAVE FOR MAP SCRIPT
-
-<!-- # 6. Data viz -->
-<!-- ## Map -->
-<!-- ```{r} -->
-<!-- # devtools::install_github("ropensci/rnaturalearthdata") -->
-<!-- # install.packages("rnaturalearthhires", repos = "http://packages.ropensci.org", type = "source") -->
-
-<!-- shp <- ne_countries(scale = 50, returnclass = 'sf') %>% #st_as_sf() %>% -->
-<!--   select(name, iso_a3) %>% ## , economy, income_grp -->
-<!--   # filter(name != 'Antarctica') %>% -->
-<!--   # filter(name == 'France') %>% -->
-<!--   dplyr::mutate( -->
-<!--     iso_a3 = if_else(name == 'France', 'FRA', iso_a3), -->
-<!--     iso_a3 = if_else(name == 'Norway', 'NOR', iso_a3)) -->
-<!-- # plot(shp[1]) -->
-
-<!-- shp %>% filter(name == 'Norway') -->
-
-<!-- ### add new country name that are consistant with names uned in SDG data -->
-<!-- # library(readxl) -->
-<!-- # xls.shp.info <- paste0(dir, '/update_0503_SUM_dist/_input_data/ne_10m_admin_0_countries/Table/ne_10m_admin_0_countries-Export_Output.xls') -->
-<!-- #  -->
-<!-- # nation_new_name <-  -->
-<!-- #   read_excel(path = xls.shp.info, -->
-<!-- #              sheet = "dat", col_names = T) %>% -->
-<!-- #   select(ADMIN, ADM0_A3, nation_name) -->
-<!-- # names(nation_new_name) -->
-<!-- # nation_new_name <- as.data.frame(nation_new_name[,-c(3,4)]) -->
-
-
-
-
-<!-- ### theme, font -------------------------------------------------------------------------------------- -->
-<!-- font      <- 'sans' ## = "TT Arial" -->
-<!-- font_size <- 6.5 ## max = 7; min = 5 for Nature Sustainability -->
-<!-- map_theme <- ggpubr::theme_transparent()+ -->
-<!--   theme( -->
-<!--     axis.title.x=element_blank(), -->
-<!--     axis.title.y=element_blank(), -->
-<!--     axis.text.x=element_blank(), -->
-<!--     axis.ticks = element_blank(), -->
-<!--     panel.grid.major = element_blank(), -->
-<!--     panel.grid.minor = element_blank(), -->
-<!--     panel.border = element_blank(), -->
-<!--     legend.position = c(0.09, 0.38), -->
-<!--     legend.key.size = unit(0.3, "cm"), -->
-<!--     # legend.key.height = unit(0.5, "cm"), -->
-<!--     legend.key = element_rect(fill = NA, colour = NA, size = 0.25), -->
-
-<!--     panel.background = element_rect(fill = "transparent", colour = NA), -->
-<!--     plot.background = element_rect(fill = "transparent", colour = NA), -->
-<!--     legend.background = element_rect(fill = "transparent", colour = NA), -->
-<!--     legend.box.background = element_rect(fill = "transparent", colour = NA), -->
-<!--     text=element_text(family=font, size=font_size)) -->
-
-
-
-<!-- ``` -->
-
-
-
-<!-- ### - list_countries -->
-<!-- ```{r} -->
-<!-- ###  -->
-<!-- ctr_sys <- df99 %>% -->
-<!--   select(paper_id, list_countries) %>% -->
-<!--   data.frame(., do.call(rbind, str_split(.$list_countries,';'))) %>% -->
-<!--   gather(key = 'key', value = list_countries, 3:ncol(.)) %>% -->
-<!--   dplyr::mutate(list_countries = trimws(list_countries)) %>% -->
-<!--   dplyr::distinct(paper_id, list_countries, .keep_all = T) %>%  -->
-<!--   filter(list_countries != '') %>% -->
-<!--   arrange(paper_id) %>% -->
-<!--   group_by(list_countries) %>% -->
-<!--   tally()%>%  -->
-<!--   arrange(desc(n)) #%>% -->
-<!-- # str(ctr_sys) -->
-<!-- ### -->
-
-
-<!-- ### join new name table -->
-<!-- shp_df <- shp %>%  -->
-<!--   left_join(., ctr_sys, by=c("iso_a3" = "list_countries")) -->
-
-<!-- ### check the join -->
-<!-- shp_df_check <- merge( -->
-<!--   shp, ctr_sys, by.x = "iso_a3", by.y = "list_countries", all.y=T) %>% -->
-<!--   st_drop_geometry() -->
-
-<!-- # str(shp_df) -->
-<!-- unique(shp_df$n) -->
-
-
-<!-- ### breaks and colors -->
-<!-- var <- shp_df$n -->
-<!-- max <- max(var, na.rm = T); max -->
-<!-- min <- min(var, na.rm = T); min -->
-<!-- hist(var) -->
-
-<!-- breaks <- seq(min, max, 2); breaks; length(breaks) -->
-<!-- breaks <- sort(unique(shp_df$n)); breaks; length(breaks) -->
-<!-- myPalette <- colorRampPalette((brewer.pal(8, "Greens")));# myPalette; rev -->
-<!-- colors <- myPalette(length(breaks)); colors -->
-<!-- title <- 'Entire system\nNumber of papers' -->
-
-<!-- fig1 <- ggplot(data = shp_df) +  -->
-<!--   geom_sf(aes(fill = n), color='gray50', size=0.01) +  -->
-<!-- # scale_fill_manual(values = colors, -->
-<!-- #                   labels = labels) + -->
-
-<!--   # scale_fill_continuous( -->
-<!--   #   low="#F7FBFF", high="#084594",  guide="colorbar", na.value="gray90") + -->
-
-<!--   scale_fill_gradientn( -->
-<!--     name=title, -->
-<!--     colours= colors, na.value = "gray90",  -->
-<!--     # values=c(0,0.19,0.2,0.5,0.8,0.81,1), -->
-<!--     limits = c(min,max), -->
-<!--     breaks = breaks) + -->
-<!--   guides(fill = guide_legend(label.hjust = 0, label = T,  -->
-<!--                              reverse = T, title = title))+ -->
-<!--   map_theme -->
-<!-- fig1 -->
-<!-- dir -->
-<!-- fname <- paste0(fig.dir, '/Fig_map_country_sys_', today, '.jpg'); fname -->
-<!-- ggsave(fname, fig1, width = 18, height = 9, units = 'cm', limitsize = FALSE, -->
-<!--        bg = "transparent") -->
-<!-- ``` -->
-
-
-<!-- ### - biodiv_countries -->
-<!-- ```{r} -->
-<!-- ctr_bio <- df99 %>% -->
-<!--   select(paper_id, biodiv_countries) %>% -->
-<!--   data.frame(., do.call(rbind, str_split(.$biodiv_countries,';'))) %>% -->
-<!--   gather(key = 'key', value = biodiv_countries, 3:ncol(.)) %>% -->
-<!--   dplyr::mutate(biodiv_countries = trimws(biodiv_countries)) %>% -->
-<!--   dplyr::distinct(paper_id, biodiv_countries, .keep_all = T) %>%  -->
-<!--   filter(biodiv_countries != '') %>% -->
-<!--   arrange(paper_id) %>% -->
-<!--   group_by(biodiv_countries) %>% -->
-<!--   tally()%>%  -->
-<!--   arrange(desc(n)) #%>% -->
-<!-- # str(ctr_bio) -->
-
-
-<!-- ### join new name table -->
-<!-- shp_df <- shp %>%  -->
-<!--   left_join(., ctr_bio, by=c("iso_a3" = "biodiv_countries")) -->
-
-<!-- # str(shp_df) -->
-<!-- unique(shp_df$n) -->
-
-<!-- ### check the join -->
-<!-- shp_df_check <- shp %>%  -->
-<!--   right_join(., ctr_bio, by=c("iso_a3" = "biodiv_countries")) -->
-
-<!-- ### breaks and colors -->
-<!-- var <- shp_df$n -->
-<!-- max <- max(var, na.rm = T); max -->
-<!-- min <- min(var, na.rm = T); min -->
-<!-- hist(var) -->
-
-<!-- breaks <- seq(min, max, 2); breaks; length(breaks) -->
-<!-- breaks <- sort(unique(shp_df$n)); breaks; length(breaks) -->
-<!-- myPalette <- colorRampPalette((brewer.pal(8, "Blues")));# myPalette; rev -->
-<!-- colors <- myPalette(length(breaks)); colors -->
-<!-- title <- 'Biodiversity system\nNumber of papers' -->
-
-<!-- ### plot -->
-<!-- fig2 <- ggplot(data = shp_df) +  -->
-<!--   geom_sf(aes(fill = n), color='gray50', size=0.01) +  -->
-<!--   scale_fill_gradientn( -->
-<!--     name = title, -->
-<!--     colours= colors, na.value = "gray90",  -->
-<!--     limits = c(min,max), breaks = breaks) + -->
-<!--   guides(fill = guide_legend(label.hjust = 0, label = T, -->
-<!--                              reverse = T, title = title))+ -->
-<!--   map_theme -->
-<!-- fig2 -->
-<!-- dir -->
-<!-- fname <- paste0(fig.dir, '/Fig_map_country_bio_', today, '.jpg'); fname -->
-<!-- ggsave(fname, fig2, width = 18, height = 9, units = 'cm', limitsize = FALSE, -->
-<!--        bg = "transparent") -->
-<!-- ``` -->
-
-
-<!-- ## Percentage of telecoupling -->
-<!-- ```{r} -->
-<!-- s2_cled <- survey2_cleaned -->
-
-<!-- s2_dt <- read.csv(s2_cled, stringsAsFactors = F) -->
-<!-- names(s2_dt) -->
-
-<!-- ### select the cols, spread by tc -->
-<!-- tc_by_ctr0 <- s2_dt %>% as.data.frame() %>% -->
-<!--   dplyr::select(paper_id, biodiv_countries, tele_cat) %>% -->
-<!--   dplyr::mutate(id = row_number())  -->
-
-<!-- tc_by_ctr <- tc_by_ctr0 %>% -->
-<!--   spread(key = tele_cat, value = paper_id) %>% -->
-<!--   arrange(id) -->
-
-<!-- ### split country col into multiple cols -->
-<!-- tc_by_ctr1 <- splitstackshape::cSplit( -->
-<!--   indt = tc_by_ctr, splitCols = 'biodiv_countries', sep = ';',  -->
-<!--   direction = 'wide', drop = T)  -->
-
-<!-- # ctr0 <- tc_by_ctr %>% -->
-<!-- #   select(id, biodiv_countries) -->
-<!-- # ctr_split <- data.frame( -->
-<!-- #   ctr0, do.call(rbind, str_split(ctr0$biodiv_countries,';'))) %>% -->
-<!-- #   select(-biodiv_countries) %>% -->
-<!-- #   arrange(id) %>%  -->
-<!-- #   select(-id)  -->
-<!-- # tc_by_ctr2 <- cbind(tc_by_ctr, ctr_split) -->
-<!-- # -->
-<!-- # ### wide ctr to long ctr format -->
-<!-- # tc_by_ctr3 <- tc_by_ctr2  %>% -->
-<!-- #   gather(key = 'key_ctr', value = 'ctr', X1:X28) %>% -->
-<!-- #   distinct(id, ctr, .keep_all = T) %>% -->
-<!-- #   select(-biodiv_countries) %>% -->
-<!-- #   dplyr::filter(ctr != '') -->
-<!-- # unique(tc_by_ctr3$ctr) -->
-
-<!-- ### wide ctr to long ctr -->
-<!-- tc_by_ctr3 <- tc_by_ctr1 %>% -->
-<!--   gather(key = 'key_ctr', value = 'ctr',  -->
-<!--          biodiv_countries_01:biodiv_countries_28) %>% -->
-<!--   distinct(id, ctr, .keep_all = T) %>% -->
-<!--   dplyr::filter(!is.na(ctr)) -->
-
-<!-- ### wide tc to long tc -->
-<!-- tc_by_ctr4 <- tc_by_ctr3 %>% -->
-<!--   gather(key = 'tc', value = 'paper_id', 2:25) %>% -->
-<!--   dplyr::filter(!is.na(paper_id)) -->
-
-<!-- ## split tc into multiple cols - wide tc -->
-<!-- tc_by_ctr5 <- splitstackshape::cSplit( -->
-<!--   indt = tc_by_ctr4, splitCols = 'tc', sep = ';',  -->
-<!--   direction = 'wide', drop = T)  -->
-
-<!-- ### wide tc to long tc -->
-<!-- tc_by_ctr6 <- tc_by_ctr5 %>% -->
-<!--   gather(key = 'tc_id', value = 'tc', tc_1:tc_3) %>% -->
-<!--   filter(!is.na(tc), -->
-<!--          tc != 'remove') -->
-
-<!-- str(tc_by_ctr6) -->
-
-<!-- ### count by ctr and tc -->
-<!-- tc_by_ctr7 <- tc_by_ctr6 %>% -->
-<!--   dplyr::select(ctr, tc) %>% -->
-<!--   ### how many tcs in total for each ctr? -->
-<!--   ungroup() %>% -->
-<!--   group_by(ctr) %>% -->
-<!--   add_tally(name = 'total_tc') %>% -->
-<!--   ### the number of each tc -->
-<!--   dplyr::ungroup() %>% -->
-<!--   dplyr::group_by(ctr, total_tc) %>% -->
-<!--   dplyr::count(tc, name = 'n_tc') %>% -->
-<!--   arrange(ctr) %>% -->
-<!--   dplyr::mutate(pct_tc = n_tc/total_tc*100) -->
-
-
-<!-- tc_by_ctr7_check <-  tc_by_ctr7 %>% -->
-<!--   dplyr::group_by(ctr) %>% -->
-<!--   dplyr::summarise(sum = sum(pct_tc, na.rm = T)) -->
-
-<!-- fname <- paste0(dat.dir, 'pct_of_tc_by_country.csv'); fname -->
-<!-- write.csv(x = tc_by_ctr7, file = fname, row.names = F) -->
-
-<!-- ``` -->
 

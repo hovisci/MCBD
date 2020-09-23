@@ -1,97 +1,52 @@
----
-author: "Ciara Hovis & Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 30, 2020 (Updated: September 16, 2020)"
-output: 
-  html_document:
-    keep_tex: yes
-    toc: yes
-    toc_depth: 4
-    toc_float: true
-    df_print: paged
-editor_options: 
-  chunk_output_type: console
----
-
-```{r setup, include=FALSE}
+## ----setup, include=FALSE------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
                       warning = FALSE, message = FALSE, results='hold')
-```
 
-# 1. Methods summary
 
-Synthesis of survey 2 and 3 results for metacoupling/biodiversity systematic review. It consists of error checks, response summaries, and visualizations of the accepted papers.
-
-# 2. R Setup
-
-The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
-
-Load libraries, directories, and custom functions from source file.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # Source file
   source('./scripts/Reference.R')
-```
 
-Data is stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 # Data directory
   dat.dir
-```
 
-Final tables are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 # Final tables
   tab.dir
-```
 
-Final figures are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 # Final figures
   fig.dir
-```
 
-For **this run** of the script, tables for manual checks will be stored in the following folder:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 tab.check.dir
-```
-
-# 3. Load data
 
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # load previous workspace (if needed)
   #load("synthesisResults.RData")
 
 # surveys
-  survey2 <- read.csv(paste0(dat.dir,'survey2_cleaned.csv'))
+  survey2 <- read.csv(paste0(dat.dir,'survey2_cleaned_20200922.csv'))
   survey3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
-```
 
-# 4. Data formatting
 
-## 4.1 Merge tables
-
-Merge tables. The expected length of this merge should be the same as survey 3, with fields from survey 2 repeated across entries for each paper id. 
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # left join survey 2 to survey 3
   s23 <- left_join(survey3,survey2,by=c("paper_id","coder_id"))
-```
 
-Show column names
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get col names
   colnames(s23)
-```
 
-Drop columns. Includes s3 notes now.
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 unwanted <- c(# survey 3 fields
               'timestamp.x','taxa.x',
               # survey 2 fields
@@ -107,24 +62,13 @@ s23$sig_effect <- '' #adding column now because there are errors below
 
 s23 <- s23 %>%
         select(-one_of(unwanted))
-```
 
-## 4.2 Quick cleanup of levels
 
-Next, show levels of couplings
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 levels(as.factor(s23$tele_cat))
-```
 
 
-**IMPORTANT STEP HERE:** COMMENTED OUT FOR NOW
-
-Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well!!!!!!!!!!!!!!!!!!!!!!!!! 
-
-The reason for doing this is so that we can attribute biodiversity impacts to the specific flows that may have been studied together, and whose individual impacts cannot be decoupled.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # # set as character
 #   s23$tele_cat <- as.character(s23$tele_cat)
 # 
@@ -140,25 +84,13 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
 # 
 # # show levels
 #   summary(s23$tele_cat)
-```
 
-Some have NA's. Let's see which ones they are.
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 s23[is.na(s23$tele_cat),]
-```
 
-These items above are the **common survey** responses from Survey 2. This **needs to be addressed by the Survey 2 sub-team.**
 
-# 6. Classify Impact and Significance Category
-
-To simplify our results, we opted classify impacts into 4 categories:  Positive, Negative, Comp. Change, No relation or unclear.
-
-## 6.1 Investigate Significance Not Evaluated
-
-No action taken yet, need to discuss with group
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # Check how many entries were "not evaluated" n=259
 table(s23$significant)
 
@@ -176,12 +108,9 @@ table(not.eval$biodiv_cat_multsp)
 table(not.eval$biodiv_cat_habitat)
 table(not.eval$effect)
 
-```
 
 
-## 6.2  Classification Code
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 
 
 
@@ -223,15 +152,9 @@ check_sig_effect <- as.data.frame(cbind(s23$effect, s23$significant, s23$sig_eff
 
 table(s23$sig_effect)
 
-```
 
 
-# 7. Export table
-
-The table to be exported here will be used in another script for synthesis, data summaries and figures.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # save as csv
   write.csv(s23, paste0(dat.dir,'s23.csv'), row.names = FALSE)
-```
 

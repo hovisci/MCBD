@@ -1,75 +1,33 @@
----
-title: "MCBD Raw Survey Prep"
-author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 7, 2020 (Updated: September 4, 2020)"
-output:
-  html_document:
-    keep_tex: yes
-    toc: yes
-    toc_depth: 4
-    toc_float: true
-    df_print: paged
-editor_options: 
-  chunk_output_type: console
----
-
-```{r setup, include=FALSE}
+## ----setup, include=FALSE---------------------------------------------------------------------------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
                       warning = FALSE, message = FALSE, results='hold')
-```
 
-# 1. Methods summary
 
-Compilation, inspection, and rough formatting of the raw Google form responses from the Biodiversity and Metacoupling literature review. The reviewed articles are those that were accepted in the abstract screening process.
-
-The outputs from this script are:
-
-- Tables of extracted data fields containing errors for reviewers to manually edit (and later incorporated in updated versions of this R script).
-- Surveys 1 - 3 for the 5 shared articles that were examined by all reviewers ("common papers").
-- Surveys 1 - 3 for all remaining articles, to be cleaned in other R scripts.
-
-# 2. R Setup
-
-The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
-
-Load libraries, directories, and custom functions from source file.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Source file
   source('./scripts/Reference.R')
-```
 
-Data is stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Data directory
   dat.dir
-```
 
-Final tables are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Final tables
   tab.dir
-```
 
-Final figures are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Final figures
   fig.dir
-```
 
-For **this run** of the script, tables for manual checks will be stored in the following folder:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
 tab.check.dir
-```
 
 
-# 3. Load data
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # load previous workspace (if needed)
   #load("RawSurveyPrep.RData")
 
@@ -89,35 +47,9 @@ tab.check.dir
   
 # manual edits
   s1_manual <- read.csv(paste0(dat.dir,'rawData\\survey1_manual_edits.csv'))
-```
 
-# 4. Data cleanup
 
-## 4.1 Survey 1
-
-Goals:
-sort by paper ID and timestamp
-Take the latest survey for that paper ID
-Select the unique paper ID per person that was done the most recently
-i.e. no duplicate paper IDs, but take the most recent edits they did
-
-Error check:
-  - Need to double-check paper IDs and match with author names and years
-  - need to import the final paper list with assignments for checking this
-
-Quality check: separate the 5 papers that everyone did
-  - use the final answers from these to also control the other survey column answers
-  
-Error check:
-  - ensure that the 'no's' don't have any answers for surveys 2 or 3
-  - ensure that all yes' have answers for 2 or 3
-  - ensure that any updated no's (and for sure a NO) have surveys 2 or 3 REMOVED from the dataset
-
-### 4.1.1 Data preview
-
-The summaries here are **preliminary**, as the final numbers depend on the edits.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # structure
   #str(survey1)
 
@@ -139,38 +71,26 @@ The summaries here are **preliminary**, as the final numbers depend on the edits
 # list of observers
   paste('observer names:')
   paste(unique(survey1$Coder.ID),collapse="; ")
-```
 
-The expected number of papers surveyed should be **593** (plus or minus 2 with duplicated study IDs).
 
-### 4.1.2 Edit study IDs from manual edit file
-
-Some study IDs in survey 1 were written incorrectly. These were manually edited by MG_Chung in a new table. We add these edits here to change the survey numbers.
-
-First, select only the timestamp, coder ID, only paper ID and correction, and display the errors. 
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # select columns
   s1_manual <- subset(s1_manual,
                       select = c('Timestamp','Coder.ID','Paper_ID_correction', 
                                  'Paper.ID.Code', 'First.Author.s.Last.Name'))
 # show edits
   s1_manual
-```
 
-How many are there, and are all values unique? Duplicates would be a little more complicated...
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # count
   nrow(s1_manual)
 
 # count unique
   length(unique(s1_manual$Paper.ID.Code))
-```
 
-Next, extract these entries from survey 1 as a new subset.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # subset
   s1_sub <- survey1 %>%
               filter(Paper.ID.Code %in% s1_manual$Paper.ID.Code) %>% 
@@ -186,17 +106,14 @@ Next, extract these entries from survey 1 as a new subset.
   b <- s1_manual %>% arrange(Paper.ID.Code) %>% subset(select=c('Paper.ID.Code'))
   cat('test:\n')
   paste(a==b)
-```
 
-Remove from the previous dataset (will append later)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # remove from survey 1
   survey1 <- anti_join(survey1,s1_sub)
-```
 
-Edit paper IDs of the subset
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # edit paper IDs (NOTE: this edit requires that positions of wrong and right code to be the same!!)
   wrong_code <- s1_manual %>% arrange(Paper.ID.Code) %>% subset(select=c('Paper.ID.Code'))
   right_code <- s1_manual %>% arrange(Paper.ID.Code) %>% subset(select=c('Paper_ID_correction'))
@@ -206,52 +123,37 @@ Edit paper IDs of the subset
   # replace values
     s1_sub$Paper.ID.Code <- mapvalues(s1_sub$Paper.ID.Code,
                                       from=wrong_code,to=right_code)
-```
 
-Rejoin to survey 1
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # join edited surveys to survey 1
   survey1 <- rbind(survey1,s1_sub)
-```
 
-Quick edit of Paper ID mismatch from A_Herzberger and R_Chen.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # paper ID manual edits
   survey1$Paper.ID.Code[survey1$Paper.ID.Code==2001] <- 2201
   # survey1$Paper.ID.Code[survey1$Paper.ID.Code==264 & 
   #                         survey1$Coder.ID=='R_Chen'] <- 2800
-```
 
-We also found an article mistakenly surveyed. This will be removed from all analyses, as of a decision on 5-15-2020.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop entries completely (invalid papers)
   survey1 <- survey1[!survey1$Paper.ID.Code==6005,]
-```
 
-We will also remove an observer from survey 1, who only did part of one of the common surveys, and another observer whose papers were full of errors and had to be completely redone. This prevents skewing agreement across the common surveys, and from using other invalidated surveys that have been redone.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop entries completely (invalid papers)
   survey1 <- survey1[!survey1$Coder.ID=='V_Frans',]
   survey1 <- survey1[!survey1$Coder.ID=='R_Chen',]
-```
 
 
-### 4.1.3 Edit columns
-
-Drop empty columns in the dataset
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop blank columns
   survey1 <-  subset(survey1, select = -c(X, X.1) )
-```
 
-Edit column names (too long!)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get colnames
   #colnames(survey1)
 
@@ -271,20 +173,14 @@ Edit column names (too long!)
                          "further_discuss",
                          "explicit_distant_impacts",
                          "explain_distant_impacts") 
-```
 
-Change structure (if needed)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check structure
   #str(survey1)
-```
 
-### 4.1.4 Combine with Chinese version of the survey entries
 
-First, convert timestamps, since different formats.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # convert timestamp to POSIX format
   survey1$timestamp <- lubridate::mdy_hms(as.character(survey1$timestamp),
                                           truncated=3)
@@ -292,27 +188,21 @@ First, convert timestamps, since different formats.
   cnS1$timestamp <- lubridate::ymd_hms(as.character(cnS1$timestamp),
                                           truncated=3)
   #str(survey1$timestamp)
-```
 
-Then, check column names.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check column name matching. If mismatch is listed, correct before binding
   cat('column mismatch test:\n')
   setdiff(colnames(survey1),colnames(cnS1))
-```
 
-Quick edit of Paper ID mismatches from E_Xing.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # paper ID manual edits
   cnS1$paper_id[cnS1$paper_id==3879] <- 3897
   cnS1$paper_id[cnS1$paper_id==3881] <- 3888
-```
 
-Quick edit of missing entries from surveys 1 and 3.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # select columns
   cns1_manual <- subset(cn_edit,
                         select = c('paper_id',
@@ -341,22 +231,14 @@ Quick edit of missing entries from surveys 1 and 3.
     
 # join edited surveys to survey 1
   cnS1 <- rbind(cnS1,cns1_sub)
-```
 
-Bind rows.
 
-**NOTE:** structure for those matching column names have to be the same; also, any missing columns will be filled with NA.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # combine
   survey1 <- bind_rows(survey1,cnS1)
-```
 
-### 4.1.5 Edit name errors
 
-Name formatting matters for sorting data by timestamp. We will repeat this for the other surveys, too. 
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change dashes to underscores
   survey1$coder_id <- gsub("-", "_", survey1$coder_id)
 
@@ -369,15 +251,9 @@ Name formatting matters for sorting data by timestamp. We will repeat this for t
   paste('observer names:')
   paste(unique(survey1$coder_id),collapse="; ")
 
-```
 
-### 4.1.6 Format dates and extract unique papers
 
-We will repeat this for the other surveys, too. 
-
-Sort and extract entry by latest timestamp. The resulting number of entries should match the number of unique study IDs across coders.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get original length
   a <- length(unique(c(survey1$paper_id,survey1$coder_id)))
 
@@ -399,19 +275,9 @@ Sort and extract entry by latest timestamp. The resulting number of entries shou
   
 # how many?
   paste('count:', b)
-```
 
-### 4.1.7 Make lists of accepted and rejected papers for Survey 1
 
-We are only using the following question from survey 1 to confirm that a paper is accepted (core team decision):
-
-*Were you able to explicitly indicate that the paper meets all four of our criteria for the previous questions?*
-
-Any entries mistakenly put as 'yes' when really not eligible will be changed via R later, after reviewing surveys 2 and 3.
-
-Here, we are also including manual rejections from team meeting discussions of papers on 5-1-2020, 5-13-2020 6-4-2020, and those via email.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change paper id field to character
   survey1$paper_id <- as.character(survey1$paper_id)
 
@@ -464,11 +330,9 @@ Here, we are also including manual rejections from team meeting discussions of p
   
 # check if length of objects match survey form
   paste('test:', nrow(s1_keep)+nrow(s1_reject) == nrow(survey1))
-```
 
-Make a new survey1 with accept/reject column (called status) for later query if needed. Also change the answer for 'meet_all_4' to NO for s1_reject.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # add column
   s1_keep$status <- 'accept'
   s1_reject$status <- 'reject'
@@ -478,11 +342,9 @@ Make a new survey1 with accept/reject column (called status) for later query if 
 
 # rbind
   survey1 <- rbind(s1_keep,s1_reject)
-```
 
-Extract list of unique papers and observer IDs to CSV for core team use (will cbind later).
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # list of completed surveys
   s1_complete <- survey1 %>% 
                  arrange(coder_id, paper_id, desc(timestamp)) %>% 
@@ -514,15 +376,9 @@ Extract list of unique papers and observer IDs to CSV for core team use (will cb
   
 # show summary table
   t1
-```
 
-**NOTE:** This acceptance rate **INCLUDES** the 5 common surveys everyone did.
 
-## 4.2 Survey 2
-
-### 4.2.1 Data preview
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # structure
   #str(survey2)
 
@@ -544,41 +400,29 @@ Extract list of unique papers and observer IDs to CSV for core team use (will cb
 # list of observers
   paste('observer names:')
   paste(unique(survey2$Coder.ID),collapse="; ")
-```
 
-We also found an article mistakenly surveyed. This will be removed from all analyses, as of a decision on 5-15-2020.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop entries completely (invalid papers)
   survey2 <- survey2[!survey2$Paper.ID.Code==6005,]
-```
 
-Edit survey ID numbers
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # R_Chen paper ID error
   #survey2$Paper.ID.Code[survey2$Paper.ID.Code==109] <- 3924
-```
 
-Remove observer whose papers were completely redone by another observer (similar to Survey 1).
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop entries completely (invalid papers)
   survey2 <- survey2[!survey2$Coder.ID=='R_Chen',]
-```
 
-### 4.2.2 Edit columns
 
-Drop empty columns in the dataset
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop blank columns
   survey2 <-  subset(survey2, select = -c(X,X.1,X.2,X.3,X.4,X.5,X.6))
-```
 
-Edit column names (too long!)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get colnames
   #colnames(survey2)
 
@@ -615,61 +459,45 @@ Edit column names (too long!)
                          "list_biodiv_metrics",
                          "further_discuss",
                          "biodiv_countries")
-```
 
-Change structure (if needed)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check structure
   #str(survey2)
-```
 
-### 4.2.3 Combine with Chinese version of the survey entries
 
-First, convert timestamps, since different formats.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # convert timestamp to POSIX format
   survey2$timestamp <- lubridate::mdy_hms(as.character(survey2$timestamp),
                                           truncated=3)
 
   cnS2$timestamp <- lubridate::mdy_hms(as.character(cnS2$timestamp),
                                           truncated=3)
-```
 
-Then, check column names.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check column name matching. If mismatch is listed, correct before binding
   cat('column mismatch test:\n')
   setdiff(colnames(survey2),colnames(cnS2))
   setdiff(colnames(cnS2),colnames(survey2))
   ncol(survey2)==ncol(cnS2)
-```
 
-Bind rows.
 
-**NOTE:** structure for those matching column names have to be the same; also, any missing columns will be filled with NA.
+## ---- echo=FALSE, eval=FALSE------------------------------------------------------------------------------------------------------------------------------------------------
+## # TEMPORARY EDIT HERE UNTIL FIXES ARE MADE
+##   # cnS2$scale_entire <- as.factor(cnS2$scale_entire)
+##   # answers <- c('Yes','No')
+##   # cnS2$further_discuss <- mapvalues(cnS2$further_discuss,from = 1:2,to=answers)
+##   # cnS2$peri_tele_sep <- as.factor(cnS2$peri_tele_sep)
+##   # cnS2$meta_var_type <- as.factor(cnS2$meta_var_type)
 
-```{r, echo=FALSE, eval=FALSE}
-# TEMPORARY EDIT HERE UNTIL FIXES ARE MADE
-  # cnS2$scale_entire <- as.factor(cnS2$scale_entire)
-  # answers <- c('Yes','No')
-  # cnS2$further_discuss <- mapvalues(cnS2$further_discuss,from = 1:2,to=answers)
-  # cnS2$peri_tele_sep <- as.factor(cnS2$peri_tele_sep)
-  # cnS2$meta_var_type <- as.factor(cnS2$meta_var_type)
-```
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # combine
   survey2 <- bind_rows(survey2,cnS2)
-```
 
-### 4.2.4 Edit name errors
 
-Name formatting matters for sorting data by timestamp. We will repeat this for the other surveys, too. 
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change dashes to underscores
   survey2$coder_id <- gsub("-", "_", survey2$coder_id)
 
@@ -682,15 +510,9 @@ Name formatting matters for sorting data by timestamp. We will repeat this for t
 # show updated list
   paste('observer names:')
   paste(unique(survey2$coder_id),collapse="; ")
-```
 
-### 4.2.5 Format dates and extract unique papers
 
-We will repeat this for the other surveys, too. 
-
-Sort and extract entry by latest timestamp. The resulting number of entries should match the number of unique study IDs across coders. If false, the error needs to be found in order to proceed.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get original length
   a <- length(unique(c(survey2$paper_id,survey2$coder_id)))
 
@@ -712,15 +534,9 @@ Sort and extract entry by latest timestamp. The resulting number of entries shou
   
 # how many?
   paste('count:', b)
-```
 
-### 4.2.6 Comparing matching eligible papers from survey 1 with survey 2 completion
 
-Here we are making the assumption that all of survey 2 is dependent on survey 1. We had instances where observers began surveys 2 and 3 and then realized the paper wasn't eligible after all. They were then instructed to fill out survey 1 again and change the responses accordingly.
-
-First we manually remove any survey 2 papers that were manually rejected above.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change to numeric
   survey2$paper_id <- as.character(survey2$paper_id)
 
@@ -745,28 +561,19 @@ First we manually remove any survey 2 papers that were manually rejected above.
   paste('number of entries:',nrow(survey2))
   paste('number of papers:',length(unique(survey2$paper_id)))
   paste('number of observers:',length(unique(survey2$coder_id)))
-```
 
-Then, we make edits for wrong paper IDs (found while coding below, but edits made above in prep for new survey uploads as they come in).
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # fix wrong paper ID
   #survey2$paper_id[survey2$paper_id==77 & survey2$coder_id=='R_Chen'] <- 6655
-```
 
-We will also investigate the differences in paper IDs, to ensure no other errors in data entry.
 
-Does the number of entries match the number of eligible papers in survey 1?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # test match of survey 1 with survey 2
   length(unique(s1_keep$paper_id)) == length(unique(survey2$paper_id))
-```
-
-This **NEEDS TO BE TRUE** for a complete, error-free dataset.
 
 
-```{r, fig.height=3,fig.width=3}
+## ---- fig.height=3,fig.width=3----------------------------------------------------------------------------------------------------------------------------------------------
 # make list of paper IDs from survey 1 'keep' for matching
   keep_list <- unique(s1_keep$paper_id)
 
@@ -785,34 +592,24 @@ This **NEEDS TO BE TRUE** for a complete, error-free dataset.
 
 # venn diagram with count of papers in each
   venn(list(survey1_keep = first, survey2_entries = second))
-```
 
-**Error check: which papers have a survey 2 but no survey 1???**
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show only the second list of paper IDs (survey 2 only)
   onlysecond
-```
 
-These are a potential problem. Need to go back to survey 1 and see what the answers were for these.
 
-Whose papers are they so we can contact the observers?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 1, not just the keep list
   survey1[survey1$paper_id %in% onlysecond,]
-```
 
-It looks like a 'keep list' issue for this one.
 
-We should also check the ones not in survey 1 at all.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 2 for those not in survey 1 at all
   survey2[survey2$paper_id %in% onlysecond,]
-```
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 1, not just the keep list
   #survey1[survey1$paper_id %in% onlyfirst,]
 
@@ -830,20 +627,14 @@ We should also check the ones not in survey 1 at all.
   
 # show list
   s1_missing
-```
 
-**Error check: which papers have a survey 1 but no survey 2???**
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show only the first list of paper IDs (survey 1 only)
   onlyfirst
-```
 
-It's very likely that these are the papers that were made inelligible after starting surveys 2 or 3. However, it's best to double-check. If there is an error here in survey 2, then the entry for survey 1 would have to be modified.
 
-Whose papers are they so we can contact the observers?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 1, not just the keep list
   #survey1[survey1$paper_id %in% onlyfirst,]
 
@@ -861,14 +652,9 @@ Whose papers are they so we can contact the observers?
   
 # show list
   s2_missing
-```
 
 
-The 'both' section is fine and no need to investigate. They would be more of an issue if there's no survey 3 to match survey 2 (to do later). 
-
-### 4.2.7 Extract data summaries for core team.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # list of completed surveys
   s2_complete <- survey2 %>% 
                  arrange(coder_id, paper_id, desc(timestamp)) %>% 
@@ -914,13 +700,9 @@ The 'both' section is fine and no need to investigate. They would be more of an 
   
 # display progress here
   t2
-```
 
-## 4.3 Survey 3
 
-### 4.3.1 Data preview
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # structure
   #str(survey3)
 
@@ -942,20 +724,14 @@ The 'both' section is fine and no need to investigate. They would be more of an 
 # list of observers
   paste('observer names:')
   paste(unique(survey3$Coder.ID),collapse="; ")
-```
 
-Remove observer whose papers were completely redone by another observer (similar to Survey 1).
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # drop entries completely (invalid papers)
   survey3 <- survey3[!survey3$Coder.ID=='R_Chen',]
-```
 
-### 4.3.2 Edit columns
 
-Edit column names (too long!)
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get colnames
   #colnames(survey3)
 
@@ -975,44 +751,32 @@ Edit column names (too long!)
                          "p_value",
                          "notes",
                          "coder_id")
-```
 
-Change structure (if needed)
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check structure
   #str(survey3)
-```
 
-### 4.3.3 Combine with Chinese version of the survey entries
 
-First, convert timestamps, since different formats.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # convert timestamp to POSIX format
   survey3$timestamp <- lubridate::mdy_hms(as.character(survey3$timestamp),
                                           truncated=3)
 
   cnS3$timestamp <- lubridate::ymd_hms(as.character(cnS3$timestamp),
                                           truncated=3)
-```
 
-Then, check column names.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # check column name matching. If mismatch is listed, correct before binding
   cat('column mismatch test:\n')
   setdiff(colnames(survey3),colnames(cnS3))
   setdiff(colnames(cnS3),colnames(survey3))
   paste('ncol Survey3:',ncol(survey3))
   paste('ncol cnSurvey3:',ncol(cnS3))
-```
 
-Bind rows.
 
-**NOTE:** structure for those matching column names have to be the same; also, any missing columns will be filled with NA.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # TEMPORARY EDIT HERE UNTIL FIXES ARE MADE
   # cnS3$unique_id <- as.factor(cnS3$unique_id)
   # cnS3$significant <- as.factor(cnS3$significant)
@@ -1024,13 +788,9 @@ Bind rows.
 
 # combine
   survey3 <- bind_rows(survey3,cnS3)
-```
 
-### 4.3.4 Edit name errors
 
-Name formatting matters for sorting data by timestamp. We will repeat this for the other surveys, too. 
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # change dashes/periods to underscores
   survey3$coder_id <- gsub("-", "_", survey3$coder_id)
   survey3$coder_id <- gsub("\\.", "_", survey3$coder_id)
@@ -1043,61 +803,47 @@ Name formatting matters for sorting data by timestamp. We will repeat this for t
 # show updated list
   paste('observer names:')
   paste(unique(survey3$coder_id),collapse="; ")
-```
 
-### 4.3.5 Format dates and extract unique papers and entries
 
-We will repeat this for the other surveys, too. 
-
-Sort and extract entry by latest timestamp. The resulting number of entries should match the number of unique study IDs across coders. 
-
-First, double-check that all timestamps are indeed unique and not just copy-paste.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # test all entries have unique timestamps
   a <- nrow(survey3)
   b <- length(unique(survey3$timestamp))
   paste('test:', a == b)
-```
 
 
+## ---- eval=FALSE, echo=FALSE------------------------------------------------------------------------------------------------------------------------------------------------
+## ### NOT SURE IF THIS MATTERS. NEED TO CHECK. ####
+## 
+## # There are errors in this part, where we don't have observer ID numbers or paper/entry ID numbers... This would also be an issue when filtering.
+## 
+## # # get original length
+## #   a <- length(unique(c(survey3$paper_id,
+## #                        survey3$coder_id,
+## #                        survey3$entry_id,
+## #                        survey3$taxa)))
+## #
+## # # select latest data entries according to paper ID, observer and timestamp
+## #   survey3 <-  survey3 %>%
+## #                 # Within each grouping of col 1 and col 2...
+## #                 group_by(paper_id, coder_id, survey3$entry_id) %>%
+## #                 # Sort rows by descending order of timestamp...
+## #                 # (extra step helpful in checking what happens here)
+## #                 arrange(paper_id, coder_id, entry_id, desc(timestamp)) %>%
+## #                 # Pick the latest time
+## #                 slice(which.max(timestamp)) %>%
+## #                 # ungroup
+## #                 ungroup()
+## #
+## # # check if length matches
+## #   b <- length(unique(c(survey3$paper_id,survey3$coder_id)))
+## #   paste('test:', a == b)
+## #
+## # # how many?
+## #   paste('count:', a)
 
-```{r, eval=FALSE, echo=FALSE}
-### NOT SURE IF THIS MATTERS. NEED TO CHECK. ####
 
-# There are errors in this part, where we don't have observer ID numbers or paper/entry ID numbers... This would also be an issue when filtering.
-
-# # get original length
-#   a <- length(unique(c(survey3$paper_id,
-#                        survey3$coder_id,
-#                        survey3$entry_id,
-#                        survey3$taxa)))
-# 
-# # select latest data entries according to paper ID, observer and timestamp
-#   survey3 <-  survey3 %>% 
-#                 # Within each grouping of col 1 and col 2...
-#                 group_by(paper_id, coder_id, survey3$entry_id) %>% 
-#                 # Sort rows by descending order of timestamp...
-#                 # (extra step helpful in checking what happens here)
-#                 arrange(paper_id, coder_id, entry_id, desc(timestamp)) %>% 
-#                 # Pick the latest time
-#                 slice(which.max(timestamp)) %>% 
-#                 # ungroup
-#                 ungroup()
-#   
-# # check if length matches
-#   b <- length(unique(c(survey3$paper_id,survey3$coder_id)))
-#   paste('test:', a == b)
-#   
-# # how many?
-#   paste('count:', a)
-```
-
-### 4.3.6 Removing rejected papers
-
-As per meeting on 5/1/2020, some papers were rejected after completing other surveys beyond survey 1. We thus remove them here to avoid any further confusion.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # correct ID number of a rejected paper
   # paperID 22, entry ID 22
     survey3$paper_id[survey3$coder_id=='A_Torres' &
@@ -1125,13 +871,9 @@ As per meeting on 5/1/2020, some papers were rejected after completing other sur
   paste('number of entries:', nrow(survey3))
   paste('number of papers:', length(unique(survey3$paper_id)))
   paste('number of observers:', length(unique(survey3$coder_id)))
-```
 
-### 4.3.7 Correcting known errors
 
-Then, we nake edit for observer errors (found while coding below, but edits made above in prep for new survey uploads as they come in). The following corrections are from a group meeting on 5-13-2020,and from email inquiries on 5-18-2020 to coauthors.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # A_Torres errors
   # paper ID 1488, entry ID 4
     survey3$paper_id[survey3$coder_id=='A_Torres' &
@@ -1175,11 +917,9 @@ Then, we nake edit for observer errors (found while coding below, but edits made
 # rejections from email confirmation
   # survey3 <- survey3[!(survey3$paper_id==0000 & survey3$coder_id=='____'),]
 
-```
 
-We also correct for unknown coders, organized by timestamp.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Y_Zhang
   int <- interval(ymd_hms("2020-03-17 13:08:00"), ymd_hms("2020-03-17 13:10:59"))
   survey3$coder_id[survey3$timestamp %within% int] <- 'Y_Zhang'
@@ -1205,30 +945,19 @@ We also correct for unknown coders, organized by timestamp.
   survey3$coder_id[survey3$timestamp %within% int |
                    survey3$timestamp %within% int2|
                    survey3$timestamp %within% int3] <- 'E_Dean'
-```
 
-### 4.3.8 Comparing matching eligible papers from survey 1 with survey 3 completion
 
-Here we are making the assumption that all of survey 3 is dependent on survey 1. We had instances where observers began surveys 2 and 3 and then realized the paper wasn't eligible after all. They were then instructed to fill out survey 1 again and change the responses accordingly.
-
-Does the number of entries match the number of eligible papers in survey 1?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # test match of survey 1 with survey 3
   length(unique(s1_keep$paper_id)) == length(unique(survey3$paper_id))
-```
 
-Does the number of unique papers match the number of papers in survey 2?
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # test match of survey 2 with survey 3
   length(unique(survey2$paper_id)) == length(unique(survey3$paper_id))
-```
 
 
-We will also investigate the differences in paper IDs, to ensure no other errors in data entry.
-
-```{r, fig.height=3,fig.width=3}
+## ---- fig.height=3,fig.width=3----------------------------------------------------------------------------------------------------------------------------------------------
 # make list of paper IDs from survey 1 'keep' for matching
   keep_list <- unique(s1_keep$paper_id)
 
@@ -1247,34 +976,24 @@ We will also investigate the differences in paper IDs, to ensure no other errors
 
 # venn diagram with count of papers in each
   venn(list(survey1_keep = first, survey3_entries = third))
-```
 
-**Error check: which papers have a survey 3 but no survey 1???**
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show only the third list of paper IDs (survey 3 only)
   onlythird
-```
 
-These are a potential problem. Need to go back to survey 1 and see what the answers were for these.
 
-Whose papers are they so we can contact the observers?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 1, not just the keep list
   a <- survey1[survey1$paper_id %in% onlythird,]
-```
 
-It looks like a 'keep list' issue for this one.
 
-We should also check the ones not in survey 1 at all.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 3 for those not in survey 1 at all
   survey3[survey3$paper_id %in% onlythird,]
-```
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save list as csv (if there are entries)
   s31_missing <- survey3[survey3$paper_id %in% onlythird,]
   s31_missing <- s31_missing %>%
@@ -1289,20 +1008,14 @@ We should also check the ones not in survey 1 at all.
   
 # show list
   s31_missing
-```
 
-**Error check: which papers have a survey 1 but no survey 3???**
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show only the first list of paper IDs (survey 1 only)
   onlyfirst
-```
 
-It's very likely that these are the papers that were made inelligible after starting surveys 2 or 3. However, it's best to double-check. If there is an error here in survey 3, then the entry for survey 1 would have to be modified.
 
-Whose papers are they so we can contact the observers?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 1, not just the keep list
   #survey1[survey1$paper_id %in% onlyfirst,]
 
@@ -1321,13 +1034,9 @@ Whose papers are they so we can contact the observers?
   
 # show list
   s3_missing
-```
 
-The 'both' section is fine and no need to investigate. 
 
-Get summary data to add to core team summary below.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # S1_s3 mismatches per observer
   only3 <- survey3[survey3$paper_id %in% onlythird,]
   only1 <- survey1[survey1$paper_id %in% onlyfirst,]
@@ -1335,13 +1044,9 @@ Get summary data to add to core team summary below.
                  num_s3_no_s1=length(unique(paper_id)))
   only1 <- ddply(only1,.(coder_id),summarize,
                  num_s1_no_s3=length(unique(paper_id)))
-```
 
-### 4.3.9 Comparing matching eligible papers from survey 2 with survey 3 completion
 
-You can't have a survey 3 without a survey 2. Time to check it out.
-
-```{r, fig.height=3,fig.width=3}
+## ---- fig.height=3,fig.width=3----------------------------------------------------------------------------------------------------------------------------------------------
 # make list of paper IDs from survey 1 'keep' for matching
   keep_list <- unique(survey2$paper_id)
 
@@ -1360,34 +1065,24 @@ You can't have a survey 3 without a survey 2. Time to check it out.
 
 # venn diagram with count of papers in each
   venn(list(survey2_entries = second, survey3_entries = third))
-```
 
-**Error check: which papers have a survey 3 but no survey 2???**
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show only the third list of paper IDs (survey 3 only)
   onlythird
-```
 
-These are a potential problem. Need to go back to survey 2 and see what the answers were for these.
 
-Whose papers are they so we can contact the observers?
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 2, not just the keep list
   survey2[survey2$paper_id %in% onlythird,]
-```
 
-It looks like a 'keep list' issue for this one.
 
-We should also check the ones not in survey 2 at all.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 3 for those not in survey 2 at all
   survey3[survey3$paper_id %in% onlythird,]
-```
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save list as csv (only if there are entries)
   s32_missing <- survey3[survey3$paper_id %in% onlythird,]
   s32_missing <- s32_missing %>%
@@ -1402,24 +1097,19 @@ We should also check the ones not in survey 2 at all.
   
 # show list
   s32_missing
-```
 
-**Error check: which papers have a survey 2 but no survey 3???**
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show only the second list of paper IDs (survey 2 only)
   onlysecond
-```
 
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # we compare with the entire survey 2, not just the keep list
   survey2[survey2$paper_id %in% onlysecond,]
-```
 
-Export list to contact observers.
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # save list as csv (if there are entries)
   s3_missing <- survey1[survey1$paper_id %in% onlysecond,]
   s3_missing <- s3_missing %>%
@@ -1434,16 +1124,14 @@ Export list to contact observers.
 
 # show list
   s3_missing
-```
 
-### 4.3.10 Check NA entry ID fields
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show empty entry IDs
   survey3[survey3$entry_id=='',]
-```
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get unique entry IDs from list and add value
   pID_list <- survey3[survey3$entry_id=='',]$paper_id
   cID_list <- survey3[survey3$entry_id=='',]$coder_id
@@ -1453,9 +1141,9 @@ Export list to contact observers.
     # print(survey3[survey3$paper_id==pID_list[[i]] &
     #                 survey3$coder_id==cID_list[[i]],])
   }
-```
 
-```{r}
+
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # edit entry IDs manually
   survey3$entry_id[survey3$entry_id==''& survey3$coder_id==cID_list[[1]]] <- 1
   survey3$entry_id[survey3$entry_id==''& survey3$coder_id==cID_list[[2]]] <- 2
@@ -1469,31 +1157,22 @@ Export list to contact observers.
                      survey3$coder_id==cID_list[[8]]][2] <- 8
   survey3$entry_id[survey3$entry_id==''& survey3$paper_id==pID_list[[9]] & 
                      survey3$coder_id==cID_list[[9]]] <- 1
-```
 
-### 4.3.11 Find empty coder ID fields
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # show empty coder IDs
   survey3[survey3$coder_id=='',]
-```
 
-### Check NA coder ID fields
 
-Check survey assignments from previous surveys to get coder ID. This was especially a problem for ID 3456, 3924 and 6655 since they were assigned to all, but was solved above using timestamps.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # get paper IDs from list
   pID_list <- unique(survey3$paper_id[survey3$coder_id==''])
 
 # show list
   pID_list
-```
 
 
-### 4.3.12 Data summaries for core team
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # list of completed surveys
   s3_complete <- survey3 %>% 
                  arrange(coder_id, paper_id,desc(entry_id)) %>% 
@@ -1551,13 +1230,9 @@ Check survey assignments from previous surveys to get coder ID. This was especia
   
 # show progress table
   t3
-```
 
-# 5. Export surveys for cleanup
 
-## 5.1 Exports for manual checking.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # exports for manual check of study IDs
   write.csv(survey1,paste0(tab.check.dir,
                            'survey1_for_manual_check.csv'),row.names=FALSE)
@@ -1565,13 +1240,9 @@ Check survey assignments from previous surveys to get coder ID. This was especia
                            'survey2_for_manual_check.csv'),row.names=FALSE)
   write.csv(survey3,paste0(tab.check.dir,
                            'survey3_for_manual_check.csv'),row.names=FALSE)
-```
 
-## 5.2 Extract 5 common paper survey responses
 
-The 5 common surveys will be analyzed separately. The most common response will be used as the final 'answers', and then appended to the rest of surveys 1 thru 3 for the other analytical portions of the study.
-
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # list of common papers to extract
   commons <- c(6655,2577,3924,3456,1488)
 
@@ -1599,11 +1270,9 @@ The 5 common surveys will be analyzed separately. The most common response will 
   paste('test1:', nrow(survey1c)+nrow(s1_full) == nrow(survey1))
   paste('test2:', nrow(survey2c)+nrow(s2_full) == nrow(survey2))
   paste('test3:', nrow(survey3c)+nrow(s3_full) == nrow(survey3))
-```
 
-All common surveys have been assessed as of 6/4/2020, so no further work on these is needed.
 
-```{r, eval=TRUE}
+## ---- eval=TRUE-------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make subfolder
   dir.create(paste0(dat.dir,'\\common_papers'),recursive=TRUE)
 
@@ -1614,11 +1283,9 @@ All common surveys have been assessed as of 6/4/2020, so no further work on thes
                             'survey2_common_papers.csv'),row.names=FALSE)
   write.csv(survey3c,paste0(dat.dir,'\\common_papers\\',
                             'survey3_common_papers.csv'),row.names=FALSE)
-```
 
-## 5.3 Extract all survey responses
 
-```{r}
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # make subfolder
   dir.create(paste0(dat.dir,'\\survey_cleanup'),recursive=TRUE)
 
@@ -1629,33 +1296,27 @@ All common surveys have been assessed as of 6/4/2020, so no further work on thes
                           'survey2_for_cleanup.csv'),row.names=FALSE)
   write.csv(s3_full,paste0(dat.dir,'\\survey_cleanup\\',
                           'survey3_for_cleanup.csv'),row.names=FALSE)
-```
 
-## 5.4 Extract column names for dictionary
 
-```{r, eval=FALSE}
-# extract column names
-  s1_coln <- data.frame(column_name=colnames(survey1), question='NA')
-  s2_coln <- data.frame(column_name=colnames(survey2), question='NA')
-  s3_coln <- data.frame(column_name=colnames(survey3), question='NA')
-  
-# make subfolder
-  dir.create(paste0(dat.dir,'\\survey_colnames'),recursive=TRUE)
+## ---- eval=FALSE------------------------------------------------------------------------------------------------------------------------------------------------------------
+## # extract column names
+##   s1_coln <- data.frame(column_name=colnames(survey1), question='NA')
+##   s2_coln <- data.frame(column_name=colnames(survey2), question='NA')
+##   s3_coln <- data.frame(column_name=colnames(survey3), question='NA')
+## 
+## # make subfolder
+##   dir.create(paste0(dat.dir,'\\survey_colnames'),recursive=TRUE)
+## 
+## # exports for survey cleanup
+##   write.csv(s1_coln,paste0(dat.dir,'\\survey_colnames\\',
+##                           'survey1_colnames.csv'),row.names=FALSE)
+##   write.csv(s2_coln,paste0(dat.dir,'\\survey_colnames\\',
+##                           'survey2_colnames.csv'),row.names=FALSE)
+##   write.csv(s3_coln,paste0(dat.dir,'\\survey_colnames\\',
+##                           'survey3_colnames.csv'),row.names=FALSE)
 
-# exports for survey cleanup
-  write.csv(s1_coln,paste0(dat.dir,'\\survey_colnames\\',
-                          'survey1_colnames.csv'),row.names=FALSE)
-  write.csv(s2_coln,paste0(dat.dir,'\\survey_colnames\\',
-                          'survey2_colnames.csv'),row.names=FALSE)
-  write.csv(s3_coln,paste0(dat.dir,'\\survey_colnames\\',
-                          'survey3_colnames.csv'),row.names=FALSE)
-```
 
-# 6. Save workspace
-
-```{r,cache=TRUE,cache.comments=FALSE}
+## ----cache=TRUE,cache.comments=FALSE----------------------------------------------------------------------------------------------------------------------------------------
 # save workspace to load later if needed
   save.image("RawSurveyPrep.RData")
-```
 
------------------------------------------------------------------------------------

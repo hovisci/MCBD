@@ -1,68 +1,33 @@
----
-title: "MCBD Survey 1 Cleanup and Summaries"
-author: "Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 19, 2020 (Updated: September 4, 2020)"
-output: 
-  html_document:
-    keep_tex: yes
-    toc: yes
-    toc_depth: 4
-    toc_float: true
-    df_print: paged
-editor_options: 
-  chunk_output_type: console
----
-
-```{r setup, include=FALSE}
+## ----setup, include=FALSE------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
                       warning = FALSE, message = FALSE, results='hold')
-```
 
-# 1. Methods summary
 
-Synthesis of survey 1 results for metacoupling/biodiversity systematic review. It consists of error checks, response summaries, numbers of papers for each stage of the PRISMA framework, and visualizations of the accepted papers.
-
-# 2. R Setup
-
-The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
-
-Load libraries, directories, and custom functions from source file.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # Source file
   source('./scripts/Reference.R')
-```
 
-Data is stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 # Data directory
   dat.dir
-```
 
-Final tables are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 # Final tables
   tab.dir
-```
 
-Final figures are stored here:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 # Final figures
   fig.dir
-```
 
-For **this run** of the script, tables for manual checks will be stored in the following folder:
 
-```{r, echo=FALSE}
+## ---- echo=FALSE---------------------------------------------------------------------------------
 tab.check.dir
-```
 
-# 3. Load data
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # load previous workspace (if needed)
   #load("Survey1Results.RData")
 
@@ -84,21 +49,13 @@ tab.check.dir
                                'absScreening\\AbsScreen2_maybes_to_keep.csv'))
   ab_yeses <- read.csv(paste0(dat.dir,
                               'absScreening\\final_sample_for_coding.csv'))
-```
 
-# 4. Data cleanup
 
-## 4.1 Data preview
-
-Merge survey 1 with the 5 common paper survey result.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 survey1 <- bind_rows(survey1,survey1.5)
-```
 
-Quick summary of the dataset. 
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # number entries
   paste('number of entries:',nrow(survey1))
   
@@ -118,15 +75,9 @@ Quick summary of the dataset.
 # list of observers
   paste('observer names:')
   paste(unique(survey1$coder_id),collapse="; ")
-```
 
-The expected number of papers surveyed should be **593** (plus or minus 2 with duplicated study IDs 379 and 501).
 
-## 4.2 Editing each column
-
-First, we change the the paper ID numbers in the assignment sheet for those with duplicate IDs that have been changed in the surveys.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # change paper ID based on original ID and coder
   assignments$STUDY_ID.1[assignments$STUDY_ID.1==501 &
                            assignments$REVIEWERS=='EmilyX'] <-5010002
@@ -134,13 +85,9 @@ First, we change the the paper ID numbers in the assignment sheet for those with
                            assignments$REVIEWERS=='Yuqian'] <- 5010001
   assignments$STUDY_ID.1[assignments$STUDY_ID.1==379 &
                            assignments$REVIEWERS=='Ruishan'] <- 3790002
-```
 
-### 4.2.1 Publication years
 
-There are some typos in publication years. The publication years for each paper ID will thus be replaced with those from the assignment sheet.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get list of values to replace
   pID <- unique(survey1$paper_id)
 
@@ -149,13 +96,9 @@ There are some typos in publication years. The publication years for each paper 
       survey1$year_pub[survey1$paper_id==pID[[i]]] <-
       assignments$PY[assignments$STUDY_ID.1==pID[[i]]]
   }
-```
 
-## 4.2.2 Author names
 
-Some author names have also been recorded incorrectly. Here, we copy the author list from the assignment sheet to replace all the author entries in the survey.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # change to character
   assignments$AU <- as.character(assignments$AU)
   survey1$author <- as.character(survey1$author)
@@ -165,140 +108,95 @@ Some author names have also been recorded incorrectly. Here, we copy the author 
       aut <- str_split(assignments$AU[assignments$STUDY_ID.1==pID[[i]]],";")[[1]][1]
       survey1$author[survey1$paper_id==pID[[i]]] <- aut
   }
-```
 
-### 4.2.3 Criteria 1 (Accepted papers only)
 
-For this column and all subsequent columns, we only need to focus our edits on the accepted papers.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # drop rejects
   keep <-  subset(survey1, status=='accept')
 
 # antijoin for rejects (to be combined later)
   reject <- anti_join(survey1,keep)
-```
 
-Get unique values across columns
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # drop levels
   keep <- droplevels(keep)
 
 # unique criteria 1s
   #unique(keep$C1_biodiv)
   length(unique(keep$C1_biodiv))
-```
-
-These are **too unique to clean up**. Perhaps better results can be taken from survey2. This is a problem with open-ended questions.
 
 
-### 4.2.4 Criteria 2 (Accepted papers only)
-
-Get unique values across columns
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # unique criteria 2s
   #unique(keep$C2_meta)
   length(unique(keep$C2_meta))
-```
 
-Again, **too unique to clean up**. 
 
-### 4.2.5 Criteria 3 (Accepted papers only)
-
-Get unique values across columns
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # unique criteria 3s
   #unique(keep$C3_quant)
   length(unique(keep$C3_quant))
-```
 
-Again, **too unique to clean up**. Reserve for now.
 
-### 4.2.6 Criteria 4 (Accepted papers only)
-
-Get unique values across columns
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # unique criteria 4s
   keep$C4_study <- as.factor(keep$C4_study)
   levels(keep$C4_study)
   length(unique(keep$C4_study))
-```
 
-Show the entries for each of these study types and correct as needed.
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # "Experimental study" 
   keep[keep$C4_study==levels(keep$C4_study)[1],]
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # "Interview" 
   keep[keep$C4_study==levels(keep$C4_study)[2],]
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # Edit as per email with coder 
   keep$C4_study[keep$paper_id==5853] <- "Observational study"
-```
 
-"The estimation of gecko abundance is based on the combination of observational and survey data. I think it is sufficiently robust, and this paper met all the other criteria we established. So I would include this paper in the dataset and recode the study type as "observational" (because it has at least the observational component)"
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # "Mixed: both observational/experimental study and literature review" 
   keep[keep$C4_study==levels(keep$C4_study)[3],]
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # Edit as per email with coder 
   keep$C4_study[keep$paper_id==425] <- "Observational study"
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # "Modeling study (using empirical data and not projected)" 
   keep[keep$C4_study==levels(keep$C4_study)[4],]
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # "Observational study" 
   keep[keep$C4_study==levels(keep$C4_study)[5],]
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # "Observational/Modeling study"
   keep[keep$C4_study==levels(keep$C4_study)[6],]
-```
-
-This paper will remain, as per email with MG_Chung:
-"I also remembered this ID 45 paper. I first thought that this paper is modeling paper as their method section in the main text. But we discussed this paper together, then we noticed that its supplementary information provided their specific data based on previous observational data. So, I selected both observational and modeling study and moved to the survey 2 and 3. In my opinion, we could not select this paper one of observational or modeling study. It is mixed."
 
 
-Drop levels
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # drop levels
   keep$C4_study <- droplevels(keep$C4_study)
-```
 
 
-### 4.2.7 Explicit telecoupling impacts on biodiversity (Accepted papers only)
-
-This question informs us about the number of papers from which the telecouplings are inferred or if they are explicitly stated.
-
-We first assess how many are missing this answer, as this question was added at a later point in time in the review process.
-
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # show NA rows
   keep[keep$explicit_distant_impacts=='',]
-```
 
-Manual edits for those who provided information via email.
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # A_Herzberger errors
   keep$explicit_distant_impacts[keep$coder_id=='A_Herzberger' &
                                (keep$paper_id==332  | 
@@ -394,23 +292,20 @@ Manual edits for those who provided information via email.
     keep$coder_id=='Y_Li' & keep$paper_id==2222] <- 'Yes'
   keep$explain_distant_impacts[
     keep$coder_id=='Y_Li' & keep$paper_id==2222] <- "wood trade"
-```
 
-List remaining edits (and also check E_Xing survey responses).
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # show NA rows
   keep[keep$explicit_distant_impacts==''|
          keep$explicit_distant_impacts=='no such data in Chinese survey',]
-```
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # identify coders to be contacted for edits
   unique(keep$coder_id[keep$explicit_distant_impacts==''|keep$explicit_distant_impacts=='no such data in Chinese survey'])
-```
 
-Export for inquiry with coders.
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # export missing entries
   missing_explicit <- keep[keep$explicit_distant_impacts==''|keep$explicit_distant_impacts=='no such data in Chinese survey',]
 
@@ -420,35 +315,22 @@ Export for inquiry with coders.
             paste0(tab.check.dir,'survey1_cleanup_inferred_columns.csv'),
                    row.names=FALSE)
   }
-```
 
 
-# 5. Data summaries
-
-## 5.1 Accepted/rejected published papers over time
-
-Total number of papers
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get total numbers but also ensure both values here match
   nrow(survey1)
   length(unique(survey1$paper_id))
-```
 
-Number of accepted and rejected papers.
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get summary
   ddply(survey1, .(status), summarize,
         # total count of entries     
         count=length(status))
-```
 
-### 5.1.1 Visualizing accepted papers over time
 
-Visualizing accepted papers over time, including the ones from the abstract screening process.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # all abstract screened papers (n=7307)
   ab_screen <- ab_screen[!ab_screen$PY==2020,] #remove 2020 studies
   ab_all <- ab_screen[!duplicated(ab_screen$TITLE),]
@@ -494,16 +376,14 @@ Visualizing accepted papers over time, including the ones from the abstract scre
         nrow(papers_reviewed) == nrow(ab_accept) - nrow(paper_unavail))
   paste('total abstract screen:',
         nrow(ab_all) == nrow(ab_reject) + nrow(ab_accept))
-```
 
-```{r, eval=FALSE,echo=FALSE}
- # uniqueIDs <- unique(ab_maybes$STUDY_ID.1)
- # ab_accept %>% subset(grepl(paste(uniqueIDs,collapse="|"),STUDY_ID))
-```
 
-Next, simplify columns and combine for three tiers in the plot.
+## ---- eval=FALSE,echo=FALSE----------------------------------------------------------------------
+##  # uniqueIDs <- unique(ab_maybes$STUDY_ID.1)
+##  # ab_accept %>% subset(grepl(paste(uniqueIDs,collapse="|"),STUDY_ID))
 
-```{r}
+
+## ------------------------------------------------------------------------------------------------
 # select columns
   # papers found in WOS but don't meet criteria
     reject_abstract_level <- subset(ab_reject,select=c("STUDY_ID","PY"))
@@ -532,11 +412,9 @@ Next, simplify columns and combine for three tiers in the plot.
   
 # check
   nrow(papers)
-```
 
-Plot image.
 
-```{r, fig.width=5,fig.height=5}
+## ---- fig.width=5,fig.height=5-------------------------------------------------------------------
 # Get a count of records per year
   paper_ct <- ddply(papers, .(year_pub,type), summarize, count=length(year_pub))
 
@@ -574,27 +452,19 @@ Plot image.
 
 # show here
   papers.fig
-```
 
-### 5.1.2 Acceptance rate at each level of review
 
-Acceptance rate for abstract screening.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get total abstract acceptance rate
   sum(ab_all$INCLUDE=='YES')/nrow(ab_all)
-```
 
-Acceptance rate for papers that were reviewed (**NOTE:** this includes the 5 common surveys).
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get total paper acceptance rate
   sum(survey1$status=='accept')/nrow(survey1)
-```
 
-Acceptance rate per person (**NOTE:** this excludes the 5 common surveys per person, but has a rate for it on its own as "all").
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get summary
   acr <- ddply(survey1, .(coder_id), summarize,
               # total count of entries     
@@ -604,20 +474,14 @@ Acceptance rate per person (**NOTE:** this excludes the 5 common surveys per per
               # percent acceptance
               accept_rate=sum(status=='accept')/length(coder_id))
   acr
-``` 
 
-Average per-person acceptance rates
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # mean per-person acceptance rate 
   mean(acr$accept_rate)
-```
 
-## 5.2 Themes across accepted papers
 
-Add abstracts to the accepted papers and convert to term matrix.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # fix columns
   assignments$ABSTRACT <- as.character(assignments$ABSTRACT)
   keep$abstract <- NA
@@ -673,13 +537,9 @@ Add abstracts to the accepted papers and convert to term matrix.
 
 # Show frequency of the top 20 terms
   head(abterms.df, 20)
-```
 
-### 5.2.1 Wordcloud 
 
-Next, make a wordcloud.
-
-```{r wordcloud, results='hide', message=FALSE, warning=FALSE}
+## ----wordcloud, results='hide', message=FALSE, warning=FALSE-------------------------------------
 # Word cloud
   png(paste0(fig.dir,"S1_word_cloud.png"),
       height=6,width=6,units='in',res=300)
@@ -690,26 +550,17 @@ Next, make a wordcloud.
             max.words=100, random.order=FALSE, rot.per=0.0, 
             colors=brewer.pal(8, "Dark2"))
   dev.off()
-```
 
 
-![](../images/S1_word_cloud.png)
-
-## 5.3 Counts of study types (accepted papers only)
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get summary
   ddply(keep, .(C4_study), summarize,
         # total count of entries     
         count=length(C4_study),
         percent=length(C4_study)/nrow(keep))
-```
 
-## 5.4 Counts of papers that were inferred (accepted papers only)
 
-Total rate of **inferring** across papers.
-
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get total papers for which the tc relationships were inferred
   paste('number inferred papers:',sum(keep$explicit_distant_impacts=='No'))
   paste('number explicit papers:',sum(keep$explicit_distant_impacts=='Yes'))
@@ -717,11 +568,9 @@ Total rate of **inferring** across papers.
 # get total inferring rate
   paste('inferred percent:',sum(keep$explicit_distant_impacts=='No')/nrow(keep))
   paste('explicit percent:',sum(keep$explicit_distant_impacts=='Yes')/nrow(keep))
-```
 
-Percent of papers inferred per person per person
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # get summary
   ddply(keep, .(coder_id), summarize,
         # total count of entries     
@@ -730,17 +579,13 @@ Percent of papers inferred per person per person
         explicit=sum(explicit_distant_impacts=='Yes'),
         # percent inferred
         inferred_rate=sum(explicit_distant_impacts=='No')/length(coder_id))
-```
 
-# 6. Cleaned survey export
 
-```{r}
+## ------------------------------------------------------------------------------------------------
 # join tables
   survey1 <- bind_rows(keep,reject)
 
 # export
   write.csv(survey1,paste0(dat.dir,'survey1_cleaned.csv'),row.names=FALSE)
 
-```
 
--------------------------------------------------------------

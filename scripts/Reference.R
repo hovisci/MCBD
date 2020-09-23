@@ -22,11 +22,14 @@ library("rnaturalearthdata")
 library("rnaturalearth")
 library("sf")
 library("psych")
+library('classInt')
+
+getwd()
 
 ### Directories & Set up ###
 
 # Root directory
-  # setwd('..')           # set directory by one folder up
+#  setwd('..')           # set directory by one folder up
   dir <- paste0(getwd()); dir
 
 # Data directory
