@@ -1,0 +1,177 @@
+"","ctr","total_tc","tc","n_tc","pct_tc"
+"1","BRA",21,"Tourism",10,47.6190476190476
+"2","BRA",21,"Trade",4,19.047619047619
+"3","BRA",21,"Species Dispersal",3,14.2857142857143
+"4","BRA",21,"Energy Transfer",2,9.52380952380952
+"5","BRA",21,"Water Transfer",2,9.52380952380952
+"6","USA",17,"Species Dispersal",4,23.5294117647059
+"7","USA",17,"Energy Transfer",3,17.6470588235294
+"8","USA",17,"Knowledge Transfer",3,17.6470588235294
+"9","USA",17,"Trade",3,17.6470588235294
+"10","USA",17,"Investment",1,5.88235294117647
+"11","USA",17,"Migration (human)",1,5.88235294117647
+"12","USA",17,"Tourism",1,5.88235294117647
+"13","USA",17,NA,1,5.88235294117647
+"14","CHN",11,"Tourism",7,63.6363636363636
+"15","CHN",11,"Trade",2,18.1818181818182
+"16","CHN",11,"Energy Transfer",1,9.09090909090909
+"17","CHN",11,"Investment",1,9.09090909090909
+"18","AUS",10,"Tourism",5,50
+"19","AUS",10,"Trade",2,20
+"20","AUS",10,"Waste Transfer",1,10
+"21","AUS",10,"Water Transfer",1,10
+"22","AUS",10,NA,1,10
+"23","ESP",9,"Knowledge Transfer",3,33.3333333333333
+"24","ESP",9,"Tourism",3,33.3333333333333
+"25","ESP",9,"Species Dispersal",2,22.2222222222222
+"26","ESP",9,"Investment",1,11.1111111111111
+"27","FRA",8,"Knowledge Transfer",2,25
+"28","FRA",8,"Species Dispersal",2,25
+"29","FRA",8,"Energy Transfer",1,12.5
+"30","FRA",8,"Investment",1,12.5
+"31","FRA",8,"Tourism",1,12.5
+"32","FRA",8,"Trade",1,12.5
+"33","ITA",8,"Tourism",4,50
+"34","ITA",8,"Knowledge Transfer",2,25
+"35","ITA",8,"Investment",1,12.5
+"36","ITA",8,"Trade",1,12.5
+"37","DEU",7,"Knowledge Transfer",2,28.5714285714286
+"38","DEU",7,"Tourism",2,28.5714285714286
+"39","DEU",7,"Investment",1,14.2857142857143
+"40","DEU",7,"Species Dispersal",1,14.2857142857143
+"41","DEU",7,"Trade",1,14.2857142857143
+"42","ZAF",7,"Tourism",3,42.8571428571429
+"43","ZAF",7,"Investment",1,14.2857142857143
+"44","ZAF",7,"Knowledge Transfer",1,14.2857142857143
+"45","ZAF",7,"Species Dispersal",1,14.2857142857143
+"46","ZAF",7,"Trade",1,14.2857142857143
+"47","ROU",6,"Knowledge Transfer",3,50
+"48","ROU",6,"Investment",1,16.6666666666667
+"49","ROU",6,"Tourism",1,16.6666666666667
+"50","ROU",6,"Trade",1,16.6666666666667
+"51","SVK",6,"Knowledge Transfer",2,33.3333333333333
+"52","SVK",6,"Investment",1,16.6666666666667
+"53","SVK",6,"Species Dispersal",1,16.6666666666667
+"54","SVK",6,"Tourism",1,16.6666666666667
+"55","SVK",6,"Trade",1,16.6666666666667
+"56",NA,6,"Trade",3,50
+"57",NA,6,"Migration (human)",2,33.3333333333333
+"58",NA,6,"Investment",1,16.6666666666667
+"59","AUT",5,"Knowledge Transfer",2,40
+"60","AUT",5,"Investment",1,20
+"61","AUT",5,"Species Dispersal",1,20
+"62","AUT",5,"Trade",1,20
+"63","BEL",5,"Knowledge Transfer",2,40
+"64","BEL",5,"Investment",1,20
+"65","BEL",5,"Species Dispersal",1,20
+"66","BEL",5,"Trade",1,20
+"67","CAN",5,"Trade",2,40
+"68","CAN",5,"Energy Transfer",1,20
+"69","CAN",5,"Knowledge Transfer",1,20
+"70","CAN",5,"Tourism",1,20
+"71","HUN",5,"Knowledge Transfer",2,40
+"72","HUN",5,"Investment",1,20
+"73","HUN",5,"Species Dispersal",1,20
+"74","HUN",5,"Trade",1,20
+"75","IDN",5,"Trade",4,80
+"76","IDN",5,"Tourism",1,20
+"77","IND",5,"Tourism",2,40
+"78","IND",5,"Trade",2,40
+"79","IND",5,"Species Dispersal",1,20
+"80","LUX",5,"Knowledge Transfer",2,40
+"81","LUX",5,"Investment",1,20
+"82","LUX",5,"Species Dispersal",1,20
+"83","LUX",5,"Trade",1,20
+"84","NLD",5,"Knowledge Transfer",2,40
+"85","NLD",5,"Investment",1,20
+"86","NLD",5,"Species Dispersal",1,20
+"87","NLD",5,"Trade",1,20
+"88","SWE",5,"Knowledge Transfer",2,40
+"89","SWE",5,"Investment",1,20
+"90","SWE",5,"Species Dispersal",1,20
+"91","SWE",5,"Water Transfer",1,20
+"92","BGR",4,"Knowledge Transfer",2,50
+"93","BGR",4,"Investment",1,25
+"94","BGR",4,"Tourism",1,25
+"95","CYP",4,"Knowledge Transfer",2,50
+"96","CYP",4,"Investment",1,25
+"97","CYP",4,NA,1,25
+"98","CZE",4,"Knowledge Transfer",2,50
+"99","CZE",4,"Investment",1,25
+"100","CZE",4,"Trade",1,25
+"101","EST",4,"Knowledge Transfer",2,50
+"102","EST",4,"Investment",1,25
+"103","EST",4,NA,1,25
+"104","FIN",4,"Knowledge Transfer",2,50
+"105","FIN",4,"Investment",1,25
+"106","FIN",4,"Tourism",1,25
+"107","GRC",4,"Investment",2,50
+"108","GRC",4,"Knowledge Transfer",2,50
+"109","POL",4,"Knowledge Transfer",2,50
+"110","POL",4,"Investment",1,25
+"111","POL",4,"Tourism",1,25
+"112","PRT",4,"Knowledge Transfer",2,50
+"113","PRT",4,"Investment",1,25
+"114","PRT",4,"Tourism",1,25
+"115","ARG",3,"Tourism",2,66.6666666666667
+"116","ARG",3,"Water Transfer",1,33.3333333333333
+"117","DNK",3,"Knowledge Transfer",2,66.6666666666667
+"118","DNK",3,"Investment",1,33.3333333333333
+"119","GBR",3,"Knowledge Transfer",2,66.6666666666667
+"120","GBR",3,"Investment",1,33.3333333333333
+"121","HRV",3,"Knowledge Transfer",2,66.6666666666667
+"122","HRV",3,"Investment",1,33.3333333333333
+"123","IRL",3,"Knowledge Transfer",2,66.6666666666667
+"124","IRL",3,"Investment",1,33.3333333333333
+"125","LTU",3,"Knowledge Transfer",2,66.6666666666667
+"126","LTU",3,"Investment",1,33.3333333333333
+"127","LVA",3,"Knowledge Transfer",2,66.6666666666667
+"128","LVA",3,"Investment",1,33.3333333333333
+"129","MEX",3,"Knowledge Transfer",1,33.3333333333333
+"130","MEX",3,"Species Dispersal",1,33.3333333333333
+"131","MEX",3,"Tourism",1,33.3333333333333
+"132","MLT",3,"Knowledge Transfer",2,66.6666666666667
+"133","MLT",3,"Investment",1,33.3333333333333
+"134","SVN",3,"Knowledge Transfer",2,66.6666666666667
+"135","SVN",3,"Investment",1,33.3333333333333
+"136","BOL",2,"Tourism",1,50
+"137","BOL",2,"Water Transfer",1,50
+"138","BWA",2,"Tourism",2,100
+"139","CAF",2,"Migration (human)",1,50
+"140","CAF",2,"Trade",1,50
+"141","KOR",2,"Knowledge Transfer",1,50
+"142","KOR",2,"Trade",1,50
+"143","MYS",2,"Investment",1,50
+"144","MYS",2,"Trade",1,50
+"145","THA",2,"Energy Transfer",1,50
+"146","THA",2,"Tourism",1,50
+"147","ALB",1,"Tourism",1,100
+"148","ATA",1,"Tourism",1,100
+"149","BEN",1,"Knowledge Transfer",1,100
+"150","BHS",1,"Tourism",1,100
+"151","BLR",1,"Waste Transfer",1,100
+"152","BTN",1,"Tourism",1,100
+"153","CHL",1,"Trade",1,100
+"154","COL",1,"Trade",1,100
+"155","CRI",1,"Trade",1,100
+"156","CUB",1,"Investment",1,100
+"157","ECU",1,"Trade",1,100
+"158","IRN",1,"Tourism",1,100
+"159","MAR",1,"Knowledge Transfer",1,100
+"160","MDV",1,"Tourism",1,100
+"161","MNE",1,"Tourism",1,100
+"162","MNG",1,"Trade",1,100
+"163","MWI",1,"Species Dispersal",1,100
+"164","NAM",1,"Tourism",1,100
+"165","NPL",1,"Tourism",1,100
+"166","NZL",1,"Species Dispersal",1,100
+"167","PER",1,"Tourism",1,100
+"168","PHL",1,"Species Dispersal",1,100
+"169","PRY",1,"Water Transfer",1,100
+"170","PYF",1,"Tourism",1,100
+"171","RUS",1,"Tourism",1,100
+"172","SLB",1,"Trade",1,100
+"173","TZA",1,"Trade",1,100
+"174","UKR",1,"Waste Transfer",1,100
+"175","URY",1,"Water Transfer",1,100
+"176","ZWE",1,"Tourism",1,100

@@ -631,22 +631,22 @@ df99 <- func_update_col(dt = c4, col_name = 'list_countries')
 bc0 <- df %>% select(paper_id, biodiv_countries) %>%
   dplyr::mutate(
     
-    ## Ruishan
-    biodiv_countries = ifelse(paper_id==109,  'Costa Rica', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==566,  'Nepal', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==854,  'USA', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==1893,  'China', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==2036,  'Indonesia', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==2214,  'Chile', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==2402,  'Indonesia', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==2504,  'China', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==3081,  'Romanaia', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==4136,  'China', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==4207,  'India', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==4427,  'Canada', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==4772,  'Nepal', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==6348,  'Germany', biodiv_countries),
-    biodiv_countries = ifelse(paper_id==3790002,  'China', biodiv_countries),
+    # ## Ruishan
+    # biodiv_countries = ifelse(paper_id==109,  'Costa Rica', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==566,  'Nepal', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==854,  'USA', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==1893,  'China', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==2036,  'Indonesia', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==2214,  'Chile', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==2402,  'Indonesia', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==2504,  'China', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==3081,  'Romanaia', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==4136,  'China', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==4207,  'India', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==4427,  'Canada', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==4772,  'Nepal', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==6348,  'Germany', biodiv_countries),
+    # biodiv_countries = ifelse(paper_id==3790002,  'China', biodiv_countries),
     
     ## anna
     biodiv_countries = ifelse(paper_id==5477,  'Indonesia', biodiv_countries),
