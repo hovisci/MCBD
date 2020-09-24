@@ -1,129 +1,129 @@
 "","taxa","tele_cat","sig_effect","count"
 "1","Amphibians","Trade","Changed (e.g. species composition)",1
-"2","Birds","Energy Transfer","Negative (detrimental)",6
+"2","Birds","Energy Transfer","Negative (detrimental)",5
 "3","Birds","Energy Transfer","Not Signif.",8
-"4","Birds","Energy Transfer","Positive (beneficial)",9
-"5","Birds","Investment","Negative (detrimental)",4
-"6","Birds","Investment","Not Signif.",4
+"4","Birds","Energy Transfer","Positive (beneficial)",7
+"5","Birds","Investment","Negative (detrimental)",2
+"6","Birds","Investment","Not Signif.",2
 "7","Birds","Investment","Positive (beneficial)",2
 "8","Birds","Knowledge Transfer","Changed (e.g. species composition)",42
-"9","Birds","Knowledge Transfer","Negative (detrimental)",2
-"10","Birds","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1
-"11","Birds","Knowledge Transfer","Not Signif.",17
-"12","Birds","Knowledge Transfer","Positive (beneficial)",7
-"13","Birds","Knowledge Transfer","Unknown Signif.",2
-"14","Birds","Migration (human)","Unknown Signif.",3
-"15","Birds","Migration (non-human)","Unknown Signif.",1
-"16","Birds","Other","Not Signif.",1
-"17","Birds","Other","Unknown Signif.",1
-"18","Birds","remove","Changed (e.g. species composition)",1
-"19","Birds","remove","Negative (detrimental)",4
-"20","Birds","remove","Neutral (only when there is absolutely no difference in metrics)",2
-"21","Birds","remove","Positive (beneficial)",1
-"22","Birds","Species Dispersal","Changed (e.g. species composition)",1
-"23","Birds","Species Dispersal","Not Signif.",9
-"24","Birds","Species Dispersal","Positive (beneficial)",2
-"25","Birds","Tourism","Negative (detrimental)",14
-"26","Birds","Tourism","Not Signif.",4
-"27","Birds","Tourism","Positive (beneficial)",5
-"28","Birds","Tourism","Unknown Signif.",1
-"29","Birds","Trade","Changed (e.g. species composition)",2
-"30","Birds","Trade","Negative (detrimental)",21
-"31","Birds","Trade","Neutral (only when there is absolutely no difference in metrics)",1
-"32","Birds","Trade","Not Signif.",7
-"33","Birds","Trade","Positive (beneficial)",2
-"34","Birds","Trade","Unknown Signif.",171
-"35","Birds",NA,"Negative (detrimental)",13
-"36","Birds",NA,"Not Signif.",7
-"37","Birds",NA,"Unknown Signif.",9
-"38","Fish","Energy Transfer","Changed (e.g. species composition)",17
-"39","Fish","Energy Transfer","Negative (detrimental)",3
-"40","Fish","Energy Transfer","Not Signif.",15
-"41","Fish","Energy Transfer","Positive (beneficial)",1
-"42","Fish","Energy Transfer","Unknown Signif.",4
-"43","Fish","Migration (non-human)","Negative (detrimental)",4
-"44","Fish","Migration (non-human)","Positive (beneficial)",3
-"45","Fish","remove","Negative (detrimental)",2
-"46","Fish","remove","Positive (beneficial)",2
-"47","Fish","Species Dispersal","Unknown Signif.",1
+"9","Birds","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1
+"10","Birds","Knowledge Transfer","Not Signif.",12
+"11","Birds","Knowledge Transfer","Positive (beneficial)",7
+"12","Birds","Knowledge Transfer","Unknown Signif.",1
+"13","Birds","Knowledge Transfer;Investment","Negative (detrimental)",2
+"14","Birds","Knowledge Transfer;Investment","Not Signif.",3
+"15","Birds","Knowledge Transfer;Investment","Unknown Signif.",1
+"16","Birds","Migration (human)","Unknown Signif.",3
+"17","Birds","Species Dispersal","Changed (e.g. species composition)",1
+"18","Birds","Species Dispersal","Not Signif.",8
+"19","Birds","Species Dispersal","Positive (beneficial)",2
+"20","Birds","Species Dispersal;Knowledge Transfer","Not Signif.",1
+"21","Birds","Tourism","Negative (detrimental)",15
+"22","Birds","Tourism","Not Signif.",6
+"23","Birds","Tourism","Positive (beneficial)",5
+"24","Birds","Tourism","Unknown Signif.",1
+"25","Birds","Trade","Changed (e.g. species composition)",2
+"26","Birds","Trade","Negative (detrimental)",20
+"27","Birds","Trade","Neutral (only when there is absolutely no difference in metrics)",1
+"28","Birds","Trade","Not Signif.",5
+"29","Birds","Trade","Unknown Signif.",170
+"30","Birds","Trade;Energy Transfer","Negative (detrimental)",1
+"31","Birds","Trade;Energy Transfer","Positive (beneficial)",2
+"32","Birds","Trade;Knowledge Transfer","Not Signif.",2
+"33","Birds","Trade;Knowledge Transfer","Unknown Signif.",1
+"34","Birds","Trade;Tourism;Knowledge Transfer","Negative (detrimental)",2
+"35","Birds",NA,"Changed (e.g. species composition)",1
+"36","Birds",NA,"Negative (detrimental)",14
+"37","Birds",NA,"Neutral (only when there is absolutely no difference in metrics)",2
+"38","Birds",NA,"Not Signif.",5
+"39","Birds",NA,"Positive (beneficial)",1
+"40","Birds",NA,"Unknown Signif.",9
+"41","Fish","Energy Transfer","Changed (e.g. species composition)",14
+"42","Fish","Energy Transfer","Negative (detrimental)",3
+"43","Fish","Energy Transfer","Not Signif.",15
+"44","Fish","Energy Transfer","Positive (beneficial)",3
+"45","Fish","Energy Transfer","Unknown Signif.",4
+"46","Fish","Species Dispersal","Negative (detrimental)",4
+"47","Fish","Species Dispersal","Positive (beneficial)",1
 "48","Fish","Tourism","Changed (e.g. species composition)",1
 "49","Fish","Tourism","Negative (detrimental)",2
 "50","Fish","Tourism","Not Signif.",3
 "51","Fish","Tourism","Positive (beneficial)",5
-"52","Fish","Trade","Negative (detrimental)",12
-"53","Fish","Trade","Neutral (only when there is absolutely no difference in metrics)",1
-"54","Fish","Trade","Positive (beneficial)",7
-"55","Fish","Trade","Unknown Signif.",3
-"56","Fish","Water Transfer","Changed (e.g. species composition)",3
-"57","Fish","Water Transfer","Negative (detrimental)",2
-"58","Fish",NA,"Changed (e.g. species composition)",1
-"59","Fish",NA,"Unknown Signif.",3
-"60","Invertebrates","Migration (non-human)","Changed (e.g. species composition)",2
-"61","Invertebrates","Migration (non-human)","Unknown Signif.",1
-"62","Invertebrates","Species Dispersal","Changed (e.g. species composition)",5
-"63","Invertebrates","Species Dispersal","Negative (detrimental)",1
-"64","Invertebrates","Species Dispersal","Not Signif.",13
-"65","Invertebrates","Species Dispersal","Unknown Signif.",6
-"66","Invertebrates","Tourism","Changed (e.g. species composition)",12
-"67","Invertebrates","Tourism","Negative (detrimental)",42
-"68","Invertebrates","Tourism","Neutral (only when there is absolutely no difference in metrics)",1
-"69","Invertebrates","Tourism","Not Signif.",33
-"70","Invertebrates","Tourism","Positive (beneficial)",4
-"71","Invertebrates","Tourism","Unknown Signif.",13
-"72","Invertebrates","Trade","Negative (detrimental)",7
-"73","Invertebrates","Trade","Neutral (only when there is absolutely no difference in metrics)",1
-"74","Invertebrates","Trade","Not Signif.",4
-"75","Invertebrates","Trade","Positive (beneficial)",3
-"76","Invertebrates","Trade","Unknown Signif.",1
-"77","Invertebrates","Waste Transfer","Not Signif.",5
-"78","Invertebrates",NA,"Changed (e.g. species composition)",1
-"79","Invertebrates",NA,"Not Signif.",4
-"80","Invertebrates",NA,"Unknown Signif.",2
-"81","Mammals","Migration (human)","Changed (e.g. species composition)",1
-"82","Mammals","Migration (human)","Negative (detrimental)",7
-"83","Mammals","Other","Unknown Signif.",1
+"52","Fish","Tourism;Investment","Changed (e.g. species composition)",1
+"53","Fish","Tourism;Investment","Unknown Signif.",3
+"54","Fish","Trade","Negative (detrimental)",12
+"55","Fish","Trade","Neutral (only when there is absolutely no difference in metrics)",1
+"56","Fish","Trade","Positive (beneficial)",7
+"57","Fish","Trade","Unknown Signif.",2
+"58","Fish","Trade;Species Dispersal","Unknown Signif.",1
+"59","Fish","Water Transfer","Changed (e.g. species composition)",1
+"60","Fish","Water Transfer","Negative (detrimental)",1
+"61","Fish","Water Transfer;Energy Transfer","Changed (e.g. species composition)",3
+"62","Fish",NA,"Negative (detrimental)",1
+"63","Fish",NA,"Positive (beneficial)",1
+"64","Invertebrates","Species Dispersal","Changed (e.g. species composition)",7
+"65","Invertebrates","Species Dispersal","Negative (detrimental)",1
+"66","Invertebrates","Species Dispersal","Not Signif.",13
+"67","Invertebrates","Species Dispersal","Unknown Signif.",6
+"68","Invertebrates","Tourism","Changed (e.g. species composition)",13
+"69","Invertebrates","Tourism","Negative (detrimental)",41
+"70","Invertebrates","Tourism","Not Signif.",36
+"71","Invertebrates","Tourism","Positive (beneficial)",4
+"72","Invertebrates","Tourism","Unknown Signif.",13
+"73","Invertebrates","Tourism;Investment","Unknown Signif.",2
+"74","Invertebrates","Trade","Negative (detrimental)",7
+"75","Invertebrates","Trade","Not Signif.",4
+"76","Invertebrates","Trade","Positive (beneficial)",3
+"77","Invertebrates","Trade;Tourism","Neutral (only when there is absolutely no difference in metrics)",1
+"78","Invertebrates","Waste Transfer","Not Signif.",5
+"79","Invertebrates",NA,"Changed (e.g. species composition)",2
+"80","Invertebrates",NA,"Not Signif.",3
+"81","Invertebrates",NA,"Unclear",1
+"82","Mammals","Energy Transfer","Unknown Signif.",1
+"83","Mammals","Migration (human)","Negative (detrimental)",1
 "84","Mammals","Tourism","Negative (detrimental)",16
 "85","Mammals","Tourism","Not Signif.",4
 "86","Mammals","Tourism","Positive (beneficial)",3
-"87","Mammals","Trade","Changed (e.g. species composition)",1
-"88","Mammals","Trade","Negative (detrimental)",8
+"87","Mammals","Tourism","Unknown Signif.",10
+"88","Mammals","Trade","Negative (detrimental)",2
 "89","Mammals","Trade","Unknown Signif.",2
-"90","Mammals",NA,"Not Signif.",6
-"91","Mammals",NA,"Positive (beneficial)",1
-"92","Mammals",NA,"Unknown Signif.",13
-"93","Multiple","Investment","Unknown Signif.",1
-"94","Multiple","Species Dispersal","Unknown Signif.",1
-"95","Multiple","Tourism","Negative (detrimental)",5
-"96","Multiple","Tourism","Not Signif.",3
-"97","Multiple","Trade","Unknown Signif.",7
-"98","Plants/Trees/Shrubs","Knowledge Transfer","Negative (detrimental)",3
-"99","Plants/Trees/Shrubs","Migration (human)","Not Signif.",2
-"100","Plants/Trees/Shrubs","Migration (human)","Positive (beneficial)",1
-"101","Plants/Trees/Shrubs","Migration (non-human)","Positive (beneficial)",1
-"102","Plants/Trees/Shrubs","Other","Unknown Signif.",1
-"103","Plants/Trees/Shrubs","remove","Positive (beneficial)",2
-"104","Plants/Trees/Shrubs","Species Dispersal","Changed (e.g. species composition)",1
-"105","Plants/Trees/Shrubs","Species Dispersal","Negative (detrimental)",6
-"106","Plants/Trees/Shrubs","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",1
-"107","Plants/Trees/Shrubs","Species Dispersal","Not Signif.",4
-"108","Plants/Trees/Shrubs","Species Dispersal","Positive (beneficial)",1
-"109","Plants/Trees/Shrubs","Species Dispersal","Unknown Signif.",3
-"110","Plants/Trees/Shrubs","Tourism","Changed (e.g. species composition)",6
-"111","Plants/Trees/Shrubs","Tourism","Negative (detrimental)",11
-"112","Plants/Trees/Shrubs","Tourism","Not Signif.",10
-"113","Plants/Trees/Shrubs","Tourism","Positive (beneficial)",7
-"114","Plants/Trees/Shrubs","Trade","Changed (e.g. species composition)",1
-"115","Plants/Trees/Shrubs","Trade","Not Signif.",4
-"116","Plants/Trees/Shrubs","Trade","Positive (beneficial)",3
-"117","Plants/Trees/Shrubs","Trade","Unknown Signif.",2
-"118","Plants/Trees/Shrubs","Waste Transfer","Negative (detrimental)",2
-"119","Plants/Trees/Shrubs","Water Transfer","Negative (detrimental)",4
-"120","Plants/Trees/Shrubs","Water Transfer","Positive (beneficial)",1
-"121","Plants/Trees/Shrubs",NA,"Negative (detrimental)",1
-"122","Plants/Trees/Shrubs",NA,"Not Signif.",4
-"123","Plants/Trees/Shrubs",NA,"Positive (beneficial)",1
-"124","Plants/Trees/Shrubs",NA,"Unclear",1
-"125","Plants/Trees/Shrubs",NA,"Unknown Signif.",8
+"90","Mammals","Trade;Migration (human)","Changed (e.g. species composition)",1
+"91","Mammals","Trade;Migration (human)","Negative (detrimental)",6
+"92","Mammals",NA,"Not Signif.",6
+"93","Mammals",NA,"Positive (beneficial)",1
+"94","Mammals",NA,"Unknown Signif.",3
+"95","Multiple","Investment","Unknown Signif.",1
+"96","Multiple","Species Dispersal","Unknown Signif.",1
+"97","Multiple","Tourism","Negative (detrimental)",5
+"98","Multiple","Tourism","Not Signif.",3
+"99","Multiple","Trade","Unknown Signif.",7
+"100","Plants/Trees/Shrubs","Knowledge Transfer","Negative (detrimental)",3
+"101","Plants/Trees/Shrubs","Knowledge Transfer","Unknown Signif.",4
+"102","Plants/Trees/Shrubs","Knowledge Transfer;Investment","Unknown Signif.",1
+"103","Plants/Trees/Shrubs","Migration (human)","Not Signif.",2
+"104","Plants/Trees/Shrubs","Migration (human)","Positive (beneficial)",1
+"105","Plants/Trees/Shrubs","Species Dispersal","Changed (e.g. species composition)",1
+"106","Plants/Trees/Shrubs","Species Dispersal","Negative (detrimental)",6
+"107","Plants/Trees/Shrubs","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",1
+"108","Plants/Trees/Shrubs","Species Dispersal","Not Signif.",4
+"109","Plants/Trees/Shrubs","Species Dispersal","Positive (beneficial)",1
+"110","Plants/Trees/Shrubs","Species Dispersal","Unknown Signif.",2
+"111","Plants/Trees/Shrubs","Tourism","Changed (e.g. species composition)",6
+"112","Plants/Trees/Shrubs","Tourism","Negative (detrimental)",12
+"113","Plants/Trees/Shrubs","Tourism","Not Signif.",14
+"114","Plants/Trees/Shrubs","Tourism","Positive (beneficial)",8
+"115","Plants/Trees/Shrubs","Tourism","Unclear",1
+"116","Plants/Trees/Shrubs","Tourism","Unknown Signif.",4
+"117","Plants/Trees/Shrubs","Trade","Changed (e.g. species composition)",1
+"118","Plants/Trees/Shrubs","Trade","Not Signif.",4
+"119","Plants/Trees/Shrubs","Trade","Positive (beneficial)",3
+"120","Plants/Trees/Shrubs","Trade","Unknown Signif.",1
+"121","Plants/Trees/Shrubs","Trade;Species Dispersal","Unknown Signif.",1
+"122","Plants/Trees/Shrubs","Water Transfer","Negative (detrimental)",2
+"123","Plants/Trees/Shrubs","Water Transfer","Positive (beneficial)",1
+"124","Plants/Trees/Shrubs","Water Transfer;Waste Transfer","Negative (detrimental)",2
+"125","Plants/Trees/Shrubs",NA,"Positive (beneficial)",1
 "126","Reptiles","Investment","Negative (detrimental)",1
 "127","Reptiles","Tourism","Negative (detrimental)",2
 "128","Reptiles","Tourism","Not Signif.",2

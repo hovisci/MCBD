@@ -35,41 +35,19 @@ getwd()
   source('./scripts/Reference.R')
 ```
 
-Data is stored here:
-
-```{r, echo=FALSE}
-# Data directory
-  dat.dir
-```
-
-Final tables are stored here:
-
-```{r, echo=FALSE}
-# Final tables
-  tab.dir
-```
-
-Final figures are stored here:
-
-```{r, echo=FALSE}
-# Final figures
-  fig.dir
-```
-
-For **this run** of the script, tables for manual checks will be stored in the following folder:
-
-```{r, echo=FALSE}
-tab.check.dir
-```
-
 # 3. Load data
 
 ```{r}
 # surveys
-  s1 <- read.csv(paste0(dat.dir,'survey1_cleaned.csv'))
-  s2 <- read.csv(paste0(dat.dir,'survey2_cleaned.csv'))
-  s3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
+  ab_screen <- read.csv(paste0(dat.dir, 'absScreening\\AbsScreen1_Merge.csv'))
+  ab_maybes <- read.csv(paste0(dat.dir, 'absScreening\\AbsScreen2_maybes_to_keep.csv'))
+  ab_yeses <- read.csv(paste0(dat.dir,  'absScreening\\final_sample_for_coding.csv'))
+  assignments <- read.csv(paste0(dat.dir,'absScreening\\Coding_MergeAssign_R1.csv'))
 
+
+  survey1 <- read.csv(paste0(dat.dir,'survey1_cleaned.csv'))
+  s2 <- read.csv(paste0(dat.dir,'survey2_cleaned.csv'))
+  survey3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
   s23 <- read.csv(paste0(dat.dir,'s23.csv'))
   
 ```
@@ -80,36 +58,240 @@ Show column names
 # get col names
   colnames(s23)
 ```
-♥
-
-
-DATA FIXING SUPP CODE WILL DELETE
-```{r}
-
-# find paper id 
-
-poo <- s1[s1$paper_id == '4132',]
-poo2 <- s23[s23$paper_id == '4132',]
-
-# check animal migrations
-
-
-
-```
-
-
-
-
-
-
-
 
 
 # 4. Survey 1 Summary
 
+## 4.1 Accepted/rejected published papers over time
+
+Total number of papers = 591
+
+```{r}
+# get total numbers but also ensure both values here match
+  nrow(survey1)
+  length(unique(survey1$paper_id))
+```
+
+Number of accepted and rejected papers.
+
+Accepted = 135 (23%) , Rejected = 456 (77%)
+
+```{r}
+# get summary
+  ddply(survey1, .(status), summarize,
+        # total count of entries     
+        count=length(status))
+sum(survey1$status == 'accept')/nrow(survey1)
+sum(survey1$status == 'reject')/nrow(survey1)
+
+```
+
+### 4.1.1 Visualizing accepted papers over time
+
+Visualizing accepted papers over time, including the ones from the abstract screening process.
+
+```{r}
+# all abstract screened papers (n=7306)
+  ab_screen <- ab_screen[!ab_screen$PY==2020,] #remove 2020 studies
+  ab_all <- ab_screen[!duplicated(ab_screen$TITLE),]
+
+# remove the papers accepted in screening from the abstract screening list (n=6665)
+  ab_reject <- anti_join(ab_all,ab_maybes,by=c("TITLE"))
+  ab_reject <- anti_join(ab_reject,ab_yeses,by=c("TITLE"))
+  ab_reject <- ab_reject[!duplicated(ab_reject$TITLE,ab_reject$PY),]
+    
+# all papers that were accepted from abstract screening (n=641)
+  ab_accept <- ab_yeses[!duplicated(ab_yeses$TITLE),]
+
+  
+# accepted papers from the assignment list for full review (n=595)
+  papers_reviewed <- assignments[!duplicated(assignments$TITLE),]
+
+# papers with PDF not available or rejected because of language (n=46)
+  paper_unavail <- anti_join(ab_accept,papers_reviewed,by=c("TITLE"))
+  paper_unavail <- paper_unavail[!duplicated(paper_unavail$TITLE),]
+  
+# rejected papers or not yet reviewed (n=460)
+# number does not match up with the reject number (456), could be due to study_id's changing during cleaning
+  keep <-  subset(survey1, status=='accept')
+  reject <- anti_join(survey1,keep)
+
+  papers_rejected <- anti_join(papers_reviewed,keep,by=c("STUDY_ID.1"="paper_id"))
+  papers_rejected <- papers_rejected[!duplicated(papers_rejected$TITLE),]
+  
+# show numbers:
+  paste('original number of papers in WOS search:',nrow(ab_screen))
+  paste('number of duplicates in WOS search:',nrow(ab_screen)-nrow(ab_all))
+  paste('number of abstracts screened:',nrow(ab_all))
+  paste('number of accepted abstracts:',nrow(ab_accept))
+  paste('number of rejected abstracts:',nrow(ab_reject))
+  paste('number of accepted papers unavailable or non-English:',
+        nrow(paper_unavail))
+  paste('number of papers available for full review:',
+        nrow(papers_reviewed))
+  paste('number of full papers accepted for synthesis:',
+        nrow(keep)) #REMEMBER YOU NEED THE 5 COMMON PAPERS
+  paste('number of full papers rejected from synthesis:',nrow(reject))
+  paste('number of full papers not yet reviewed for synthesis:',
+        nrow(papers_rejected)-nrow(reject)-5) #THE 5 COMMON PAPERS NOT IN DATASET YET
+  
+# test if they add up correctly
+  paste('COUNT TESTS:')
+  paste('total full papers:',
+        nrow(papers_reviewed) == nrow(ab_accept) - nrow(paper_unavail))
+  paste('total abstract screen:',
+        nrow(ab_all) == nrow(ab_reject) + nrow(ab_accept))
+```
+
+Next, simplify columns and combine for three tiers in the plot.
+
+```{r}
+# select columns
+  # papers found in WOS but don't meet criteria
+    reject_abstract_level <- subset(ab_reject,select=c("STUDY_ID","PY"))
+  # WOS papers that meet criteria but don't directly look at coupling effects on biodiv
+    reject_paper_level <- subset(papers_rejected,select=c("STUDY_ID.1","PY"))
+    reject_paper_level2 <- subset(paper_unavail,select=c("STUDY_ID","PY"))
+  # papers that do look at coupling effects on biodiv
+    accept_paper_level <- subset(keep,select=c("paper_id","year_pub"))
+  
+# rename columns
+  colnames(reject_abstract_level) <- c('paper_id','year_pub')
+  colnames(reject_paper_level) <- c('paper_id','year_pub')
+  colnames(reject_paper_level2) <- c('paper_id','year_pub')
+  
+# add columns
+  #papers that discuss tc effects on biodiv in...
+  reject_abstract_level$type <- 'search but not abstract'
+  reject_paper_level$type <- 'abstract but not paper'
+  reject_paper_level2$type <- 'abstract but not paper'
+  accept_paper_level$type <- 'abstract and paper'
+  
+# rbind (should be 7307 rows)
+  papers <- rbind(reject_abstract_level,reject_paper_level,
+                  reject_paper_level2, # <-- NOT SURE IF UNAVAILABLE PAPERS BELONG HERE
+                  accept_paper_level)
+  
+# check
+  nrow(papers)
+```
+
+Plot image.
+
+```{r, fig.width=5,fig.height=5}
+# Get a count of records per year
+  paper_ct <- ddply(papers, .(year_pub,type), summarize, count=length(year_pub))
+
+# Change to factors
+  paper_ct$year_pub <- as.factor(paper_ct$year_pub)
+  paper_ct$type <- factor(paper_ct$type,
+                        levels = c('search but not abstract',
+                                   'abstract but not paper',
+                                   'abstract and paper'))
+              
+  papers.fig <- ggplot(paper_ct, aes(x=year_pub, y=count)) + 
+                  geom_area(position="identity",
+                            aes(y=count, fill = type, group = type), alpha=0.6) +
+                  geom_point(aes(y =count, color = type, group = type))+
+                  geom_line(aes(y =count, color = type, group = type))+
+                  geom_text(aes(label=count),size=3,
+                            position=position_dodge(.7),
+                            vjust=-.7,
+                            check_overlap=TRUE)+
+                  scale_color_manual(
+                  name=expression(italic("telecoupling effects\non biodiversity in...")),
+                  values=paper_col)+
+                  scale_fill_manual(
+                  name=expression(italic("telecoupling effects\non biodiversity in...")),
+                  values=paper_col)+
+                  xlab("publication year")+
+                  ylab("number of articles") + ylim(0,860)+
+                  scale_y_continuous(breaks=seq(0,850,100)) +
+                  theme_classic()+
+                  theme(legend.position = c(0.22,0.87))
+  
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_2_papers_over_time.png"),
+         plot=papers.fig, height = 5, width = 5)
+
+# show here
+  papers.fig
+```
+
+### 4.1.2 Acceptance rate at each level of review
+
+Acceptance rate for abstract screening.
+
+```{r}
+# get total abstract acceptance rate
+  sum(ab_all$INCLUDE=='YES')/nrow(ab_all)
+```
+
+Acceptance rate for papers that were reviewed (**NOTE:** this includes the 5 common surveys).
+
+```{r}
+# get total paper acceptance rate
+  sum(survey1$status=='accept')/nrow(survey1)
+```
+
+Acceptance rate per person (**NOTE:** this excludes the 5 common surveys per person, but has a rate for it on its own as "all").
+
+```{r}
+# get summary
+  acr <- ddply(survey1, .(coder_id), summarize,
+              # total count of entries     
+              count=length(coder_id),
+              accept=sum(status=='accept'),
+              reject=sum(status=='reject'),
+              # percent acceptance
+              accept_rate=sum(status=='accept')/length(coder_id))
+  acr
+``` 
+
+Average per-person acceptance rates
+
+```{r}
+# mean per-person acceptance rate 
+  mean(acr$accept_rate)
+```
 
 
+## 4.3 Counts of study types (accepted papers only)
 
+```{r}
+# get summary
+  ddply(keep, .(C4_study), summarize,
+        # total count of entries     
+        count=length(C4_study),
+        percent=length(C4_study)/nrow(keep))
+```
+
+## 4.4 Counts of papers that were inferred (accepted papers only)
+
+Total rate of **inferring** across papers.
+
+```{r}
+# get total papers for which the tc relationships were inferred
+  paste('number inferred papers:',sum(keep$explicit_distant_impacts=='No'))
+  paste('number explicit papers:',sum(keep$explicit_distant_impacts=='Yes'))
+  
+# get total inferring rate
+  paste('inferred percent:',sum(keep$explicit_distant_impacts=='No')/nrow(keep))
+  paste('explicit percent:',sum(keep$explicit_distant_impacts=='Yes')/nrow(keep))
+```
+
+Percent of papers inferred per person per person
+
+```{r}
+# get summary
+  ddply(keep, .(coder_id), summarize,
+        # total count of entries     
+        count=length(coder_id),
+        inferred=sum(explicit_distant_impacts=='No'),
+        explicit=sum(explicit_distant_impacts=='Yes'),
+        # percent inferred
+        inferred_rate=sum(explicit_distant_impacts=='No')/length(coder_id))
+```
 
 
 # 5. Survey 2 & 3 Summary
@@ -125,15 +307,18 @@ habitat.study <- count(s2, 'habitat')
 print(habitat.study)
 prop.table(table(s2$habitat))
 
+p<-ggplot(data=habitat.study, aes(x=habitat, y=freq)) +
+  geom_bar(stat="identity")
+p
+
 # By entry (REPLICATED FLOW ID NOT RMVD YET)
 
-habitat.entry <- count(s23, 'habitat')
+habitat.entry <- count(s23, 'hab')
 print(habitat.entry)
 prop.table(table(s23$habitat))
 
 
 ```
-
 
 
 ## 5.2 Taxa Frequency 
@@ -161,10 +346,10 @@ multiple <- multiple != 0
 multiple <- table(multiple) ["TRUE"]
 
 
-# By entry (REPLICATED FLOW ID NOT RMVD YET)
+# By entry 
 
 taxa.entry <- count(s23, 'taxa')
-print(habitat.entry)
+print(taxa.entry)
 prop.table(table(s23$taxa))
 
 
@@ -175,823 +360,489 @@ prop.table(table(s23$taxa))
 ```{r}
 count(s2$tele_cat)
 
-tc.list <- c("Energy Transfer", "Investment", "Knowledge Transfer", "Migration (human)", 
-             "Migration (non-human)","Other", "remove", "Species Dispersal", "Technology Transfer",
-             "Tourism", "Trade", "Water Transfer", "Waste Transfer")
-
-desired_length <- length(tc.list)
-empty_list <- vector(mode = "list", length = desired_length)
-
-
-tc.cat <- (s2$tele_cat)
-tc.count <- empty_list
-
-for (i in 1:length(tc.list)) {
-  
-  tc.count[i] <- sum(str_count(tc.cat, tc.list[i]))
-  
-}
-
-tc.count
-tc.count <- as.data.frame(rbind(tc.list,tc.count))
-tc.count
-
-# Can't get loop to count the migration values for some reason, manual input code below
-
-tc.table <- table(s2$tele_cat)
-
-tc.count[2,4] <- tc.table[4] + tc.table[15]      # Migration (human) n=6
-tc.count[2,5] <- tc.table[5]                     # Migration (non-human) n-7
-
-tc.count
-
-gather(tc.count)
-```
-
-
-
-
-
-
-
-
-
-
-
-
-Habitat vs sig_effect 
-
-
-```{r}
-# get summary
-a <- ddply(s23, .(habitat, sig_effect), summarize,
-           # total count of entries     
-           count=length(habitat)) %>%
-  # percents of effects within totals per hab
-  group_by(habitat) %>%
-  nest() %>% 
-  mutate(perc_per_hab=map(data, function(x) x$count/sum(x$count))) %>% 
-  unnest()
-
-
-a
-
-quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_hab, x=habitat)) + 
-  geom_bar(position="stack", stat="identity") +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  xlab("")
-
-quick_plot
+count(s23$tele_cat)
 
 ```
 
+## 5.4 Number of entries per paper
 
-# 4. First synthesis: Effects of coupling categories across taxa 
-
-## 4.1 Summary regardless of significance
-
-Make a new table.
+Get number of papers and percent of the dataset each paper covers. This can give an idea on the weight of the papers on our results.
 
 ```{r}
 # get summary
-  taxa_flow <- ddply(s23, .(taxa, tele_cat, effect), summarize,
-                # total count of entries     
-                count=length(taxa)) %>%
-                # percents of effects within totals per taxa
-                group_by(taxa) %>%
-                  nest() %>% 
-                   mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>%
-                    unnest()
+  ddply(survey3, .(paper_id), summarize,
+        # total count of entries     
+        num_entries=length(entry_id),
+        perc_dataset=length(entry_id)/nrow(survey3),
+        num_taxa=length(unique(taxa))) %>% 
+    arrange(desc(perc_dataset))
+```
+
+## 5.5 Summary of taxa across papers
+
+```{r}
+# get summary
+  a <- ddply(survey3, .(taxa), summarize,
+        # total count of entries     
+        num_entries=length(entry_id),
+        perc_dataset=length(entry_id)/nrow(survey3),
+        num_papers=length(unique(paper_id)),
+        perc_papers=length(unique(paper_id))/length(unique(survey3$paper_id))) %>% 
+      arrange(desc(perc_dataset))
 
 # save as csv
-  write.csv(taxa_flow, paste0(tab.dir,'synthesis_effects_taxa_and_flow.csv'),
+  write.csv(a, paste0(tab.dir,'survey3_summary_number_taxa.csv'),
+            row.names = TRUE)
+  
+# view
+  a
+```
+
+## 5.6 Summary of biodiversity metrics
+
+```{r}
+# get summary
+  a <- ddply(survey3, .(taxa), summarize,
+          # total count of entries     
+          num_taxonomic=sum(taxon_or_func=='Taxonomic'),
+          perc_taxonomic=sum(taxon_or_func=='Taxonomic')/nrow(survey3),
+          num_functional=sum(taxon_or_func=='Functional'),
+          perc_functional=sum(taxon_or_func=='Functional')/nrow(survey3),
+          num_1sp=sum(!is.na(biodiv_cat_1sp)),
+          perc_1sp=sum(!is.na(biodiv_cat_1sp))/nrow(survey3),
+          num_multsp=sum(!is.na(biodiv_cat_multsp)),
+          perc_multsp=sum(!is.na(biodiv_cat_multsp))/nrow(survey3),
+          num_hab=sum(!is.na(biodiv_cat_habitat)),
+          perc_hab=sum(!is.na(biodiv_cat_habitat))/nrow(survey3))
+
+# save as csv
+  write.csv(a, paste0(tab.dir,'survey3_summary_biodiv_metrics.csv'),
+            row.names = TRUE)
+  
+# view
+  a
+```
+
+## 5.7 Summary of effects and their significance 
+
+```{r}
+# get summary
+  a <- ddply(survey3, .(effect, significant), summarize,
+          # total count of entries     
+          count=length(effect))
+
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=effect, y=count, x=significant)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                theme_classic() +
+                xlab("")
+
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_significant_effects.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# save as csv
+  write.csv(a, paste0(tab.dir,'survey3_summary_significant.csv'),
+            row.names = TRUE)
+  
+# view
+  a
+```
+
+# 6 Summary of effects/significance
+
+Subset s23 data for majority effects
+
+```{r}
+s23_maj <- s23[!duplicated(s23$paper_id),]
+```
+
+## 6.1 Taxa By Entry
+
+```{r}
+# get summary
+  a <- ddply(s23, .(taxa, sig_effect), summarize,
+          # total count of entries     
+          count=length(taxa)) %>%
+          # percents of effects within totals per taxa
+          group_by(taxa) %>%
+            nest() %>% 
+             mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_taxa))
+# save as csv
+  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),
             row.names = TRUE)
 
 # view
-  taxa_flow
+  a
 ```
 
-Check levels
+Quick data visualization
 
-```{r}
-levels(as.factor(taxa_flow$taxa))
-```
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_taxa, x=taxa)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-Check levels
-
-```{r}
-levels(as.factor(taxa_flow$effect))
-```
-```{r}
-levels(as.factor(taxa_flow$tele_cat))
-```
-
-Adjust levels
-
-```{r}
-# taxa level change
-  taxa_flow$taxa <- factor(taxa_flow$taxa,
-                           c('Birds','Mammals','Reptiles','Amphibians',
-                             'Fish','Invertebrates','Plants/trees/shrubs',
-                             'Multiple'))
-
-# effects level change
-  taxa_flow$effect <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(taxa_flow$effect))
-  taxa_flow$effect <- factor(taxa_flow$effect,
-                             c('Positive','Neutral','Negative','Changed','Unclear'))
-
-# telecoupling level change
-  taxa_flow$tele_cat <- factor(taxa_flow$tele_cat,
-                               c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
-```
-Energy Transfer            Investment    Knowledge Transfer 
-                   63                    11                    73 
-    Migration (human) Migration (non-human)                 Other 
-                   16                    13                    10 
-               remove     Species Dispersal   Technology Transfer 
-                   15                    54                     1 
-              Tourism                 Trade        Waste Transfer 
-                  213                   286                     2 
-       Water Transfer                  NA's 
-                   12                    38 
-Visualize as a matrix of pie charts
-
-```{r}
-# change colors
-  #effect_cols <- c('#4EB265','#999999','#A50026','#FDB366','#9A709E')
-  effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  
-# Matrix of pie charts
-  taxa_flow_fig <- ggplot(taxa_flow) + 
-                    aes(x='', y = count, fill = effect) +
-                    geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(taxa ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ taxa, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=10)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y = element_text(size=10,
-                                          angle=180, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('') 
-                
 # save image
-  ggsave(taxa_flow_fig,
-         filename=paste0(fig.dir,
-                         #'synthesis_effects_taxa_and_flow_Vert.png'),
-                         'synthesis_effects_taxa_and_flow_Horz.png'),
-         #height=6.5,width=7,units='in',
-         dpi=600)
-
-
-# display image
-  taxa_flow_fig
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
 ```
 
-## 4.2 Summary emphasizing significance
+Numbers instead of percents
 
-Make a new column for significant effects; non-significant becomes a new level in this dataset.
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=count, x=taxa)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-```{r}
-# new column of significant effects; non-significant effects renamed
-  s23$sig_effect <- ''
-  s23$sig_effect <- as.character(s23$significant)
-  s23$effect <- as.character(s23$effect)
-  s23$sig_effect[is.na(s23$sig_effect)] <- "Unknown Signif."
-  s23$sig_effect[s23$sig_effect=='Not evaluated'] <- "Unknown Signif."
-  s23$sig_effect[s23$sig_effect=='FALSE'] <- "Not Signif."
-  s23$sig_effect[s23$sig_effect=='TRUE'] <- s23$effect[s23$sig_effect=='TRUE']
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa2.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
 ```
 
-Summarize new column by taxa and telecoupling category.
+### 6.2 Taxa By Study (majority effect)
 
 ```{r}
 # get summary
-  taxa_flow_sig <- ddply(s23, .(taxa, tele_cat, sig_effect), summarize,
-                        # total count of entries     
-                        count=length(taxa))
+  a <- ddply(s23_maj, .(taxa, maj_eff), summarize,
+          # total count of entries     
+          count=length(taxa)) %>%
+          # percents of effects within totals per taxa
+          group_by(taxa) %>%
+            nest() %>% 
+             mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_taxa))
 # save as csv
-  write.csv(taxa_flow_sig,
-            paste0(tab.dir,'synthesis_effects_taxa_and_flow_significant.csv'),
+  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),
             row.names = TRUE)
 
 # view
-  taxa_flow_sig
+  a
 ```
 
-Change levels
+Quick data visualization
 
-```{r}
-# taxa level change
-  taxa_flow_sig$taxa <- factor(taxa_flow_sig$taxa,
-                           c('Birds','Mammals','Reptiles','Amphibians',
-                             'Fish','Invertebrates','Plants/trees/shrubs',
-                             'Multiple','Undefined'))
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_taxa, x=taxa)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-# effects level change
-  taxa_flow_sig$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(taxa_flow_sig$sig_effect))
-  taxa_flow_sig$sig_effect <- factor(taxa_flow_sig$sig_effect,
-                             c('Positive','Neutral','Negative','Changed',
-                               'Not Signif.',
-                               'Unknown Signif.',
-                               'Unclear'))
-
-# telecoupling level change
-  taxa_flow_sig$tele_cat <- factor(taxa_flow_sig$tele_cat,
-                               c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
-```
-
-Visualize as a matrix of pie charts
-
-```{r}
-# change colors
-  #effect_cols <- c('#4EB265','#999999','#A50026','#FDB366','#9A709E')
-  #effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141',
-                       # include 'Not Signif.' and 'Unknown Signif.'
-                       '#BBBBBB','#DDDDDD',
-                       # 'unclear' keeps same color as before
-                       '#882E72')
-  
-# Matrix of pie charts
-  taxa_flow_fig <- ggplot(taxa_flow_sig) + 
-                    aes(x='', y = count, fill = sig_effect) +
-                    geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(taxa ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ taxa, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=sig_effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=10)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('') 
-                
 # save image
-  ggsave(taxa_flow_fig,
-         filename=paste0(fig.dir,
-                         # activate for vertical or horizontal version
-                           #'synthesis_effects_taxa_and_flow_significant_Vert.png'),
-                           'synthesis_effects_taxa_and_flow_significant_Horz.png'),
-         #height=6.5,width=7,units='in',
-         dpi=600)
-
-
-# display image
-  taxa_flow_fig
-```
-
-# 5. Second synthesis: Effects by coupling and metric categories
-
-## 5.1 New dataset (long format)
-
-Convert to long format, where metric is indicated.
-
-```{r}
-# subset
-  metrics <- subset(s23,
-                    select=c('paper_id','entry_id',
-                            'taxa','tele_cat','effect',
-                            'biodiv_cat_1sp',
-                            'biodiv_cat_multsp',
-                            'biodiv_cat_habitat'))
-# melt
-  metrics_long <- melt(metrics, id.vars=c('paper_id','entry_id',
-                            'taxa','tele_cat','effect'))
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa.png"),
+         plot=quick_plot, height = 6, width = 11)
   
-# remove NA fields
-  metrics_long <- metrics_long[!is.na(metrics_long$value),]
+# view
+  quick_plot
 ```
 
-Rename last columns
+Numbers instead of percents
 
-```{r}
-# change colnames
-  colnames(metrics_long)[6] <- 'metric_type'
-  colnames(metrics_long)[7] <- 'metric'
-```
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=taxa)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-Rename metric types
-
-```{r}
-# check levels
-  levels(metrics_long$metric_type)
-```
-
-```{r}
-# change levels
-  levels(metrics_long$metric_type) <- c('single species',
-                                        'multiple species',
-                                        'habitat')
-```
-
-Rename metrics
-
-```{r}
-# check levels
-  levels(as.factor(metrics_long$metric))
-```
-
-```{r}
-# remove parentheses
-  metrics_long$metric <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(metrics_long$metric))
-
-# capitalize each word
-  metrics_long$metric <- tools::toTitleCase(metrics_long$metric)
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa2.png"),
+         plot=quick_plot, height = 6, width = 11)
   
-# adjust name
-  metrics_long$metric <- gsub("With-in", 'Within',
-                        as.character(metrics_long$metric))
-  
-# change levels, moving other to the end
-  metrics_long$metric <- factor(metrics_long$metric,
-                                c("Abundance/Density",
-                                   "Amount",
-                                   "Composition",
-                                   "Detection",
-                                   "Diversity Index",
-                                   "Evenness",
-                                   "Movement",
-                                   "Occurrence",
-                                   "Population Dynamics",
-                                   "Quality",
-                                   "Richness",
-                                   "Within Species Diversity",
-                                   "Other"))
-  
-# check levels
-  levels(as.factor(metrics_long$metric))
+# view
+  quick_plot
 ```
 
-## 5.2 Summary regardless of significance
 
-### 5.2.1 Summary table
-
-Make a new table summarizing dataset by metric, coupling category and effect
+### 6.3 Habitat By Entry 
 
 ```{r}
 # get summary
-  metric_flow <- ddply(metrics_long,
-                       .(metric_type, metric, tele_cat, effect),
-                       summarize,
-                      # total count of entries     
-                        count=length(metric))
-
+  a <- ddply(s23, .(hab, sig_effect), summarize,
+          # total count of entries     
+          count=length(hab)) %>%
+          # percents of effects within totals per hab
+          group_by(hab) %>%
+            nest() %>% 
+             mutate(perc_per_hab=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_hab))
 # save as csv
-  write.csv(metric_flow, paste0(tab.dir,'synthesis_effects_metric_and_flow.csv'),
+  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_hab.csv'),
             row.names = TRUE)
 
 # view
-  metric_flow
+  a
 ```
 
-Change levels
+Quick data visualization
 
-```{r}
-# effects level change
-  metric_flow$effect <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(metric_flow$effect))
-  metric_flow$effect <- factor(metric_flow$effect,
-                             c('Positive','Neutral','Negative','Changed','Unclear'))
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_hab, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-# telecoupling level change
-  metric_flow$tele_cat <- factor(metric_flow$tele_cat,
-                               c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
-```
-
-
-### 5.2.2 Pie chart with all metrics combined
-
-Visualize as a matrix of pie charts. First, **ALL** metrics together.
-
-```{r}
-# change colors
-  effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  
-# Matrix of pie charts
-  metric_flow_fig <- ggplot(metric_flow) + 
-                    aes(x='', y = count, fill = effect) +
-                    geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(position='right',expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=10)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y.left = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('')
-                
 # save image
-  ggsave(metric_flow_fig,
-         filename=paste0(fig.dir,
-                         #'synthesis_effects_metric_and_flow_Vert.png'),
-                         'synthesis_effects_metric_and_flow_Horz.png'),
-         #height=6.5,width=7,units='in',
-         dpi=600)
-
-
-# display image
-  metric_flow_fig
-```
-
-## 5.2.3 Pie chart separating metric categories
-
-```{r}
-# change colors
-  effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa.png"),
+         plot=quick_plot, height = 6, width = 11)
   
-# Matrix of pie charts
-  metric_flow_fig <- ggplot(metric_flow) + 
-                    aes(x='', y = count, fill = effect) +
-                    geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(metric_type ~ metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(position='right',expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=10)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y.left = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('')
-                
+# view
+  quick_plot
+```
+Numbers instead of percents
+
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=count, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
+
 # save image
-  ggsave(metric_flow_fig,
-         filename=paste0(fig.dir,
-                         #'synthesis_effects_metric_type_and_flow_Vert.png'),
-                         'synthesis_effects_metric_type_and_flow_Horz.png'),
-         #height=6.5,width=7,units='in',
-         dpi=600)
-
-
-# display image
-  metric_flow_fig
-```
-
-## 5.3 Summary emphasizing significance
-
-### 5.3.1 New dataset (long format)
-
-Convert to long format, where metric is indicated and the significant effect category is used instead.
-
-```{r}
-# subset
-  sig_metrics <- subset(s23,
-                    select=c('paper_id','entry_id',
-                            'taxa','tele_cat',
-                            'sig_effect', ##<--- THIS IS THE CHANGE HERE
-                            'biodiv_cat_1sp',
-                            'biodiv_cat_multsp',
-                            'biodiv_cat_habitat'))
-# melt
-  sig_met_long <- melt(sig_metrics, id.vars=c('paper_id','entry_id',
-                            'taxa','tele_cat','sig_effect'))
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_hab2.png"),
+         plot=quick_plot, height = 6, width = 11)
   
-# remove NA fields
-  sig_met_long <- sig_met_long[!is.na(sig_met_long$value),]
+# view
+  quick_plot
 ```
 
-Rename last columns
 
-```{r}
-# change colnames
-  colnames(sig_met_long)[6] <- 'metric_type'
-  colnames(sig_met_long)[7] <- 'metric'
-```
-
-Rename metric types
-
-```{r}
-# check levels
-  levels(sig_met_long$metric_type)
-```
-
-```{r}
-# change levels
-  levels(sig_met_long$metric_type) <- c('single species',
-                                        'multiple species',
-                                        'habitat')
-```
-
-Rename metrics
-
-```{r}
-# check levels
-  levels(as.factor(sig_met_long$metric))
-```
-
-```{r}
-# remove parentheses
-  sig_met_long$metric <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(sig_met_long$metric))
-
-# capitalize each word
-  sig_met_long$metric <- tools::toTitleCase(sig_met_long$metric)
-  
-# adjust name
-  sig_met_long$metric <- gsub("With-in", 'Within',
-                        as.character(sig_met_long$metric))
-  
-# change levels, moving other to the end
-  sig_met_long$metric <- factor(sig_met_long$metric,
-                                c("Abundance/Density",
-                                   "Amount",
-                                   "Composition",
-                                   "Detection",
-                                   "Diversity Index",
-                                   "Evenness",
-                                   "Movement",
-                                   "Occurrence",
-                                   "Population Dynamics",
-                                   "Quality",
-                                   "Richness",
-                                   "Within Species Diversity",
-                                   "Other"))
-  
-# check levels
-  levels(as.factor(sig_met_long$metric))
-```
-
-Make a new table summarizing dataset by metric, coupling category and significant effect
+### 6.4 Habitat By Study (majority effect)
 
 ```{r}
 # get summary
-  met_flow_sig <- ddply(sig_met_long,
-                       .(metric_type, metric, tele_cat, sig_effect),
-                       summarize,
-                      # total count of entries     
-                        count=length(metric))
-
+  a <- ddply(s23_maj, .(hab, maj_eff), summarize,
+          # total count of entries     
+          count=length(hab)) %>%
+          # percents of effects within totals per hab
+          group_by(hab) %>%
+            nest() %>% 
+             mutate(perc_per_hab=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_hab))
 # save as csv
-  write.csv(met_flow_sig,
-            paste0(tab.dir,
-                   'synthesis_effects_metric_and_flow_significant.csv'),
-            row.names = FALSE)
+  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_hab.csv'),
+            row.names = TRUE)
 
 # view
-  met_flow_sig
+  a
 ```
 
-Change levels
+Quick data visualization
 
-```{r}
-# effects level change
-  met_flow_sig$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(met_flow_sig$sig_effect))
-  met_flow_sig$sig_effect <- factor(met_flow_sig$sig_effect,
-                              c('Positive','Neutral','Negative','Changed',
-                               'Not Signif.',
-                               'Unknown Signif.',
-                               'Unclear'))
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_hab, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-# telecoupling level change
-  met_flow_sig$tele_cat <- factor(met_flow_sig$tele_cat,
-                               c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
-```
-
-### 5.3.2 Pie chart with all metrics combined
-
-Visualize as a matrix of pie charts. First, **ALL** metrics together.
-
-```{r}
-# Matrix of pie charts
-  met_flow_sig_fig <- ggplot(met_flow_sig) + 
-                    aes(x='', y = count, fill = sig_effect) +
-                    geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=sig_effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(position='right',expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=10)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y.left = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('')
-                
 # save image
-  ggsave(met_flow_sig_fig,
-         filename=paste0(fig.dir,
-         # activate for vertical or horizontal version
-           #'synthesis_effects_metric_and_flow_significant_Vert.png'),
-           'synthesis_effects_metric_and_flow_significant_Horz.png'),
-         #height=6.5,width=7,units='in',
-         dpi=600)
-
-
-# display image
-  met_flow_sig_fig
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
 ```
+Numbers instead of percents
 
-## 5.3.3 Pie chart separating metric categories
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
 
-```{r}
-# Matrix of pie charts
-  met_flow_sig_fig <- ggplot(met_flow_sig) + 
-                    aes(x='', y = count, fill = sig_effect) +
-                    geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(metric_type ~ metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=sig_effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(position='right',expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=10)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y.left = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('')
-                
 # save image
-  ggsave(met_flow_sig_fig,
-         filename=paste0(fig.dir,
-         # activate for vertical or horizontal version
-           #'synthesis_effects_metric_type_and_flow_significant_Vert.png'),
-           'synthesis_effects_metric_type_and_flow_significant_Horz.png'),
-         height=6,width=14,units='in',
-         dpi=600)
-
-
-# display image
-  met_flow_sig_fig
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_hab2.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
 ```
-# 7. Standardization
 
-Some papers/studies reported multiple metrics. If left as is, our results may be misleading as some studies only reported 1 or 2 biodiversity metric impacts, while others reported many (>100). To address this, we will create a "majority" effect value for each unique study ID.
+### 6.5 Flow By Entry 
+
+Repeat flows
+**IMPORTANT STEP HERE:** 
+
+Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well!!!!!!!!!!!!!!!!!!!!!!!!! 
+
+The reason for doing this is so that we can attribute biodiversity impacts to the specific flows that may have been studied together, and whose individual impacts cannot be decoupled.
+```{r}
+# set as character
+  s23$tele_cat <- as.character(s23$tele_cat)
+
+# show original length of rows
+  print(paste('Original number of rows:',nrow(s23)))
+
+# split multiple flows listed in a row into other new rows
+  tcRep <- separate_rows(s23, tele_cat, sep=";", convert = TRUE)
+  tcRep$tele_cat <- as.factor(tcRep$tele_cat)
+
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep)))
+
+# show levels
+  summary(tcRep$tele_cat)
+  
+```
+
+Some NA's (not sure why)
+
+```{r}
+# get summary
+  a <- ddply(tcRep, .(tele_cat, sig_effect), summarize,
+          # total count of entries     
+          count=length(tele_cat)) %>%
+          # percents of effects within totals per tele_cat
+          group_by(tele_cat) %>%
+            nest() %>% 
+             mutate(perc_per_tele_cat=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_tele_cat))
+# save as csv
+  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),
+            row.names = TRUE)
+
+# view
+  a
+```
+
+Quick data visualization
+
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_tele_cat, x=tele_cat)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
+
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_flow.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
+```
+
+Numbers instead of percents
+
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=count, x=tele_cat)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
+
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_hab2.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
+```
+
+
+### 6.6 Flow By Study (majority effect)
 
 ```{r}
 
-# what is the range of number of metric/entries?
-num.entry <- as.data.frame(x= table(s23$paper_id) )
-mean(num.entry$Freq)
-median(num.entry$Freq)
-max(num.entry$Freq)
+# set as character
+  s23_maj$tele_cat <- as.character(s23_maj$tele_cat)
 
-# how many instances are paper_id & entry_id repeated due to separating the TC.Flow
+# show original length of rows
+  print(paste('Original number of rows:',nrow(s23_maj)))
 
-flow.rep <- paste(s23$paper_id, s23$entry_id, sep="_")
-flow.rep <- as.data.frame(table(flow.rep))
-flow.rep[flow.rep$freq > 1,]
+# split multiple flows listed in a row into other new rows
+  tcRep_maj <- separate_rows(s23_maj, tele_cat, sep=";", convert = TRUE)
+  tcRep_maj$tele_cat <- as.factor(tcRep_maj$tele_cat)
 
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep_maj)))
+
+# show levels
+  summary(tcRep$tele_cat)
+
+# get summary
+  a <- ddply(tcRep_maj, .(tele_cat, maj_eff), summarize,
+          # total count of entries     
+          count=length(tele_cat)) %>%
+          # percents of effects within totals per tele_cat
+          group_by(tele_cat) %>%
+            nest() %>% 
+             mutate(perc_per_tele_cat=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_tele_cat))
+# save as csv
+  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),
+            row.names = TRUE)
+
+# view
+  a
 ```
+
+Quick data visualization
+
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_tele_cat, x=tele_cat)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
+
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_flow.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
+```
+
+
+Numbers instead of percents
+
+```{r, fig.height = 6, fig.width = 11}
+# Stack plot
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=tele_cat)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                xlab("")
+
+# save image
+  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_flow2.png"),
+         plot=quick_plot, height = 6, width = 11)
+  
+# view
+  quick_plot
+```
+
+
+
+
+
+
+

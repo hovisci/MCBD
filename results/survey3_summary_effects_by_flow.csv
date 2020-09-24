@@ -1,0 +1,34 @@
+"","tele_cat","maj_eff","count","perc_per_tele_cat"
+"1","Energy Transfer","Beneficial",2,0.222222222222222
+"2","Energy Transfer","Changed",3,0.333333333333333
+"3","Energy Transfer","Detrimental",2,0.222222222222222
+"4","Energy Transfer","No relation or unclear",2,0.222222222222222
+"5","Investment","Beneficial",4,0.5
+"6","Investment","Detrimental",3,0.375
+"7","Investment","No relation or unclear",1,0.125
+"8","Knowledge Transfer","Beneficial",5,0.384615384615385
+"9","Knowledge Transfer","Changed",1,0.0769230769230769
+"10","Knowledge Transfer","Detrimental",4,0.307692307692308
+"11","Knowledge Transfer","No relation or unclear",3,0.230769230769231
+"12","Migration (human)","Detrimental",3,0.75
+"13","Migration (human)","No relation or unclear",1,0.25
+"14","Species Dispersal","Beneficial",2,0.125
+"15","Species Dispersal","Changed",1,0.0625
+"16","Species Dispersal","Detrimental",8,0.5
+"17","Species Dispersal","No relation or unclear",5,0.3125
+"18","Tourism","Beneficial",7,0.127272727272727
+"19","Tourism","Changed",3,0.0545454545454545
+"20","Tourism","Detrimental",30,0.545454545454545
+"21","Tourism","No relation or unclear",15,0.272727272727273
+"22","Trade","Beneficial",4,0.129032258064516
+"23","Trade","Changed",2,0.0645161290322581
+"24","Trade","Detrimental",19,0.612903225806452
+"25","Trade","No relation or unclear",6,0.193548387096774
+"26","Waste Transfer","Detrimental",1,0.5
+"27","Waste Transfer","No relation or unclear",1,0.5
+"28","Water Transfer","Changed",2,0.5
+"29","Water Transfer","Detrimental",2,0.5
+"30",NA,"Beneficial",2,0.222222222222222
+"31",NA,"Changed",2,0.222222222222222
+"32",NA,"Detrimental",3,0.333333333333333
+"33",NA,"No relation or unclear",2,0.222222222222222
