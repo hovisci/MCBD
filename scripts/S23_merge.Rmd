@@ -202,10 +202,6 @@ Some papers/studies reported multiple metrics. If left as is, our results may be
 
 ```{r}
 
-getmode <- function(v) {
-   uniqv <- unique(v)
-   uniqv[which.max(tabulate(match(v, uniqv)))]
-}
 Mode <- function(x) {
     tabulatedOutcomes <- table(x)
     sortedOutcomes <- sort(tabulatedOutcomes, decreasing=TRUE)
@@ -238,8 +234,15 @@ maj_effect2 <- s23 %>%
     ungroup()
 
 s23$maj_eff <- maj_effect$maj_effect
-  
-  
+
+maj_effect2$maj_eff <- NA
+maj.table <- as.data.frame(cbind(maj_effect$paper_id, maj_effect$maj_effect))
+maj.table<-maj.table[!duplicated(maj.table),]
+
+
+maj_effect2$maj_eff <- maj.table$V2[match(maj_effect2$paper_id,maj.table$V1)]
+
+write.csv(maj_effect2, paste0(tab.dir, 'maj_effect.csv'))
 
 ```
 
