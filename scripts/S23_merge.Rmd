@@ -246,6 +246,7 @@ write.csv(maj_effect2, paste0(tab.dir, 'maj_effect.csv'))
 
 ```
 
+
 # 7. Export table
 
 The table to be exported here will be used in another script for synthesis, data summaries and figures.

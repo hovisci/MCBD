@@ -693,7 +693,8 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
 ```{r}
 # set as character
   s23$tele_cat <- as.character(s23$tele_cat)
-
+  table(s23$tele_cat)
+  
 # show original length of rows
   print(paste('Original number of rows:',nrow(s23)))
 
