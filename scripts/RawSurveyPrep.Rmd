@@ -432,7 +432,8 @@ Here, we are also including manual rejections from team meeting discussions of p
               # based on survey 2 discussion
                 1717, 1676,              # E_Dean papers
               
-                4132                     # Manual reject based on Animal Mig fixes (CLH 9/23/2020)
+                4132,                                   # Manual reject based on Animal Mig fixes (CLH 9/23/2020)
+                4207,6493,2704,1752,3335,109            # Manual reject based on tele_cat Aurora input (CLH 9/29/20) 
               )
 
 # make list of ineligible paper ID numbers and remove from survey

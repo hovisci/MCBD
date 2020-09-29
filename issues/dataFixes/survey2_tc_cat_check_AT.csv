@@ -1,0 +1,17 @@
+paper_id,key,tele_cat,tele_cat_ori,tele_cat_AT,explanation
+109,X1,Other,Loss of large mammalian carnivores,,
+6493,X1,Other,Exurban development,EXCLUDE PAPER,Not a telecoupling paper but an urban ecology paper. Check with Min Gong?
+2704,X1,Other,This is within-country,EXCLUDE PAPER,Not a telecoupling paper but a road ecology paper. Check with Emily Dean?
+6396,X1,Other,Chernobyl Nuclear Power Plant,Other,Pollution? It assesses the impacts of Chernobyl on distant areas… Not sure which category to choose. 
+4832,X1,Other,grazing,Trade,"Inferred telecoupling. Really not sure if this is a telecoupling. Maybe check with Ming? No mention of trade, international…"
+4207,X1,Other,governance,Other,This is a case of war conflict… don't know what to do with this one. 
+1616,X2,Other,the farmers were in a conservation program,Knowledge transfer,"UNSURE. This paper assess the impacts of an EU agrienvironmental schemes (AES) on biodiversity. As it is a EU driven initiative I would consider it a telecoupling, but I am not fully sure if with knowledge transfer we are considering correctly"
+1752,X2,Other,Urbanization,EXCLUDE PAPER,It does not look like a telecoupling paper to me. Ask Yuqian as he completed this one
+3697,X2,Other,Mentioned commercial logging but its impact is not measured.,Trade,"Inferred. The potential link with trade is weak, but in case this is a telecoupling it should be trade. "
+3335,X2,Other,Climate Change,EXCLUDE PAPER (or at least this telecoupling),We decided to exclude papers that assess the impact of climate change. 
+92,X2,Other,land use,Trade,"Inferred. Land use is the outcome, but the driver could be trade (or NOT) as the authors talk about rubber and banana plantations but not about trade. It is an inferred telecoupling. "
+2050,X2,Other,Cutting and grazing/browsing,Species Dispersal,INVASIVES This paper assesses the impact of a tree species introduced by humans. 
+396,X2,Other,grazing,REMOVE THIS TELECOUPLING,"I suggest to remove this telecoupling, but NOT the PAPER. The paper presents an analysis of threats to orchids, listing tourism and grazing among many other things. Here I suggest to exclude the results for grazing, and only count those for tourism and maybe other telecouplings that were analyzed. Grazing includes 'grazing of orchid flower or stem by agricultural species such as cattle or invasive species such as rabbits and pigs' from there to infer that this is driven by international trade is going a bit too far. "
+292,X3,Other,unsure,Species Dispersal,"INVASIVES This is a clear case of species introduction done by humans. I am quite confused with which category refers to species invasion, but discarding the others I assumed that it is species dispersal? But it is super confusing. "
+227,X3,Other,human consumption (direct,Trade,"Paper 227 is about impacts of consumption on biodiversity via land-use change (which is driven by consumption) and it uses a global trade database, so I think the best option is to classify the telecoupling as trade."
+227,X4,Other,agriculture/land use change),Trade,See comment above. Should list only one telecoupling

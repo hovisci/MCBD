@@ -43,10 +43,9 @@ getwd()
 # Final figures
   fig.dir <- paste0(dir,'/images/')
 
-# Commented out by CLH (9/23/2020)
-# Tables for manual edits/error checks 
-#  dir.create(paste0(dir,'/issues/',date(Sys.Date())),recursive=TRUE)
-#  tab.check.dir <- paste0(dir,'/issues/',date(Sys.Date()),'/')
+# Tables for manual edits/error checks
+ dir.create(paste0(dir,'/issues/',date(Sys.Date())),recursive=TRUE)
+ tab.check.dir <- paste0(dir,'/issues/',date(Sys.Date()),'/')
 
 # custom colors
   paper_col <- c('#DDCC77','#009988','#882255')

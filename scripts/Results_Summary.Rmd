@@ -358,9 +358,9 @@ prop.table(table(s23$taxa))
 ## 5.3 Telecoupling Flow Category Frequency
 
 ```{r}
-count(s2$tele_cat)
+count(s2$tc)
 
-count(s23$tele_cat)
+count(s23$tc)
 
 ```
 
@@ -687,41 +687,42 @@ Numbers instead of percents
 Repeat flows
 **IMPORTANT STEP HERE:** 
 
-Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well!!!!!!!!!!!!!!!!!!!!!!!!! 
+Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well.
 
 The reason for doing this is so that we can attribute biodiversity impacts to the specific flows that may have been studied together, and whose individual impacts cannot be decoupled.
 ```{r}
 # set as character
-  s23$tele_cat <- as.character(s23$tele_cat)
-  table(s23$tele_cat)
+  s23$tc <- as.character(s23$tc)
+  table(s23$tc)   # no NAs until rows get separated
+  poo<-s23[is.na(s23$tc),]
+  
   
 # show original length of rows
   print(paste('Original number of rows:',nrow(s23)))
 
 # split multiple flows listed in a row into other new rows
-  tcRep <- separate_rows(s23, tele_cat, sep=";", convert = TRUE)
-  tcRep$tele_cat <- as.factor(tcRep$tele_cat)
+  tcRep <- separate_rows(s23, tc, sep=";", convert = TRUE)
+  tcRep$tc <- as.factor(tcRep$tc)
 
 # show new length of rows
   print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep)))
 
 # show levels
-  summary(tcRep$tele_cat)
-  
+  summary(tcRep$tc)
 ```
 
-Some NA's (not sure why)
+
 
 ```{r}
 # get summary
-  a <- ddply(tcRep, .(tele_cat, sig_effect), summarize,
+  a <- ddply(tcRep, .(tc, sig_effect), summarize,
           # total count of entries     
-          count=length(tele_cat)) %>%
-          # percents of effects within totals per tele_cat
-          group_by(tele_cat) %>%
+          count=length(tc)) %>%
+          # percents of effects within totals per tc
+          group_by(tc) %>%
             nest() %>% 
-             mutate(perc_per_tele_cat=map(data, function(x) x$count/sum(x$count))) %>% 
-              unnest(cols = c(data, perc_per_tele_cat))
+             mutate(perc_per_tc=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_tc))
 # save as csv
   write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),
             row.names = TRUE)
@@ -734,7 +735,7 @@ Quick data visualization
 
 ```{r, fig.height = 6, fig.width = 11}
 # Stack plot
-  quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_tele_cat, x=tele_cat)) + 
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=perc_per_tc, x=tc)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -752,7 +753,7 @@ Numbers instead of percents
 
 ```{r, fig.height = 6, fig.width = 11}
 # Stack plot
-  quick_plot <- ggplot(a, aes(fill=sig_effect, y=count, x=tele_cat)) + 
+  quick_plot <- ggplot(a, aes(fill=sig_effect, y=count, x=tc)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -772,30 +773,30 @@ Numbers instead of percents
 ```{r}
 
 # set as character
-  s23_maj$tele_cat <- as.character(s23_maj$tele_cat)
+  s23_maj$tc <- as.character(s23_maj$tc)
 
 # show original length of rows
   print(paste('Original number of rows:',nrow(s23_maj)))
 
 # split multiple flows listed in a row into other new rows
-  tcRep_maj <- separate_rows(s23_maj, tele_cat, sep=";", convert = TRUE)
-  tcRep_maj$tele_cat <- as.factor(tcRep_maj$tele_cat)
+  tcRep_maj <- separate_rows(s23_maj, tc, sep=";", convert = TRUE)
+  tcRep_maj$tc <- as.factor(tcRep_maj$tc)
 
 # show new length of rows
   print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep_maj)))
 
 # show levels
-  summary(tcRep$tele_cat)
+  summary(tcRep$tc)
 
 # get summary
-  a <- ddply(tcRep_maj, .(tele_cat, maj_eff), summarize,
+  a <- ddply(tcRep_maj, .(tc, maj_eff), summarize,
           # total count of entries     
-          count=length(tele_cat)) %>%
-          # percents of effects within totals per tele_cat
-          group_by(tele_cat) %>%
+          count=length(tc)) %>%
+          # percents of effects within totals per tc
+          group_by(tc) %>%
             nest() %>% 
-             mutate(perc_per_tele_cat=map(data, function(x) x$count/sum(x$count))) %>% 
-              unnest(cols = c(data, perc_per_tele_cat))
+             mutate(perc_per_tc=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_tc))
 # save as csv
   write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),
             row.names = TRUE)
@@ -808,7 +809,7 @@ Quick data visualization
 
 ```{r, fig.height = 6, fig.width = 11}
 # Stack plot
-  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_tele_cat, x=tele_cat)) + 
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_tc, x=tc)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -827,7 +828,7 @@ Numbers instead of percents
 
 ```{r, fig.height = 6, fig.width = 11}
 # Stack plot
-  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=tele_cat)) + 
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=tc)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
