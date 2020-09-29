@@ -496,6 +496,13 @@ tc2_check <- tc2 %>%
 fname <- paste0(dat.dir, '/survey2_tc_cat_check.csv'); fname
 # write.csv(x = tc2_check, file = fname, row.names = F)
 
+# Fix "NA" - CLH (9/29/20)
+table(tc2$tele_cat)
+tc2_NA <- tc2 %>%
+  dplyr::filter(tele_cat     == 'NA', 
+                tele_cat_ori != 'NA')
+
+
 
 ### summarize results and update this survey response
 tc2 <- tc2 %>% dplyr::select(-tele_cat_ori)
@@ -509,6 +516,10 @@ tc2 %>%
 
 df99 <- func_update_col(dt = tc2, col_name = 'tele_cat')
 ```
+
+
+
+
 
 
 ####    - data source
@@ -866,7 +877,6 @@ bc4 <- bc3 %>%
 ### 
 df99 <- func_update_col(dt = bc4, col_name = 'biodiv_countries')
 # df99 <- func_update_col(dt = dsm2, col_name = 'data_source_meta')
-
 ```
 
 
