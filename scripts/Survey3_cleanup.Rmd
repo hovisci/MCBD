@@ -1178,37 +1178,54 @@ survey3$entry_id[which(survey3$UID == '1551_2' & survey3$notes == 'Density-Gruss
 survey3[which(survey3$UID == '1551_19'),] # notes are diff
 survey3$entry_id[which(survey3$UID == '1551_19' & survey3$notes == 'Composition-Manguinhos beach-medium sector')] <- 28
 
-# Fix paper id 2201 
-survey3[which(survey3$paper_id == '2201'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
-survey3[which(survey3$UID == '2201_1'),]  # have different effects
+# Fix paper id 2201 <- based on survey 2 comments, only should be two entries, drop the earlier timestep
+survey3[which(survey3$paper_id == '2201'),]  
+survey3[which(survey3$UID == '2201_1'),]  
+survey3 <- survey3[-which(survey3$timestamp == '2020-05-28 14:19:57' ),] # drop dup
 
 # Fix paper id 4155 <- rename 
 survey3[which(survey3$paper_id == '4155'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
 survey3[which(survey3$UID == '4155_1'),] 
+survey3$entry_id[which(survey3$UID == '4155_1' & survey3$timestamp == '2020-03-18 15:59:26')] <- 20 
 
-
-# Fix paper id 466 <- tree and shrub metric only, rename shrub and drip first tree
-survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+# Fix paper id 466 <- tree and shrub metric only, rename shrub and drop first tree
+survey3[which(survey3$paper_id == '466'),c(1,2,3,4,5,6,7,8,11,12,14,15,16)]  
 survey3[which(survey3$UID == '466_2'),]  
-
-# Fix paper id 4831 <-
-survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
-survey3[which(survey3$UID == '466_2'),]  # have different effects
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-28 22:53:26' ),] # drop dup
+survey3$entry_id[which(survey3$UID == '466_2' & survey3$timestamp == '2020-04-28 22:54:32')] <- 1 # rename
 
 
-# Fix paper id 5844 <-
-survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
-survey3[which(survey3$UID == '466_2'),]  # have different effects
+# Fix paper id 4831 <- rename as 12
+survey3[which(survey3$paper_id == '4831'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '4831_6'),] 
+survey3$entry_id[which(survey3$UID == '4831_6' & survey3$timestamp == '2020-04-30 19:36:19')] <- 12 # rename
 
-# Fix paper id 5875 <-
-survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
-survey3[which(survey3$UID == '466_2'),]  # have different effects
+
+# Fix paper id 5844 <- based on survey 2, should only be 8 metrics. Delete all entries from earlier timestep. Keep ones from 5/15
+survey3[which(survey3$paper_id == '5844'),c(1,2,3,4,5,6,7,8,11,12,14,15,16)]   
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:25:07' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:28:15' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:30:08' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:31:03' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:32:24' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:33:07' ),] # drop 4/11 entries
+
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:34:15' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:35:52' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:36:40' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:38:16' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:39:10' ),] # drop 4/11 entries
+survey3 <- survey3[-which(survey3$timestamp == '2020-04-11 14:37:34' ),] # drop 4/11 entries
+
+# Fix paper id 5875 <- drop earlier timestep of dup
+survey3[which(survey3$paper_id == '5875'),]  
+survey3[which(survey3$UID == '5875_1'),]  # have different effects
+survey3 <- survey3[-which(survey3$timestamp == '2020-03-26 16:15:13' ),] # drop dup
 
 # Check
 survey3$UID <- paste0(survey3$paper_id,'_',survey3$entry_id)
 length(survey3$UID)
-length(unique(survey3$UID)) # 20 UIDs are repeated for some reason
-
+length(unique(survey3$UID)) 
 x <- as.data.frame(table(survey3$UID))
 y <- x[which(x$Freq > 1),]
 
