@@ -50,6 +50,7 @@ getwd()
 # custom colors
   paper_col <- c('#DDCC77','#009988','#882255')
   effect_cols <- c('#9A709E','#999999','#A50026','#FDB366','#6EA6CD')
+  sigeff_col <- c("#00CC00", "#FF9933", "#FF0000", "#C0C0C0")
 
 ## customized theme (I just copied this from app3) ##
 

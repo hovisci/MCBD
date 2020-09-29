@@ -486,7 +486,9 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
+
 
 # save image
   ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa.png"),
@@ -504,6 +506,7 @@ Numbers instead of percents
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -542,6 +545,7 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -560,6 +564,7 @@ Numbers instead of percents
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -599,6 +604,7 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -616,6 +622,7 @@ Numbers instead of percents
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -655,6 +662,7 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -672,6 +680,7 @@ Numbers instead of percents
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -739,6 +748,7 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -757,6 +767,7 @@ Numbers instead of percents
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -813,6 +824,7 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
@@ -832,6 +844,7 @@ Numbers instead of percents
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=sigeff_col) +
                 xlab("")
 
 # save image
