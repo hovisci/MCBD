@@ -4,13 +4,13 @@
 "3","Changed (e.g. species composition)","TRUE",98
 "4","Negative (detrimental)","FALSE",47
 "5","Negative (detrimental)","Not evaluated",48
-"6","Negative (detrimental)","TRUE",191
-"7","Neutral (only when there is absolutely no difference in metrics)","FALSE",65
+"6","Negative (detrimental)","TRUE",182
+"7","Neutral (only when there is absolutely no difference in metrics)","FALSE",64
 "8","Neutral (only when there is absolutely no difference in metrics)","Not evaluated",170
-"9","Neutral (only when there is absolutely no difference in metrics)","TRUE",7
-"10","Positive (beneficial)","FALSE",30
+"9","Neutral (only when there is absolutely no difference in metrics)","TRUE",6
+"10","Positive (beneficial)","FALSE",29
 "11","Positive (beneficial)","Not evaluated",22
-"12","Positive (beneficial)","TRUE",69
-"13","Unclear","FALSE",12
+"12","Positive (beneficial)","TRUE",63
+"13","Unclear","FALSE",11
 "14","Unclear","Not evaluated",13
 "15","Unclear","TRUE",3

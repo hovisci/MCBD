@@ -1120,7 +1120,99 @@ survey3 <- rbind(survey3, kelly_fix)                                            
 
 ```
 
+Add a Unique ID for each paperid_entryid
 
+```{r}
+
+survey3$UID <- paste0(survey3$paper_id,'_',survey3$entry_id)
+length(survey3$UID)
+length(unique(survey3$UID)) # 20 UIDs are repeated for some reason
+
+x <- as.data.frame(table(survey3$UID))
+y <- x[which(x$Freq > 1),]
+
+names(survey3)
+
+# Fix paper id 1299 <- drop duplicates
+
+survey3[which(survey3$paper_id == '1299'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '1299_1'),]             # duplicated
+survey3[which(survey3$UID == '1299_2'),]             # duplicated
+survey3[which(survey3$UID == '1299_4'),]             # duplicated
+survey3 <- survey3[!duplicated(survey3),]            # id duplicates, only these entries
+
+
+# Fix paper id 1488 <- assign new entry id to habitat type metrics (end number = 24)
+survey3[which(survey3$paper_id == '1488'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '1488_1'),]  # notes are different (e.g. habitat type vs spp rich)
+survey3$entry_id[which(survey3$UID == '1488_1' & survey3$notes == 'Habitat type')] <- 16
+survey3[which(survey3$UID == '1488_2'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_2' & survey3$notes == 'Habitat type')] <- 17
+survey3[which(survey3$UID == '1488_3'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_3' & survey3$notes == 'Distance to oil palm plantation')] <- 18
+survey3[which(survey3$UID == '1488_4'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_4' & survey3$notes == 'Distance to oil palm plantation')] <- 19
+survey3[which(survey3$UID == '1488_6'),] # notes are different
+survey3$entry_id[which(survey3$UID == '1488_6' & survey3$notes == 'Habitat type')] <- 20
+survey3[which(survey3$UID == '1488_7'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_7' & survey3$notes == '')] <- 21
+survey3[which(survey3$UID == '1488_8'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_8' & survey3$notes == 'Habitat type')] <- 22
+survey3[which(survey3$UID == '1488_9'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_9' & survey3$notes == 'Habitat type')] <- 23
+survey3[which(survey3$UID == '1488_10'),] # notes are different 
+survey3$entry_id[which(survey3$UID == '1488_10' & survey3$notes == 'Habitat type')] <- 24
+
+# Fix paper id 1376 <- drop repeated entry (only duplicate with diff timestamp) and rename other
+survey3[which(survey3$paper_id == '1376'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '1376_4'),]  # 3 entries, I think the first two are legit and the third is the 2nd repeated
+survey3_dup <- survey3[,-1]
+survey3_dup[duplicated(survey3_dup),]
+survey3 <- survey3[-which(survey3$timestamp == '2020-06-03 14:42:49' ),] # drop dup
+survey3$entry_id[which(survey3$UID == '1376_4' & survey3$timestamp == '2020-05-29 14:02:49')] <- 7 
+
+# Fix paper id 1551 <- assign new entry id to habitat type metrics (end number = 28)
+survey3[which(survey3$paper_id == '1551'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '1551_2'),]  # notes are diff
+survey3$entry_id[which(survey3$UID == '1551_2' & survey3$notes == 'Density-Grussai beach')] <- 27
+survey3[which(survey3$UID == '1551_19'),] # notes are diff
+survey3$entry_id[which(survey3$UID == '1551_19' & survey3$notes == 'Composition-Manguinhos beach-medium sector')] <- 28
+
+# Fix paper id 2201 
+survey3[which(survey3$paper_id == '2201'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '2201_1'),]  # have different effects
+
+# Fix paper id 4155 <- rename 
+survey3[which(survey3$paper_id == '4155'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '4155_1'),] 
+
+
+# Fix paper id 466 <- tree and shrub metric only, rename shrub and drip first tree
+survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '466_2'),]  
+
+# Fix paper id 4831 <-
+survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '466_2'),]  # have different effects
+
+
+# Fix paper id 5844 <-
+survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '466_2'),]  # have different effects
+
+# Fix paper id 5875 <-
+survey3[which(survey3$paper_id == '466'),c(2,3,4,5,6,7,8,11,12,14,15,16)]  
+survey3[which(survey3$UID == '466_2'),]  # have different effects
+
+# Check
+survey3$UID <- paste0(survey3$paper_id,'_',survey3$entry_id)
+length(survey3$UID)
+length(unique(survey3$UID)) # 20 UIDs are repeated for some reason
+
+x <- as.data.frame(table(survey3$UID))
+y <- x[which(x$Freq > 1),]
+
+```
 
 
 
