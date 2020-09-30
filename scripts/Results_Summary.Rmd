@@ -720,6 +720,13 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
   summary(tcRep$tc)
 ```
 
+How many multiple tc flows? 41
+
+```{r}
+multiple <- str_count(s23$tc, ';')
+multiple <- multiple != 0
+multiple <- table(multiple)["TRUE"]; multiple
+```
 
 
 ```{r}

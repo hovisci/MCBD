@@ -197,7 +197,6 @@ woot <- as.data.frame(table(woo))
 ok <- str_split_fixed(woot$woo, '_', 2)
 woot$ctr <- ok[,1]
 woot$tc <- ok[,2]
-dplyr::count(tc, name = 'n_tc')
 
 
 ### count by ctr and tc

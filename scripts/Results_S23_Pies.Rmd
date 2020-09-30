@@ -70,6 +70,31 @@ Show column names
   colnames(s23)
 ```
 
+Replicate TC flows
+
+```{r}
+# set as character
+  s23$tc <- as.character(s23$tc)
+  table(s23$tc)   # no NAs until rows get separated
+  poo<-s23[is.na(s23$tc),]
+  
+  
+# show original length of rows
+  print(paste('Original number of rows:',nrow(s23)))
+
+# split multiple flows listed in a row into other new rows
+  tcRep <- separate_rows(s23, tc, sep=";", convert = TRUE)
+  tcRep$tc <- as.factor(tcRep$tc)
+
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep)))
+  
+  tcRep_maj <- tcRep[!duplicated(tcRep$paper_id),]
+
+
+```
+
+
 # 4. First synthesis: sig_effects of coupling categories across taxa 
 
 ## 4.1 Summary regardless of significance
@@ -78,7 +103,7 @@ Make a new table.
 
 ```{r}
 # get summary
-  taxa_flow <- ddply(s23, .(taxa, tele_cat, sig_effect), summarize,
+  taxa_flow <- ddply(tcRep, .(taxa, tc, sig_effect), summarize,
                 # total count of entries     
                 count=length(taxa)) %>%
                 # percents of sig_effects within totals per taxa
@@ -107,7 +132,7 @@ Check levels
 levels(as.factor(taxa_flow$sig_effect))
 ```
 ```{r}
-levels(as.factor(taxa_flow$tele_cat))
+levels(as.factor(taxa_flow$tc))
 ```
 
 Adjust levels
@@ -116,48 +141,39 @@ Adjust levels
 # taxa level change
   taxa_flow$taxa <- factor(taxa_flow$taxa,
                            c('Birds','Mammals','Reptiles','Amphibians',
-                             'Fish','Invertebrates','Plants/trees/shrubs',
+                             'Fish','Invertebrates','Plants/Trees/Shrubs',
                              'Multiple'))
 
 # sig_effects level change
   taxa_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
                           as.character(taxa_flow$sig_effect))
   taxa_flow$sig_effect <- factor(taxa_flow$sig_effect,
-                             c('Positive','Neutral','Negative','Changed','Unclear'))
+                             c( "Beneficial","Changed","Detrimental","No relation or unclear"))
 
 # telecoupling level change
-  taxa_flow$tele_cat <- factor(taxa_flow$tele_cat,
+  taxa_flow$tc <- factor(taxa_flow$tc,
                                c("Energy Transfer","Investment","Knowledge Transfer",
                                  "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
 ```
-Energy Transfer            Investment    Knowledge Transfer 
-                   63                    11                    73 
-    Migration (human) Migration (non-human)                 Other 
-                   16                    13                    10 
-               remove     Species Dispersal   Technology Transfer 
-                   15                    54                     1 
-              Tourism                 Trade        Waste Transfer 
-                  213                   286                     2 
-       Water Transfer                  NA's 
-                   12                    38 
+
 Visualize as a matrix of pie charts
 
 ```{r}
 # change colors
   #sig_effect_cols <- c('#4EB265','#999999','#A50026','#FDB366','#9A709E')
-  sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  
+  #sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
+  sig_effect_cols <- sigeff_col
+
 # Matrix of pie charts
   taxa_flow_fig <- ggplot(taxa_flow) + 
                     aes(x='', y = count, fill = sig_effect) +
                     geom_bar(position='fill',
                              stat='identity', width = 1, size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(taxa ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ taxa, switch='y') +  #vertical
+                      facet_grid(taxa ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ taxa, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
                     # colors
@@ -201,62 +217,65 @@ Visualize as a matrix of pie charts
   taxa_flow_fig
 ```
 
-## 4.2 Summary emphasizing significance
+Study level
 
-Make a new column for significant sig_effects; non-significant becomes a new level in this dataset.
-
-```{r}
-# new column of significant sig_effects; non-significant sig_effects renamed
-  s23$sig_sig_effect <- ''
-  s23$sig_sig_effect <- as.character(s23$significant)
-  s23$sig_effect <- as.character(s23$sig_effect)
-  s23$sig_sig_effect[is.na(s23$sig_sig_effect)] <- "Unknown Signif."
-  s23$sig_sig_effect[s23$sig_sig_effect=='Not evaluated'] <- "Unknown Signif."
-  s23$sig_sig_effect[s23$sig_sig_effect=='FALSE'] <- "Not Signif."
-  s23$sig_sig_effect[s23$sig_sig_effect=='TRUE'] <- s23$sig_effect[s23$sig_sig_effect=='TRUE']
-```
-
-Summarize new column by taxa and telecoupling category.
+Make a new table.
 
 ```{r}
 # get summary
-  taxa_flow_sig <- ddply(s23, .(taxa, tele_cat, sig_sig_effect), summarize,
-                        # total count of entries     
-                        count=length(taxa))
+  taxa_flow <- ddply(tcRep_maj, .(taxa, tc, maj_eff), summarize,
+                # total count of entries     
+                count=length(taxa)) %>%
+                # percents of sig_effects within totals per taxa
+                group_by(taxa) %>%
+                  nest() %>% 
+                   mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>%
+                    unnest()
+
 # save as csv
-  write.csv(taxa_flow_sig,
-            paste0(tab.dir,'synthesis_sig_effects_taxa_and_flow_significant.csv'),
+  write.csv(taxa_flow, paste0(tab.dir,'synthesis_maj_eff_taxa_and_flow.csv'),
             row.names = TRUE)
 
 # view
-  taxa_flow_sig
+  taxa_flow
 ```
 
-Change levels
+Check levels
+
+```{r}
+levels(as.factor(taxa_flow$taxa))
+```
+
+Check levels
+
+```{r}
+levels(as.factor(taxa_flow$maj_eff))
+```
+```{r}
+levels(as.factor(taxa_flow$tc))
+```
+
+Adjust levels
 
 ```{r}
 # taxa level change
-  taxa_flow_sig$taxa <- factor(taxa_flow_sig$taxa,
+  taxa_flow$taxa <- factor(taxa_flow$taxa,
                            c('Birds','Mammals','Reptiles','Amphibians',
-                             'Fish','Invertebrates','Plants/trees/shrubs',
-                             'Multiple','Undefined'))
+                             'Fish','Invertebrates','Plants/Trees/Shrubs',
+                             'Multiple'))
 
 # sig_effects level change
-  taxa_flow_sig$sig_sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(taxa_flow_sig$sig_sig_effect))
-  taxa_flow_sig$sig_sig_effect <- factor(taxa_flow_sig$sig_sig_effect,
-                             c('Positive','Neutral','Negative','Changed',
-                               'Not Signif.',
-                               'Unknown Signif.',
-                               'Unclear'))
+  taxa_flow$maj_eff <- gsub("\\s*\\([^\\)]+\\)", '',
+                          as.character(taxa_flow$maj_eff))
+  taxa_flow$maj_eff <- factor(taxa_flow$maj_eff,
+                             c( "Beneficial","Changed","Detrimental","No relation or unclear"))
 
 # telecoupling level change
-  taxa_flow_sig$tele_cat <- factor(taxa_flow_sig$tele_cat,
+  taxa_flow$tc <- factor(taxa_flow$tc,
                                c("Energy Transfer","Investment","Knowledge Transfer",
                                  "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
 ```
 
 Visualize as a matrix of pie charts
@@ -265,25 +284,21 @@ Visualize as a matrix of pie charts
 # change colors
   #sig_effect_cols <- c('#4EB265','#999999','#A50026','#FDB366','#9A709E')
   #sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  sig_sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141',
-                       # include 'Not Signif.' and 'Unknown Signif.'
-                       '#BBBBBB','#DDDDDD',
-                       # 'unclear' keeps same color as before
-                       '#882E72')
-  
+  sig_effect_cols <- sigeff_col
+
 # Matrix of pie charts
-  taxa_flow_fig <- ggplot(taxa_flow_sig) + 
-                    aes(x='', y = count, fill = sig_sig_effect) +
+  taxa_flow_fig <- ggplot(taxa_flow) + 
+                    aes(x='', y = count, fill = maj_eff) +
                     geom_bar(position='fill',
                              stat='identity', width = 1, size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(taxa ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ taxa, switch='y') +  #vertical
+                      facet_grid(taxa ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ taxa, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
                     # colors
                       scale_fill_manual(
-                        values=sig_sig_effect_cols,
+                        values=sig_effect_cols,
                         guide = guide_legend(reverse = FALSE))  + 
                         scale_y_discrete(expand=c(0,0))+
                     # style
@@ -302,7 +317,7 @@ Visualize as a matrix of pie charts
                         strip.text.x = element_text(size=10,
                                           angle=90, vjust=0, hjust = 0),
                         strip.text.y = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
+                                          angle=180, vjust=0, hjust = 0),
                         strip.background = element_rect(fill='white'),
                         panel.spacing = unit(0.1, 'lines')
                         ) +
@@ -312,9 +327,8 @@ Visualize as a matrix of pie charts
 # save image
   ggsave(taxa_flow_fig,
          filename=paste0(fig.dir,
-                         # activate for vertical or horizontal version
-                           #'synthesis_sig_effects_taxa_and_flow_significant_Vert.png'),
-                           'synthesis_sig_effects_taxa_and_flow_significant_Horz.png'),
+                         #'synthesis_sig_effects_taxa_and_flow_Vert.png'),
+                         'synthesis_maj_eff_taxa_and_flow_Horz.png'),
          #height=6.5,width=7,units='in',
          dpi=600)
 
@@ -322,6 +336,9 @@ Visualize as a matrix of pie charts
 # display image
   taxa_flow_fig
 ```
+
+
+
 
 # 5. Second synthesis: sig_effects by coupling and metric categories
 
@@ -331,15 +348,15 @@ Convert to long format, where metric is indicated.
 
 ```{r}
 # subset
-  metrics <- subset(s23,
+  metrics <- subset(tcRep,
                     select=c('paper_id','entry_id',
-                            'taxa','tele_cat','sig_effect',
+                            'taxa','tc','sig_effect',
                             'biodiv_cat_1sp',
                             'biodiv_cat_multsp',
                             'biodiv_cat_habitat'))
 # melt
   metrics_long <- melt(metrics, id.vars=c('paper_id','entry_id',
-                            'taxa','tele_cat','sig_effect'))
+                            'taxa','tc','sig_effect'))
   
 # remove NA fields
   metrics_long <- metrics_long[!is.na(metrics_long$value),]
@@ -399,8 +416,8 @@ Rename metrics
                                    "Population Dynamics",
                                    "Quality",
                                    "Richness",
-                                   "Within Species Diversity",
-                                   "Other"))
+                                   "Within Species Diversity"
+                                  ))
   
 # check levels
   levels(as.factor(metrics_long$metric))
@@ -415,7 +432,7 @@ Make a new table summarizing dataset by metric, coupling category and sig_effect
 ```{r}
 # get summary
   metric_flow <- ddply(metrics_long,
-                       .(metric_type, metric, tele_cat, sig_effect),
+                       .(metric_type, metric, tc, sig_effect),
                        summarize,
                       # total count of entries     
                         count=length(metric))
@@ -435,15 +452,14 @@ Change levels
   metric_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
                           as.character(metric_flow$sig_effect))
   metric_flow$sig_effect <- factor(metric_flow$sig_effect,
-                             c('Positive','Neutral','Negative','Changed','Unclear'))
-
+                             c( "Beneficial","Changed","Detrimental","No relation or unclear"))
 # telecoupling level change
-  metric_flow$tele_cat <- factor(metric_flow$tele_cat,
-                               c("Energy Transfer","Investment","Knowledge Transfer",
+  metric_flow$tc <- factor(metric_flow$tc,
+                                c("Energy Transfer","Investment","Knowledge Transfer",
                                  "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
+  
 ```
 
 
@@ -452,17 +468,15 @@ Change levels
 Visualize as a matrix of pie charts. First, **ALL** metrics together.
 
 ```{r}
-# change colors
-  sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  
+
 # Matrix of pie charts
   metric_flow_fig <- ggplot(metric_flow) + 
                     aes(x='', y = count, fill = sig_effect) +
                     geom_bar(position='fill',
                              stat='identity', width = 1, size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
+                      facet_grid(metric ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
                     # colors
@@ -509,17 +523,14 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
 ## 5.2.3 Pie chart separating metric categories
 
 ```{r}
-# change colors
-  sig_effect_cols <- c('#4EB265','#777777','#DC050C','#F6C141','#882E72')
-  
 # Matrix of pie charts
   metric_flow_fig <- ggplot(metric_flow) + 
                     aes(x='', y = count, fill = sig_effect) +
                     geom_bar(position='fill',
                              stat='identity', width = 1, size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(metric_type ~ metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
+                      facet_grid(metric_type ~ metric ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
                     # colors
@@ -563,47 +574,46 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
   metric_flow_fig
 ```
 
-## 5.3 Summary emphasizing significance
 
-### 5.3.1 New dataset (long format)
+Study level
 
-Convert to long format, where metric is indicated and the significant sig_effect category is used instead.
+
+Convert to long format, where metric is indicated.
 
 ```{r}
 # subset
-  sig_metrics <- subset(s23,
+  metrics <- subset(tcRep_maj,
                     select=c('paper_id','entry_id',
-                            'taxa','tele_cat',
-                            'sig_sig_effect', ##<--- THIS IS THE CHANGE HERE
+                            'taxa','tc','maj_eff',
                             'biodiv_cat_1sp',
                             'biodiv_cat_multsp',
                             'biodiv_cat_habitat'))
 # melt
-  sig_met_long <- melt(sig_metrics, id.vars=c('paper_id','entry_id',
-                            'taxa','tele_cat','sig_sig_effect'))
+  metrics_long <- melt(metrics, id.vars=c('paper_id','entry_id',
+                            'taxa','tc','maj_eff'))
   
 # remove NA fields
-  sig_met_long <- sig_met_long[!is.na(sig_met_long$value),]
+  metrics_long <- metrics_long[!is.na(metrics_long$value),]
 ```
 
 Rename last columns
 
 ```{r}
 # change colnames
-  colnames(sig_met_long)[6] <- 'metric_type'
-  colnames(sig_met_long)[7] <- 'metric'
+  colnames(metrics_long)[6] <- 'metric_type'
+  colnames(metrics_long)[7] <- 'metric'
 ```
 
 Rename metric types
 
 ```{r}
 # check levels
-  levels(sig_met_long$metric_type)
+  levels(metrics_long$metric_type)
 ```
 
 ```{r}
 # change levels
-  levels(sig_met_long$metric_type) <- c('single species',
+  levels(metrics_long$metric_type) <- c('single species',
                                         'multiple species',
                                         'habitat')
 ```
@@ -612,23 +622,23 @@ Rename metrics
 
 ```{r}
 # check levels
-  levels(as.factor(sig_met_long$metric))
+  levels(as.factor(metrics_long$metric))
 ```
 
 ```{r}
 # remove parentheses
-  sig_met_long$metric <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(sig_met_long$metric))
+  metrics_long$metric <- gsub("\\s*\\([^\\)]+\\)", '',
+                          as.character(metrics_long$metric))
 
 # capitalize each word
-  sig_met_long$metric <- tools::toTitleCase(sig_met_long$metric)
+  metrics_long$metric <- tools::toTitleCase(metrics_long$metric)
   
 # adjust name
-  sig_met_long$metric <- gsub("With-in", 'Within',
-                        as.character(sig_met_long$metric))
+  metrics_long$metric <- gsub("With-in", 'Within',
+                        as.character(metrics_long$metric))
   
 # change levels, moving other to the end
-  sig_met_long$metric <- factor(sig_met_long$metric,
+  metrics_long$metric <- factor(metrics_long$metric,
                                 c("Abundance/Density",
                                    "Amount",
                                    "Composition",
@@ -640,72 +650,68 @@ Rename metrics
                                    "Population Dynamics",
                                    "Quality",
                                    "Richness",
-                                   "Within Species Diversity",
-                                   "Other"))
+                                   "Within Species Diversity"
+                                  ))
   
 # check levels
-  levels(as.factor(sig_met_long$metric))
+  levels(as.factor(metrics_long$metric))
 ```
 
-Make a new table summarizing dataset by metric, coupling category and significant sig_effect
+
 
 ```{r}
 # get summary
-  met_flow_sig <- ddply(sig_met_long,
-                       .(metric_type, metric, tele_cat, sig_sig_effect),
+  metric_flow <- ddply(metrics_long,
+                       .(metric_type, metric, tc, maj_eff),
                        summarize,
                       # total count of entries     
                         count=length(metric))
 
 # save as csv
-  write.csv(met_flow_sig,
-            paste0(tab.dir,
-                   'synthesis_sig_effects_metric_and_flow_significant.csv'),
-            row.names = FALSE)
+  write.csv(metric_flow, paste0(tab.dir,'synthesis_maj_eff_metric_and_flow.csv'),
+            row.names = TRUE)
 
 # view
-  met_flow_sig
+  metric_flow
 ```
 
 Change levels
 
 ```{r}
 # sig_effects level change
-  met_flow_sig$sig_sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
-                          as.character(met_flow_sig$sig_sig_effect))
-  met_flow_sig$sig_sig_effect <- factor(met_flow_sig$sig_sig_effect,
-                              c('Positive','Neutral','Negative','Changed',
-                               'Not Signif.',
-                               'Unknown Signif.',
-                               'Unclear'))
-
+  metric_flow$maj_eff <- gsub("\\s*\\([^\\)]+\\)", '',
+                          as.character(metric_flow$maj_eff))
+  metric_flow$maj_eff <- factor(metric_flow$maj_eff,
+                             c( "Beneficial","Changed","Detrimental","No relation or unclear"))
 # telecoupling level change
-  met_flow_sig$tele_cat <- factor(met_flow_sig$tele_cat,
-                               c("Energy Transfer","Investment","Knowledge Transfer",
+  metric_flow$tc <- factor(metric_flow$tc,
+                                c("Energy Transfer","Investment","Knowledge Transfer",
                                  "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Technology Transfer",
-                                 "Tourism","Trade","Waste Transfer","Water Transfer",
-                                 "Other","remove"))
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
+  
 ```
 
-### 5.3.2 Pie chart with all metrics combined
+
+### 5.2.2 Pie chart with all metrics combined
 
 Visualize as a matrix of pie charts. First, **ALL** metrics together.
 
 ```{r}
+
 # Matrix of pie charts
-  met_flow_sig_fig <- ggplot(met_flow_sig) + 
-                    aes(x='', y = count, fill = sig_sig_effect) +
+  metric_flow_fig <- ggplot(metric_flow) + 
+                    aes(x='', y = count, fill = maj_eff) +
                     geom_bar(position='fill',
                              stat='identity', width = 1, size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
+                      facet_grid(metric ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
                     # colors
                       scale_fill_manual(
-                        values=sig_sig_effect_cols,
+                        values=sig_effect_cols,
                         guide = guide_legend(reverse = FALSE))  + 
                         scale_y_discrete(position='right',expand=c(0,0))+
                     # style
@@ -732,35 +738,34 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
                       ylab('') + xlab('')
                 
 # save image
-  ggsave(met_flow_sig_fig,
+  ggsave(metric_flow_fig,
          filename=paste0(fig.dir,
-         # activate for vertical or horizontal version
-           #'synthesis_sig_effects_metric_and_flow_significant_Vert.png'),
-           'synthesis_sig_effects_metric_and_flow_significant_Horz.png'),
+                         #'synthesis_sig_effects_metric_and_flow_Vert.png'),
+                         'synthesis_sig_effects_metric_and_flow_Horz.png'),
          #height=6.5,width=7,units='in',
          dpi=600)
 
 
 # display image
-  met_flow_sig_fig
+  metric_flow_fig
 ```
 
-## 5.3.3 Pie chart separating metric categories
+## 5.2.3 Pie chart separating metric categories
 
 ```{r}
 # Matrix of pie charts
-  met_flow_sig_fig <- ggplot(met_flow_sig) + 
-                    aes(x='', y = count, fill = sig_sig_effect) +
+  metric_flow_fig <- ggplot(metric_flow) + 
+                    aes(x='', y = count, fill = maj_eff) +
                     geom_bar(position='fill',
                              stat='identity', width = 1, size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(metric_type ~ metric ~ tele_cat, switch='y') + #horizontal
-                      #facet_grid(tele_cat ~ metric, switch='y') +  #vertical
+                      facet_grid(metric_type ~ metric ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
                     # colors
                       scale_fill_manual(
-                        values=sig_sig_effect_cols,
+                        values=sig_effect_cols,
                         guide = guide_legend(reverse = FALSE))  + 
                         scale_y_discrete(position='right',expand=c(0,0))+
                     # style
@@ -787,15 +792,16 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
                       ylab('') + xlab('')
                 
 # save image
-  ggsave(met_flow_sig_fig,
+  ggsave(metric_flow_fig,
          filename=paste0(fig.dir,
-         # activate for vertical or horizontal version
-           #'synthesis_sig_effects_metric_type_and_flow_significant_Vert.png'),
-           'synthesis_sig_effects_metric_type_and_flow_significant_Horz.png'),
-         height=6,width=14,units='in',
+                         #'synthesis_sig_effects_metric_type_and_flow_Vert.png'),
+                         'synthesis_maj_eff_metric_type_and_flow_Horz.png'),
+         #height=6.5,width=7,units='in',
          dpi=600)
 
 
 # display image
-  met_flow_sig_fig
+  metric_flow_fig
 ```
+
+

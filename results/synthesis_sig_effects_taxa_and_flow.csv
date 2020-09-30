@@ -1,116 +1,94 @@
-"","taxa","tele_cat","sig_effect","count","perc_per_taxa"
+"","taxa","tc","sig_effect","count","perc_per_taxa"
 "1","Amphibians","Trade","Changed",1,1
-"2","Birds","Energy Transfer","Beneficial",7,0.0186666666666667
-"3","Birds","Energy Transfer","Detrimental",5,0.0133333333333333
-"4","Birds","Energy Transfer","No relation or unclear",8,0.0213333333333333
-"5","Birds","Investment","Beneficial",2,0.00533333333333333
-"6","Birds","Investment","Detrimental",2,0.00533333333333333
-"7","Birds","Investment","No relation or unclear",2,0.00533333333333333
-"8","Birds","Knowledge Transfer","Beneficial",7,0.0186666666666667
-"9","Birds","Knowledge Transfer","Changed",42,0.112
-"10","Birds","Knowledge Transfer","No relation or unclear",14,0.0373333333333333
-"11","Birds","Knowledge Transfer;Investment","Beneficial",1,0.00266666666666667
-"12","Birds","Knowledge Transfer;Investment","Detrimental",2,0.00533333333333333
-"13","Birds","Knowledge Transfer;Investment","No relation or unclear",3,0.008
-"14","Birds","Migration (human)","Detrimental",3,0.008
-"15","Birds","Species Dispersal","Beneficial",2,0.00533333333333333
-"16","Birds","Species Dispersal","Changed",1,0.00266666666666667
-"17","Birds","Species Dispersal","No relation or unclear",8,0.0213333333333333
-"18","Birds","Species Dispersal;Knowledge Transfer","No relation or unclear",1,0.00266666666666667
-"19","Birds","Tourism","Beneficial",5,0.0133333333333333
-"20","Birds","Tourism","Detrimental",16,0.0426666666666667
-"21","Birds","Tourism","No relation or unclear",6,0.016
-"22","Birds","Trade","Beneficial",8,0.0213333333333333
-"23","Birds","Trade","Changed",2,0.00533333333333333
-"24","Birds","Trade","Detrimental",25,0.0666666666666667
-"25","Birds","Trade","No relation or unclear",163,0.434666666666667
-"26","Birds","Trade;Energy Transfer","Beneficial",2,0.00533333333333333
-"27","Birds","Trade;Energy Transfer","Detrimental",1,0.00266666666666667
-"28","Birds","Trade;Knowledge Transfer","Beneficial",1,0.00266666666666667
-"29","Birds","Trade;Knowledge Transfer","No relation or unclear",2,0.00533333333333333
-"30","Birds","Trade;Tourism;Knowledge Transfer","Detrimental",2,0.00533333333333333
-"31","Birds",NA,"Beneficial",1,0.00266666666666667
-"32","Birds",NA,"Changed",2,0.00533333333333333
-"33","Birds",NA,"Detrimental",20,0.0533333333333333
-"34","Birds",NA,"No relation or unclear",9,0.024
-"35","Fish","Energy Transfer","Beneficial",4,0.0449438202247191
-"36","Fish","Energy Transfer","Changed",15,0.168539325842697
-"37","Fish","Energy Transfer","Detrimental",5,0.0561797752808989
-"38","Fish","Energy Transfer","No relation or unclear",15,0.168539325842697
-"39","Fish","Species Dispersal","Beneficial",1,0.0112359550561798
-"40","Fish","Species Dispersal","Detrimental",4,0.0449438202247191
-"41","Fish","Tourism","Beneficial",5,0.0561797752808989
-"42","Fish","Tourism","Changed",1,0.0112359550561798
-"43","Fish","Tourism","Detrimental",2,0.0224719101123595
-"44","Fish","Tourism","No relation or unclear",3,0.0337078651685393
-"45","Fish","Tourism;Investment","Beneficial",1,0.0112359550561798
-"46","Fish","Tourism;Investment","Changed",1,0.0112359550561798
-"47","Fish","Tourism;Investment","No relation or unclear",2,0.0224719101123595
-"48","Fish","Trade","Beneficial",7,0.0786516853932584
-"49","Fish","Trade","Detrimental",14,0.157303370786517
-"50","Fish","Trade","No relation or unclear",1,0.0112359550561798
-"51","Fish","Trade;Species Dispersal","Detrimental",1,0.0112359550561798
-"52","Fish","Water Transfer","Changed",1,0.0112359550561798
-"53","Fish","Water Transfer","Detrimental",1,0.0112359550561798
-"54","Fish","Water Transfer;Energy Transfer","Changed",3,0.0337078651685393
-"55","Fish",NA,"Beneficial",1,0.0112359550561798
-"56","Fish",NA,"Detrimental",1,0.0112359550561798
-"57","Invertebrates","Species Dispersal","Changed",7,0.0432098765432099
-"58","Invertebrates","Species Dispersal","Detrimental",4,0.0246913580246914
-"59","Invertebrates","Species Dispersal","No relation or unclear",16,0.0987654320987654
-"60","Invertebrates","Tourism","Beneficial",6,0.037037037037037
-"61","Invertebrates","Tourism","Changed",14,0.0864197530864197
-"62","Invertebrates","Tourism","Detrimental",49,0.302469135802469
-"63","Invertebrates","Tourism","No relation or unclear",38,0.234567901234568
-"64","Invertebrates","Tourism;Investment","No relation or unclear",2,0.0123456790123457
-"65","Invertebrates","Trade","Beneficial",3,0.0185185185185185
-"66","Invertebrates","Trade","Detrimental",7,0.0432098765432099
-"67","Invertebrates","Trade","No relation or unclear",4,0.0246913580246914
-"68","Invertebrates","Trade;Tourism","No relation or unclear",1,0.00617283950617284
-"69","Invertebrates","Waste Transfer","No relation or unclear",5,0.0308641975308642
-"70","Invertebrates",NA,"Changed",2,0.0123456790123457
-"71","Invertebrates",NA,"No relation or unclear",4,0.0246913580246914
-"72","Mammals","Energy Transfer","Detrimental",1,0.0178571428571429
-"73","Mammals","Migration (human)","Detrimental",1,0.0178571428571429
-"74","Mammals","Tourism","Beneficial",4,0.0714285714285714
-"75","Mammals","Tourism","Detrimental",16,0.285714285714286
-"76","Mammals","Tourism","No relation or unclear",13,0.232142857142857
-"77","Mammals","Trade","Detrimental",4,0.0714285714285714
-"78","Mammals","Trade;Migration (human)","Changed",1,0.0178571428571429
-"79","Mammals","Trade;Migration (human)","Detrimental",6,0.107142857142857
-"80","Mammals",NA,"Beneficial",1,0.0178571428571429
-"81","Mammals",NA,"Detrimental",2,0.0357142857142857
-"82","Mammals",NA,"No relation or unclear",7,0.125
-"83","Multiple","Investment","Beneficial",1,0.0588235294117647
-"84","Multiple","Species Dispersal","Detrimental",1,0.0588235294117647
-"85","Multiple","Tourism","Detrimental",5,0.294117647058824
-"86","Multiple","Tourism","No relation or unclear",3,0.176470588235294
-"87","Multiple","Trade","Beneficial",2,0.117647058823529
-"88","Multiple","Trade","Detrimental",4,0.235294117647059
-"89","Multiple","Trade","No relation or unclear",1,0.0588235294117647
-"90","Plants/Trees/Shrubs","Knowledge Transfer","Detrimental",6,0.0689655172413793
-"91","Plants/Trees/Shrubs","Knowledge Transfer","No relation or unclear",1,0.0114942528735632
-"92","Plants/Trees/Shrubs","Knowledge Transfer;Investment","Beneficial",1,0.0114942528735632
-"93","Plants/Trees/Shrubs","Migration (human)","Beneficial",1,0.0114942528735632
-"94","Plants/Trees/Shrubs","Migration (human)","No relation or unclear",2,0.0229885057471264
-"95","Plants/Trees/Shrubs","Species Dispersal","Beneficial",3,0.0344827586206897
-"96","Plants/Trees/Shrubs","Species Dispersal","Changed",1,0.0114942528735632
-"97","Plants/Trees/Shrubs","Species Dispersal","Detrimental",6,0.0689655172413793
-"98","Plants/Trees/Shrubs","Species Dispersal","No relation or unclear",5,0.0574712643678161
-"99","Plants/Trees/Shrubs","Tourism","Beneficial",9,0.103448275862069
-"100","Plants/Trees/Shrubs","Tourism","Changed",7,0.0804597701149425
-"101","Plants/Trees/Shrubs","Tourism","Detrimental",14,0.160919540229885
-"102","Plants/Trees/Shrubs","Tourism","No relation or unclear",15,0.172413793103448
-"103","Plants/Trees/Shrubs","Trade","Beneficial",3,0.0344827586206897
-"104","Plants/Trees/Shrubs","Trade","Changed",1,0.0114942528735632
-"105","Plants/Trees/Shrubs","Trade","No relation or unclear",5,0.0574712643678161
-"106","Plants/Trees/Shrubs","Trade;Species Dispersal","Detrimental",1,0.0114942528735632
-"107","Plants/Trees/Shrubs","Water Transfer","Beneficial",1,0.0114942528735632
-"108","Plants/Trees/Shrubs","Water Transfer","Detrimental",2,0.0229885057471264
-"109","Plants/Trees/Shrubs","Water Transfer;Waste Transfer","Detrimental",2,0.0229885057471264
-"110","Plants/Trees/Shrubs",NA,"Beneficial",1,0.0114942528735632
-"111","Reptiles","Investment","Detrimental",1,0.1
-"112","Reptiles","Tourism","Detrimental",2,0.2
-"113","Reptiles","Tourism","No relation or unclear",3,0.3
-"114","Reptiles","Trade","Detrimental",1,0.1
-"115","Reptiles","Trade","No relation or unclear",3,0.3
+"2","Birds","Energy Transfer","Beneficial",9,0.0252100840336134
+"3","Birds","Energy Transfer","Detrimental",6,0.0168067226890756
+"4","Birds","Energy Transfer","No relation or unclear",8,0.0224089635854342
+"5","Birds","Investment","Beneficial",3,0.00840336134453781
+"6","Birds","Investment","Detrimental",4,0.0112044817927171
+"7","Birds","Investment","No relation or unclear",5,0.0140056022408964
+"8","Birds","Knowledge Transfer","Beneficial",9,0.0252100840336134
+"9","Birds","Knowledge Transfer","Changed",42,0.117647058823529
+"10","Birds","Knowledge Transfer","Detrimental",4,0.0112044817927171
+"11","Birds","Knowledge Transfer","No relation or unclear",20,0.0560224089635854
+"12","Birds","Migration (human)","Detrimental",3,0.00840336134453781
+"13","Birds","Species Dispersal","Beneficial",2,0.00560224089635854
+"14","Birds","Species Dispersal","Changed",1,0.00280112044817927
+"15","Birds","Species Dispersal","No relation or unclear",9,0.0252100840336134
+"16","Birds","Tourism","Beneficial",5,0.0140056022408964
+"17","Birds","Tourism","Detrimental",16,0.0448179271708683
+"18","Birds","Tourism","No relation or unclear",5,0.0140056022408964
+"19","Birds","Trade","Beneficial",11,0.030812324929972
+"20","Birds","Trade","Changed",2,0.00560224089635854
+"21","Birds","Trade","Detrimental",28,0.0784313725490196
+"22","Birds","Trade","No relation or unclear",165,0.46218487394958
+"23","Fish","Energy Transfer","Beneficial",4,0.0481927710843374
+"24","Fish","Energy Transfer","Changed",18,0.216867469879518
+"25","Fish","Energy Transfer","Detrimental",5,0.0602409638554217
+"26","Fish","Energy Transfer","No relation or unclear",15,0.180722891566265
+"27","Fish","Investment","Beneficial",1,0.0120481927710843
+"28","Fish","Investment","Changed",1,0.0120481927710843
+"29","Fish","Investment","No relation or unclear",2,0.0240963855421687
+"30","Fish","Species Dispersal","Beneficial",1,0.0120481927710843
+"31","Fish","Species Dispersal","Detrimental",5,0.0602409638554217
+"32","Fish","Tourism","Beneficial",6,0.072289156626506
+"33","Fish","Tourism","Changed",2,0.0240963855421687
+"34","Fish","Tourism","Detrimental",2,0.0240963855421687
+"35","Fish","Tourism","No relation or unclear",5,0.0602409638554217
+"36","Fish","Trade","Beneficial",2,0.0240963855421687
+"37","Fish","Trade","Detrimental",9,0.108433734939759
+"38","Fish","Water Transfer","Changed",4,0.0481927710843374
+"39","Fish","Water Transfer","Detrimental",1,0.0120481927710843
+"40","Invertebrates","Investment","No relation or unclear",2,0.0120481927710843
+"41","Invertebrates","Species Dispersal","Changed",8,0.0481927710843374
+"42","Invertebrates","Species Dispersal","Detrimental",4,0.0240963855421687
+"43","Invertebrates","Species Dispersal","No relation or unclear",19,0.114457831325301
+"44","Invertebrates","Tourism","Beneficial",5,0.0301204819277108
+"45","Invertebrates","Tourism","Changed",14,0.0843373493975904
+"46","Invertebrates","Tourism","Detrimental",49,0.295180722891566
+"47","Invertebrates","Tourism","No relation or unclear",41,0.246987951807229
+"48","Invertebrates","Trade","Beneficial",3,0.0180722891566265
+"49","Invertebrates","Trade","Changed",1,0.00602409638554217
+"50","Invertebrates","Trade","Detrimental",7,0.0421686746987952
+"51","Invertebrates","Trade","No relation or unclear",8,0.0481927710843374
+"52","Invertebrates","Waste Transfer","No relation or unclear",5,0.0301204819277108
+"53","Mammals","Energy Transfer","Detrimental",1,0.0192307692307692
+"54","Mammals","Migration (human)","Changed",1,0.0192307692307692
+"55","Mammals","Migration (human)","Detrimental",7,0.134615384615385
+"56","Mammals","Tourism","Beneficial",4,0.0769230769230769
+"57","Mammals","Tourism","Detrimental",16,0.307692307692308
+"58","Mammals","Tourism","No relation or unclear",12,0.230769230769231
+"59","Mammals","Trade","Changed",1,0.0192307692307692
+"60","Mammals","Trade","Detrimental",10,0.192307692307692
+"61","Multiple","Investment","Beneficial",1,0.0588235294117647
+"62","Multiple","Species Dispersal","Detrimental",1,0.0588235294117647
+"63","Multiple","Tourism","Detrimental",5,0.294117647058824
+"64","Multiple","Tourism","No relation or unclear",3,0.176470588235294
+"65","Multiple","Trade","Beneficial",2,0.117647058823529
+"66","Multiple","Trade","Detrimental",4,0.235294117647059
+"67","Multiple","Trade","No relation or unclear",1,0.0588235294117647
+"68","Plants/Trees/Shrubs","Investment","Beneficial",1,0.0112359550561798
+"69","Plants/Trees/Shrubs","Knowledge Transfer","Beneficial",1,0.0112359550561798
+"70","Plants/Trees/Shrubs","Knowledge Transfer","Detrimental",6,0.0674157303370786
+"71","Plants/Trees/Shrubs","Knowledge Transfer","No relation or unclear",1,0.0112359550561798
+"72","Plants/Trees/Shrubs","Migration (human)","Beneficial",1,0.0112359550561798
+"73","Plants/Trees/Shrubs","Migration (human)","No relation or unclear",2,0.0224719101123595
+"74","Plants/Trees/Shrubs","Species Dispersal","Beneficial",3,0.0337078651685393
+"75","Plants/Trees/Shrubs","Species Dispersal","Changed",1,0.0112359550561798
+"76","Plants/Trees/Shrubs","Species Dispersal","Detrimental",7,0.0786516853932584
+"77","Plants/Trees/Shrubs","Species Dispersal","No relation or unclear",5,0.0561797752808989
+"78","Plants/Trees/Shrubs","Tourism","Beneficial",9,0.101123595505618
+"79","Plants/Trees/Shrubs","Tourism","Changed",7,0.0786516853932584
+"80","Plants/Trees/Shrubs","Tourism","Detrimental",14,0.157303370786517
+"81","Plants/Trees/Shrubs","Tourism","No relation or unclear",15,0.168539325842697
+"82","Plants/Trees/Shrubs","Trade","Beneficial",3,0.0337078651685393
+"83","Plants/Trees/Shrubs","Trade","Changed",1,0.0112359550561798
+"84","Plants/Trees/Shrubs","Trade","Detrimental",1,0.0112359550561798
+"85","Plants/Trees/Shrubs","Trade","No relation or unclear",5,0.0561797752808989
+"86","Plants/Trees/Shrubs","Waste Transfer","Detrimental",2,0.0224719101123595
+"87","Plants/Trees/Shrubs","Water Transfer","Beneficial",1,0.0112359550561798
+"88","Plants/Trees/Shrubs","Water Transfer","Detrimental",3,0.0337078651685393
+"89","Reptiles","Investment","Detrimental",1,0.111111111111111
+"90","Reptiles","Tourism","Detrimental",2,0.222222222222222
+"91","Reptiles","Tourism","No relation or unclear",3,0.333333333333333
+"92","Reptiles","Trade","Detrimental",1,0.111111111111111
+"93","Reptiles","Trade","No relation or unclear",2,0.222222222222222
