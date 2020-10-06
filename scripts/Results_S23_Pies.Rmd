@@ -452,7 +452,7 @@ Change levels
   metric_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
                           as.character(metric_flow$sig_effect))
   metric_flow$sig_effect <- factor(metric_flow$sig_effect,
-                             c( "Beneficial","Changed","Detrimental","No relation or unclear"))
+                             c( "Beneficial","Changed","Detrimental","Not significant or unclear"))
 # telecoupling level change
   metric_flow$tc <- factor(metric_flow$tc,
                                 c("Energy Transfer","Investment","Knowledge Transfer",
@@ -573,6 +573,12 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
 # display image
   metric_flow_fig
 ```
+
+
+
+
+
+
 
 
 Study level
@@ -802,6 +808,85 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
 
 # display image
   metric_flow_fig
+```
+
+Heatmap
+
+```{r}
+
+# Load data of number of studies by taxa and flow
+nr_taxa_tele <- aggregate(x = taxa_flow$count,
+                               by = list(taxa_flow$taxa, taxa_flow$tc),
+                               FUN = sum)
+
+ 
+
+# Rename columns
+
+names(nr_taxa_tele)[1:3] <- c("taxa", "telecoupling", "count")
+
+   
+
+# Fill the gaps
+
+mat_nr_taxa_tele <-dcast(nr_taxa_tele, taxa ~ telecoupling, value.var = 'count')
+filled_nr_taxa_tele <- melt(mat_nr_taxa_tele, id=c("taxa"))
+filled_nr_taxa_tele[is.na(filled_nr_taxa_tele)] <- 0
+names(filled_nr_taxa_tele)[2:3] <- c("telecoupling", "count")
+
+# Create 'count' categories for representation
+
+filled_nr_taxa_tele$count_factor <- cut(filled_nr_taxa_tele$count,
+
+          breaks = c(-1,0,5,10,20,50,100,max(filled_nr_taxa_tele$count,na.rm=T)),              labels=c("0","1-5","5-10","10-20","20-50","50-100",">100"))
+
+
+# Change order of factor levels for consistency with other figures
+
+filled_nr_taxa_tele$taxa <- factor(filled_nr_taxa_tele$taxa,
+          levels=c("Multiple","Invertebrates","Fish","Amphibians","Reptiles","Mammals",
+                  "Birds"))
+
+   
+
+# Heatmap plot
+
+heatmap_teletaxa <- ggplot(filled_nr_taxa_tele,
+                      aes(x=telecoupling, y=taxa, fill=count_factor)) +
+                      geom_tile(color = "white", size=0.25) +
+                    scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+                                               "#4E91CC","#3F76A6","#274866"))+
+                    labs(x="",y="")+
+                    scale_y_discrete(expand=c(0,0))+
+                    theme_grey(base_size=8)+                
+
+                    theme(legend.title = element_text(size = 10),
+                      legend.text = element_text(size = 10, face="bold"),
+                      plot.background=element_blank(),
+                      plot.title = element_blank(),
+                      axis.title= element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
+                                                     hjust = 0),
+                      axis.text.y.left = element_text(size=10, angle = 360, vjust=0.5,
+                                                      hjust = 0),
+                      strip.background = element_rect(fill="white"),
+                      panel.spacing = unit(0.1, "lines")) +
+                    scale_x_discrete(position = "top") +
+                    labs(fill = "number of entries")
+
+                    heatmap_teletaxa
+
+                   
+
+# Display image
+
+heatmap_teletaxa
+
+ 
+
+      
+
 ```
 
 

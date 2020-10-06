@@ -1,19 +1,21 @@
 "","hab","maj_eff","count","perc_per_hab"
-"1","Freshwater","Beneficial",4,0.181818181818182
-"2","Freshwater","Changed",4,0.181818181818182
+"1","Freshwater","Beneficial",3,0.136363636363636
+"2","Freshwater","Changed",3,0.136363636363636
 "3","Freshwater","Detrimental",8,0.363636363636364
-"4","Freshwater","No relation or unclear",6,0.272727272727273
-"5","Freshwater;Marine","Beneficial",1,1
-"6","Marine","Beneficial",1,0.0416666666666667
-"7","Marine","Changed",2,0.0833333333333333
-"8","Marine","Detrimental",14,0.583333333333333
-"9","Marine","No relation or unclear",7,0.291666666666667
-"10","Not specified/Global study","Beneficial",1,0.5
-"11","Not specified/Global study","Detrimental",1,0.5
-"12","Terrestrial","Beneficial",14,0.194444444444444
-"13","Terrestrial","Changed",4,0.0555555555555556
-"14","Terrestrial","Detrimental",39,0.541666666666667
-"15","Terrestrial","No relation or unclear",15,0.208333333333333
-"16","Terrestrial;Freshwater","Changed",1,0.25
-"17","Terrestrial;Freshwater","No relation or unclear",3,0.75
-"18","Terrestrial;Marine","Detrimental",2,1
+"4","Freshwater","Mixed",2,0.0909090909090909
+"5","Freshwater","Not significant or unclear",6,0.272727272727273
+"6","Freshwater;Marine","Beneficial",1,1
+"7","Marine","Beneficial",1,0.0416666666666667
+"8","Marine","Changed",2,0.0833333333333333
+"9","Marine","Detrimental",14,0.583333333333333
+"10","Marine","Not significant or unclear",7,0.291666666666667
+"11","Not specified/Global study","Beneficial",1,0.5
+"12","Not specified/Global study","Detrimental",1,0.5
+"13","Terrestrial","Beneficial",11,0.152777777777778
+"14","Terrestrial","Changed",4,0.0555555555555556
+"15","Terrestrial","Detrimental",37,0.513888888888889
+"16","Terrestrial","Mixed",5,0.0694444444444444
+"17","Terrestrial","Not significant or unclear",15,0.208333333333333
+"18","Terrestrial;Freshwater","Changed",1,0.25
+"19","Terrestrial;Freshwater","Not significant or unclear",3,0.75
+"20","Terrestrial;Marine","Detrimental",2,1

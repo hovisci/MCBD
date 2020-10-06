@@ -3,75 +3,77 @@
 "2","single species","Abundance/Density","Energy Transfer","Detrimental",2
 "3","single species","Abundance/Density","Investment","Detrimental",1
 "4","single species","Abundance/Density","Knowledge Transfer","Beneficial",1
-"5","single species","Abundance/Density","Knowledge Transfer","No relation or unclear",1
-"6","single species","Abundance/Density","Migration (human)","No relation or unclear",1
-"7","single species","Abundance/Density","Species Dispersal","No relation or unclear",1
-"8","single species","Abundance/Density","Tourism","Beneficial",2
+"5","single species","Abundance/Density","Knowledge Transfer","Not significant or unclear",1
+"6","single species","Abundance/Density","Migration (human)","Not significant or unclear",1
+"7","single species","Abundance/Density","Species Dispersal","Not significant or unclear",1
+"8","single species","Abundance/Density","Tourism","Beneficial",1
 "9","single species","Abundance/Density","Tourism","Detrimental",6
-"10","single species","Abundance/Density","Tourism","No relation or unclear",2
-"11","single species","Abundance/Density","Trade","Detrimental",4
-"12","single species","Movement","Tourism","No relation or unclear",1
-"13","single species","Occurrence","Investment","Beneficial",1
-"14","single species","Occurrence","Species Dispersal","Detrimental",1
-"15","single species","Occurrence","Tourism","Detrimental",1
-"16","single species","Occurrence","Tourism","No relation or unclear",2
-"17","single species","Population Dynamics","Trade","Detrimental",3
-"18","single species","Within Species Diversity","Energy Transfer","No relation or unclear",1
-"19","single species","Within Species Diversity","Tourism","Detrimental",1
-"20","multiple species","Abundance/Density","Energy Transfer","Changed",1
-"21","multiple species","Abundance/Density","Investment","Beneficial",1
-"22","multiple species","Abundance/Density","Knowledge Transfer","Beneficial",1
-"23","multiple species","Abundance/Density","Knowledge Transfer","Changed",1
-"24","multiple species","Abundance/Density","Knowledge Transfer","Detrimental",1
-"25","multiple species","Abundance/Density","Species Dispersal","Changed",1
-"26","multiple species","Abundance/Density","Species Dispersal","Detrimental",2
-"27","multiple species","Abundance/Density","Species Dispersal","No relation or unclear",1
-"28","multiple species","Abundance/Density","Tourism","Beneficial",3
-"29","multiple species","Abundance/Density","Tourism","Changed",1
-"30","multiple species","Abundance/Density","Tourism","Detrimental",7
-"31","multiple species","Abundance/Density","Tourism","No relation or unclear",1
-"32","multiple species","Abundance/Density","Trade","Beneficial",1
-"33","multiple species","Abundance/Density","Trade","Changed",1
-"34","multiple species","Abundance/Density","Trade","Detrimental",5
-"35","multiple species","Abundance/Density","Trade","No relation or unclear",3
-"36","multiple species","Composition","Species Dispersal","No relation or unclear",1
-"37","multiple species","Composition","Tourism","Detrimental",2
-"38","multiple species","Composition","Tourism","No relation or unclear",3
-"39","multiple species","Composition","Trade","Detrimental",1
-"40","multiple species","Composition","Trade","No relation or unclear",1
-"41","multiple species","Composition","Water Transfer","Changed",1
-"42","multiple species","Diversity Index","Knowledge Transfer","Detrimental",1
-"43","multiple species","Diversity Index","Species Dispersal","Beneficial",1
-"44","multiple species","Diversity Index","Tourism","No relation or unclear",1
-"45","multiple species","Diversity Index","Trade","Beneficial",1
-"46","multiple species","Diversity Index","Waste Transfer","No relation or unclear",1
-"47","multiple species","Evenness","Knowledge Transfer","Detrimental",1
-"48","multiple species","Occurrence","Knowledge Transfer","Beneficial",1
-"49","multiple species","Occurrence","Migration (human)","Detrimental",1
-"50","multiple species","Occurrence","Tourism","Beneficial",1
-"51","multiple species","Population Dynamics","Species Dispersal","Detrimental",1
-"52","multiple species","Population Dynamics","Tourism","Detrimental",1
-"53","multiple species","Population Dynamics","Trade","No relation or unclear",1
-"54","multiple species","Population Dynamics","Water Transfer","Changed",1
-"55","multiple species","Richness","Energy Transfer","Changed",1
-"56","multiple species","Richness","Energy Transfer","No relation or unclear",1
-"57","multiple species","Richness","Investment","Detrimental",1
-"58","multiple species","Richness","Migration (human)","Detrimental",1
-"59","multiple species","Richness","Species Dispersal","Beneficial",1
-"60","multiple species","Richness","Species Dispersal","Detrimental",2
-"61","multiple species","Richness","Species Dispersal","No relation or unclear",1
-"62","multiple species","Richness","Tourism","Beneficial",1
-"63","multiple species","Richness","Tourism","Changed",2
-"64","multiple species","Richness","Tourism","Detrimental",8
-"65","multiple species","Richness","Tourism","No relation or unclear",4
-"66","multiple species","Richness","Trade","Beneficial",2
-"67","multiple species","Richness","Trade","Changed",1
-"68","multiple species","Richness","Trade","Detrimental",4
-"69","multiple species","Richness","Trade","No relation or unclear",2
-"70","multiple species","Richness","Water Transfer","Beneficial",1
-"71","habitat","Amount","Tourism","Detrimental",1
-"72","habitat","Amount","Trade","Detrimental",2
-"73","habitat","Quality","Knowledge Transfer","Beneficial",1
-"74","habitat","Quality","Species Dispersal","No relation or unclear",1
-"75","habitat","Quality","Tourism","Detrimental",1
-"76","habitat","Quality","Water Transfer","Detrimental",1
+"10","single species","Abundance/Density","Tourism","Mixed",1
+"11","single species","Abundance/Density","Tourism","Not significant or unclear",2
+"12","single species","Abundance/Density","Trade","Detrimental",4
+"13","single species","Movement","Tourism","Not significant or unclear",1
+"14","single species","Occurrence","Investment","Beneficial",1
+"15","single species","Occurrence","Species Dispersal","Detrimental",1
+"16","single species","Occurrence","Tourism","Detrimental",1
+"17","single species","Occurrence","Tourism","Not significant or unclear",2
+"18","single species","Population Dynamics","Trade","Detrimental",3
+"19","single species","Within Species Diversity","Energy Transfer","Not significant or unclear",1
+"20","single species","Within Species Diversity","Tourism","Detrimental",1
+"21","multiple species","Abundance/Density","Energy Transfer","Changed",1
+"22","multiple species","Abundance/Density","Investment","Mixed",1
+"23","multiple species","Abundance/Density","Knowledge Transfer","Beneficial",1
+"24","multiple species","Abundance/Density","Knowledge Transfer","Changed",1
+"25","multiple species","Abundance/Density","Knowledge Transfer","Mixed",1
+"26","multiple species","Abundance/Density","Species Dispersal","Changed",1
+"27","multiple species","Abundance/Density","Species Dispersal","Detrimental",2
+"28","multiple species","Abundance/Density","Species Dispersal","Not significant or unclear",1
+"29","multiple species","Abundance/Density","Tourism","Beneficial",3
+"30","multiple species","Abundance/Density","Tourism","Changed",1
+"31","multiple species","Abundance/Density","Tourism","Detrimental",7
+"32","multiple species","Abundance/Density","Tourism","Not significant or unclear",1
+"33","multiple species","Abundance/Density","Trade","Beneficial",1
+"34","multiple species","Abundance/Density","Trade","Changed",1
+"35","multiple species","Abundance/Density","Trade","Detrimental",4
+"36","multiple species","Abundance/Density","Trade","Mixed",1
+"37","multiple species","Abundance/Density","Trade","Not significant or unclear",3
+"38","multiple species","Composition","Species Dispersal","Not significant or unclear",1
+"39","multiple species","Composition","Tourism","Detrimental",2
+"40","multiple species","Composition","Tourism","Not significant or unclear",3
+"41","multiple species","Composition","Trade","Detrimental",1
+"42","multiple species","Composition","Trade","Not significant or unclear",1
+"43","multiple species","Composition","Water Transfer","Mixed",1
+"44","multiple species","Diversity Index","Knowledge Transfer","Detrimental",1
+"45","multiple species","Diversity Index","Species Dispersal","Beneficial",1
+"46","multiple species","Diversity Index","Tourism","Not significant or unclear",1
+"47","multiple species","Diversity Index","Trade","Beneficial",1
+"48","multiple species","Diversity Index","Waste Transfer","Not significant or unclear",1
+"49","multiple species","Evenness","Knowledge Transfer","Detrimental",1
+"50","multiple species","Occurrence","Knowledge Transfer","Mixed",1
+"51","multiple species","Occurrence","Migration (human)","Detrimental",1
+"52","multiple species","Occurrence","Tourism","Beneficial",1
+"53","multiple species","Population Dynamics","Species Dispersal","Detrimental",1
+"54","multiple species","Population Dynamics","Tourism","Detrimental",1
+"55","multiple species","Population Dynamics","Trade","Not significant or unclear",1
+"56","multiple species","Population Dynamics","Water Transfer","Changed",1
+"57","multiple species","Richness","Energy Transfer","Changed",1
+"58","multiple species","Richness","Energy Transfer","Not significant or unclear",1
+"59","multiple species","Richness","Investment","Detrimental",1
+"60","multiple species","Richness","Migration (human)","Detrimental",1
+"61","multiple species","Richness","Species Dispersal","Beneficial",1
+"62","multiple species","Richness","Species Dispersal","Detrimental",2
+"63","multiple species","Richness","Species Dispersal","Not significant or unclear",1
+"64","multiple species","Richness","Tourism","Beneficial",1
+"65","multiple species","Richness","Tourism","Changed",2
+"66","multiple species","Richness","Tourism","Detrimental",8
+"67","multiple species","Richness","Tourism","Not significant or unclear",4
+"68","multiple species","Richness","Trade","Beneficial",2
+"69","multiple species","Richness","Trade","Changed",1
+"70","multiple species","Richness","Trade","Detrimental",4
+"71","multiple species","Richness","Trade","Not significant or unclear",2
+"72","multiple species","Richness","Water Transfer","Mixed",1
+"73","habitat","Amount","Tourism","Detrimental",1
+"74","habitat","Amount","Trade","Detrimental",2
+"75","habitat","Quality","Knowledge Transfer","Beneficial",1
+"76","habitat","Quality","Species Dispersal","Not significant or unclear",1
+"77","habitat","Quality","Tourism","Detrimental",1
+"78","habitat","Quality","Water Transfer","Detrimental",1

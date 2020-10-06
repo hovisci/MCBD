@@ -180,7 +180,7 @@ table(not.eval$effect)
 
     else
     {
-    s23$sig_effect[i] = 'No relation or unclear';
+    s23$sig_effect[i] = 'Not significant or unclear';
     }
 
   }
@@ -242,10 +242,50 @@ maj.table<-maj.table[!duplicated(maj.table),]
 
 maj_effect2$maj_eff <- maj.table$V2[match(maj_effect2$paper_id,maj.table$V1)]
 
+# Deal with ties
+
+for (i in 1:nrow(maj_effect2)){
+  
+    x <- maj_effect2[which(maj_effect2$paper_id == maj_effect2$paper_id[i]), 5]
+    ifelse(var(x) == 0, maj_effect2$maj_eff[i] <- 'Mixed', maj_effect2$maj_eff[i] <- maj_effect2$maj_eff[i])
+  }
+
 write.csv(maj_effect2, paste0(tab.dir, 'maj_effect.csv'))
+
+maj_effect3 <- cbind(maj_effect2$paper_id,maj_effect2$maj_eff)
+maj_effect3 <- as.data.frame(maj_effect3)
+maj_effect3 <- maj_effect3[!duplicated(maj_effect3),]
+
+s23$maj_eff <- maj_effect3$V2[match(s23$paper_id, maj_effect3$V1)]
+
 
 ```
 
+Determine Majority effect by paper and taxa  (NEED TO FINISH)
+
+```{r}
+# repeat taxa rows
+
+taxID <- s23
+taxID$taxID <- paste0(taxID$paper_id,'_',taxID$taxa)
+nrow(taxID)
+length(unique(taxID$paper_id))    # number of papers n=127
+length(unique(taxID$taxID))       # number of paper:taxa n=132
+length(unique(taxID$taxID)) - length(unique(taxID$paper_id))  # number of papers with multiple taxa (n=5)       
+
+q <- as.data.frame(table(unique(taxID$taxID))) 
+
+p <- q %>% tidyr::separate(Var1, c("ID"), extra='drop')
+
+q <-cbind(p,q)
+m <- as.data.frame(table(q$ID))
+n <- m[which(m$Freq >1),]
+
+
+       
+
+
+```
 
 # 7. Export table
 

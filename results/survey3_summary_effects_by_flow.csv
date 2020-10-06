@@ -2,30 +2,34 @@
 "1","Energy Transfer","Beneficial",2,0.222222222222222
 "2","Energy Transfer","Changed",3,0.333333333333333
 "3","Energy Transfer","Detrimental",2,0.222222222222222
-"4","Energy Transfer","No relation or unclear",2,0.222222222222222
-"5","Investment","Beneficial",4,0.5
-"6","Investment","Detrimental",3,0.375
-"7","Investment","No relation or unclear",1,0.125
-"8","Knowledge Transfer","Beneficial",5,0.384615384615385
-"9","Knowledge Transfer","Changed",1,0.0769230769230769
-"10","Knowledge Transfer","Detrimental",4,0.307692307692308
-"11","Knowledge Transfer","No relation or unclear",3,0.230769230769231
-"12","Migration (human)","Detrimental",3,0.75
-"13","Migration (human)","No relation or unclear",1,0.25
-"14","Species Dispersal","Beneficial",2,0.117647058823529
-"15","Species Dispersal","Changed",1,0.0588235294117647
-"16","Species Dispersal","Detrimental",8,0.470588235294118
-"17","Species Dispersal","No relation or unclear",6,0.352941176470588
-"18","Tourism","Beneficial",7,0.127272727272727
-"19","Tourism","Changed",3,0.0545454545454545
-"20","Tourism","Detrimental",30,0.545454545454545
-"21","Tourism","No relation or unclear",15,0.272727272727273
-"22","Trade","Beneficial",4,0.125
-"23","Trade","Changed",2,0.0625
-"24","Trade","Detrimental",19,0.59375
-"25","Trade","No relation or unclear",7,0.21875
-"26","Waste Transfer","Detrimental",1,0.5
-"27","Waste Transfer","No relation or unclear",1,0.5
-"28","Water Transfer","Beneficial",1,0.25
-"29","Water Transfer","Changed",2,0.5
-"30","Water Transfer","Detrimental",1,0.25
+"4","Energy Transfer","Not significant or unclear",2,0.222222222222222
+"5","Investment","Beneficial",2,0.25
+"6","Investment","Detrimental",2,0.25
+"7","Investment","Mixed",3,0.375
+"8","Investment","Not significant or unclear",1,0.125
+"9","Knowledge Transfer","Beneficial",4,0.307692307692308
+"10","Knowledge Transfer","Changed",1,0.0769230769230769
+"11","Knowledge Transfer","Detrimental",3,0.230769230769231
+"12","Knowledge Transfer","Mixed",2,0.153846153846154
+"13","Knowledge Transfer","Not significant or unclear",3,0.230769230769231
+"14","Migration (human)","Detrimental",3,0.75
+"15","Migration (human)","Not significant or unclear",1,0.25
+"16","Species Dispersal","Beneficial",2,0.117647058823529
+"17","Species Dispersal","Changed",1,0.0588235294117647
+"18","Species Dispersal","Detrimental",8,0.470588235294118
+"19","Species Dispersal","Not significant or unclear",6,0.352941176470588
+"20","Tourism","Beneficial",6,0.109090909090909
+"21","Tourism","Changed",3,0.0545454545454545
+"22","Tourism","Detrimental",30,0.545454545454545
+"23","Tourism","Mixed",1,0.0181818181818182
+"24","Tourism","Not significant or unclear",15,0.272727272727273
+"25","Trade","Beneficial",4,0.125
+"26","Trade","Changed",2,0.0625
+"27","Trade","Detrimental",18,0.5625
+"28","Trade","Mixed",1,0.03125
+"29","Trade","Not significant or unclear",7,0.21875
+"30","Waste Transfer","Detrimental",1,0.5
+"31","Waste Transfer","Not significant or unclear",1,0.5
+"32","Water Transfer","Changed",1,0.25
+"33","Water Transfer","Detrimental",1,0.25
+"34","Water Transfer","Mixed",2,0.5

@@ -1,12 +1,9 @@
 ---
 title: 'MCBD: Synthesis of Metacoupled Effects on Biodiversity'
-<<<<<<< HEAD
 author: "Veronica F. Frans, CSIS Lab, Michigan State University"
 date: "May 30, 2020 (Updated: September 4, 2020)"
-=======
 author: "Ciara Hovis & Veronica F. Frans, CSIS Lab, Michigan State University"
 date: "May 30, 2020 (Updated: September 16, 2020)"
->>>>>>> 816b281376cfaedda9499d772ff39ab6853d6784
 output: 
   html_document:
     keep_tex: yes
@@ -14,6 +11,8 @@ output:
     toc_depth: 4
     toc_float: true
     df_print: paged
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
 
 # 1. Methods summary
 
-Synthesis of survey 2 and 3 results for metacoupling/biodiversity systematic review. It consists of response summaries and visualizations of the accepted papers.
+Synthesis of survey 2 and 3 results for metacoupling/biodiversity systematic review. It consists of error checks, response summaries, and visualizations of the accepted papers.
 
 # 2. R Setup
 
@@ -33,40 +32,14 @@ Load libraries, directories, and custom functions from source file.
 
 ```{r}
 # Source file
-  source('Reference.R')
-```
-
-Data is stored here:
-
-```{r, echo=FALSE}
-# Data directory
-  dat.dir
-```
-
-Final tables are stored here:
-
-```{r, echo=FALSE}
-# Final tables
-  tab.dir
-```
-
-Final figures are stored here:
-
-```{r, echo=FALSE}
-# Final figures
-  fig.dir
-```
-
-For **this run** of the script, tables for manual checks will be stored in the following folder:
-
-```{r, echo=FALSE}
-tab.check.dir
+  source('./scripts/Reference.R')
 ```
 
 # 3. Load data
 
 ```{r}
 # surveys
+dat.dir <- 
   s23 <- read.csv(paste0(dat.dir,'s23.csv'))
 ```
 
@@ -864,6 +837,7 @@ Visualize as a matrix of pie charts. First, **ALL** metrics together.
 # display image
   met_flow_sig_fig
 ```
+
 # 7. Standardization
 
 Some papers/studies reported multiple metrics. If left as is, our results may be misleading as some studies only reported 1 or 2 biodiversity metric impacts, while others reported many (>100). To address this, we will create a "majority" effect value for each unique study ID.

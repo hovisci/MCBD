@@ -379,7 +379,6 @@ Get number of papers and percent of the dataset each paper covers. This can give
 ```
 
 ## 5.5 Summary of taxa across papers
-
 ```{r}
 # get summary
   a <- ddply(survey3, .(taxa), summarize,
@@ -397,7 +396,6 @@ Get number of papers and percent of the dataset each paper covers. This can give
 # view
   a
 ```
-
 ## 5.6 Summary of biodiversity metrics
 
 ```{r}
@@ -450,9 +448,10 @@ Get number of papers and percent of the dataset each paper covers. This can give
   a
 ```
 
+
 # 6 Summary of effects/significance
 
-Subset s23 data for majority effects
+Subset s23 data for majority effects 
 
 ```{r}
 s23_maj <- s23[!duplicated(s23$paper_id),]
@@ -545,7 +544,7 @@ Quick data visualization
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-                scale_fill_manual(values=sigeff_col) +
+                scale_fill_manual(values=majeff_col) +
                 xlab("")
 
 # save image
@@ -614,6 +613,7 @@ Quick data visualization
 # view
   quick_plot
 ```
+
 Numbers instead of percents
 
 ```{r, fig.height = 6, fig.width = 11}

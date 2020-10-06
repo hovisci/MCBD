@@ -1102,7 +1102,7 @@ survey3$biodiv_cat_multsp[survey3$paper_id == '4551' & survey3$entry_id == 3] <-
 survey3$biodiv_cat_multsp[survey3$paper_id == '4551' & survey3$entry_id == 4] <- "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"
 
 # 5905
-survey3$effect[survey3$paper_id == '5905' & survey3$entry_id == 1] <- "Changed (e.g. species composition)"
+survey3$effect[survey3$paper_id == '5905' & survey3$biodiv_cat_multsp == 'Composition (what species?)'] <- "Changed (e.g. species composition)"
 
 # 5966
 survey3$effect[survey3$paper_id == '5966' & survey3$entry_id == 1] <- "Changed (e.g. species composition)"

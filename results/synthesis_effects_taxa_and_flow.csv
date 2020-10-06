@@ -1,121 +1,109 @@
 "","taxa","tele_cat","effect","count","perc_per_taxa"
 "1","Amphibians","Trade","Changed (e.g. species composition)",1,1
-"2","Birds","Energy Transfer","Negative (detrimental)",5,0.0133333333333333
-"3","Birds","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",8,0.0213333333333333
-"4","Birds","Energy Transfer","Positive (beneficial)",7,0.0186666666666667
-"5","Birds","Investment","Negative (detrimental)",2,0.00533333333333333
-"6","Birds","Investment","Positive (beneficial)",4,0.0106666666666667
-"7","Birds","Knowledge Transfer","Changed (e.g. species composition)",42,0.112
-"8","Birds","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",12,0.032
-"9","Birds","Knowledge Transfer","Positive (beneficial)",8,0.0213333333333333
-"10","Birds","Knowledge Transfer","Unclear",1,0.00266666666666667
-"11","Birds","Knowledge Transfer;Investment","Negative (detrimental)",2,0.00533333333333333
-"12","Birds","Knowledge Transfer;Investment","Positive (beneficial)",4,0.0106666666666667
-"13","Birds","Migration (human)","Negative (detrimental)",3,0.008
-"14","Birds","Species Dispersal","Changed (e.g. species composition)",1,0.00266666666666667
-"15","Birds","Species Dispersal","Negative (detrimental)",3,0.008
-"16","Birds","Species Dispersal","Positive (beneficial)",4,0.0106666666666667
-"17","Birds","Species Dispersal","Unclear",3,0.008
-"18","Birds","Species Dispersal;Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1,0.00266666666666667
-"19","Birds","Tourism","Negative (detrimental)",20,0.0533333333333333
-"20","Birds","Tourism","Positive (beneficial)",7,0.0186666666666667
-"21","Birds","Trade","Changed (e.g. species composition)",2,0.00533333333333333
-"22","Birds","Trade","Negative (detrimental)",26,0.0693333333333333
-"23","Birds","Trade","Neutral (only when there is absolutely no difference in metrics)",162,0.432
-"24","Birds","Trade","Positive (beneficial)",8,0.0213333333333333
-"25","Birds","Trade;Energy Transfer","Negative (detrimental)",1,0.00266666666666667
-"26","Birds","Trade;Energy Transfer","Positive (beneficial)",2,0.00533333333333333
-"27","Birds","Trade;Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1,0.00266666666666667
-"28","Birds","Trade;Knowledge Transfer","Positive (beneficial)",2,0.00533333333333333
-"29","Birds","Trade;Tourism;Knowledge Transfer","Negative (detrimental)",2,0.00533333333333333
-"30","Birds",NA,"Changed (e.g. species composition)",2,0.00533333333333333
-"31","Birds",NA,"Negative (detrimental)",22,0.0586666666666667
-"32","Birds",NA,"Neutral (only when there is absolutely no difference in metrics)",2,0.00533333333333333
-"33","Birds",NA,"Positive (beneficial)",4,0.0106666666666667
-"34","Birds",NA,"Unclear",2,0.00533333333333333
-"35","Fish","Energy Transfer","Changed (e.g. species composition)",15,0.168539325842697
-"36","Fish","Energy Transfer","Negative (detrimental)",7,0.0786516853932584
-"37","Fish","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",13,0.146067415730337
-"38","Fish","Energy Transfer","Positive (beneficial)",4,0.0449438202247191
-"39","Fish","Species Dispersal","Negative (detrimental)",4,0.0449438202247191
-"40","Fish","Species Dispersal","Positive (beneficial)",1,0.0112359550561798
-"41","Fish","Tourism","Changed (e.g. species composition)",1,0.0112359550561798
-"42","Fish","Tourism","Negative (detrimental)",2,0.0224719101123595
-"43","Fish","Tourism","Neutral (only when there is absolutely no difference in metrics)",2,0.0224719101123595
-"44","Fish","Tourism","Positive (beneficial)",5,0.0561797752808989
-"45","Fish","Tourism","Unclear",1,0.0112359550561798
-"46","Fish","Tourism;Investment","Changed (e.g. species composition)",1,0.0112359550561798
-"47","Fish","Tourism;Investment","Positive (beneficial)",1,0.0112359550561798
-"48","Fish","Tourism;Investment","Unclear",2,0.0224719101123595
-"49","Fish","Trade","Negative (detrimental)",14,0.157303370786517
-"50","Fish","Trade","Neutral (only when there is absolutely no difference in metrics)",1,0.0112359550561798
-"51","Fish","Trade","Positive (beneficial)",7,0.0786516853932584
-"52","Fish","Trade;Species Dispersal","Negative (detrimental)",1,0.0112359550561798
-"53","Fish","Water Transfer","Changed (e.g. species composition)",1,0.0112359550561798
-"54","Fish","Water Transfer","Negative (detrimental)",1,0.0112359550561798
-"55","Fish","Water Transfer;Energy Transfer","Changed (e.g. species composition)",3,0.0337078651685393
-"56","Fish",NA,"Negative (detrimental)",1,0.0112359550561798
-"57","Fish",NA,"Positive (beneficial)",1,0.0112359550561798
-"58","Invertebrates","Species Dispersal","Changed (e.g. species composition)",20,0.123456790123457
-"59","Invertebrates","Species Dispersal","Negative (detrimental)",4,0.0246913580246914
-"60","Invertebrates","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",3,0.0185185185185185
-"61","Invertebrates","Tourism","Changed (e.g. species composition)",15,0.0925925925925926
-"62","Invertebrates","Tourism","Negative (detrimental)",67,0.41358024691358
-"63","Invertebrates","Tourism","Neutral (only when there is absolutely no difference in metrics)",10,0.0617283950617284
-"64","Invertebrates","Tourism","Positive (beneficial)",10,0.0617283950617284
-"65","Invertebrates","Tourism","Unclear",5,0.0308641975308642
-"66","Invertebrates","Tourism;Investment","Neutral (only when there is absolutely no difference in metrics)",1,0.00617283950617284
-"67","Invertebrates","Tourism;Investment","Unclear",1,0.00617283950617284
-"68","Invertebrates","Trade","Negative (detrimental)",10,0.0617283950617284
-"69","Invertebrates","Trade","Positive (beneficial)",4,0.0246913580246914
-"70","Invertebrates","Trade;Tourism","Neutral (only when there is absolutely no difference in metrics)",1,0.00617283950617284
-"71","Invertebrates","Waste Transfer","Neutral (only when there is absolutely no difference in metrics)",5,0.0308641975308642
-"72","Invertebrates",NA,"Changed (e.g. species composition)",3,0.0185185185185185
-"73","Invertebrates",NA,"Unclear",3,0.0185185185185185
-"74","Mammals","Energy Transfer","Negative (detrimental)",1,0.0178571428571429
-"75","Mammals","Migration (human)","Negative (detrimental)",1,0.0178571428571429
-"76","Mammals","Tourism","Negative (detrimental)",18,0.321428571428571
-"77","Mammals","Tourism","Neutral (only when there is absolutely no difference in metrics)",6,0.107142857142857
-"78","Mammals","Tourism","Positive (beneficial)",5,0.0892857142857143
-"79","Mammals","Tourism","Unclear",4,0.0714285714285714
-"80","Mammals","Trade","Negative (detrimental)",4,0.0714285714285714
-"81","Mammals","Trade;Migration (human)","Changed (e.g. species composition)",1,0.0178571428571429
-"82","Mammals","Trade;Migration (human)","Negative (detrimental)",6,0.107142857142857
-"83","Mammals",NA,"Negative (detrimental)",5,0.0892857142857143
-"84","Mammals",NA,"Positive (beneficial)",4,0.0714285714285714
-"85","Mammals",NA,"Unclear",1,0.0178571428571429
-"86","Multiple","Investment","Positive (beneficial)",1,0.0588235294117647
-"87","Multiple","Species Dispersal","Negative (detrimental)",1,0.0588235294117647
-"88","Multiple","Tourism","Negative (detrimental)",8,0.470588235294118
-"89","Multiple","Trade","Negative (detrimental)",4,0.235294117647059
-"90","Multiple","Trade","Positive (beneficial)",2,0.117647058823529
-"91","Multiple","Trade","Unclear",1,0.0588235294117647
-"92","Plants/Trees/Shrubs","Knowledge Transfer","Negative (detrimental)",6,0.0689655172413793
-"93","Plants/Trees/Shrubs","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1,0.0114942528735632
-"94","Plants/Trees/Shrubs","Knowledge Transfer;Investment","Positive (beneficial)",1,0.0114942528735632
-"95","Plants/Trees/Shrubs","Migration (human)","Positive (beneficial)",3,0.0344827586206897
-"96","Plants/Trees/Shrubs","Species Dispersal","Changed (e.g. species composition)",1,0.0114942528735632
-"97","Plants/Trees/Shrubs","Species Dispersal","Negative (detrimental)",9,0.103448275862069
-"98","Plants/Trees/Shrubs","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",1,0.0114942528735632
-"99","Plants/Trees/Shrubs","Species Dispersal","Positive (beneficial)",4,0.0459770114942529
-"100","Plants/Trees/Shrubs","Tourism","Changed (e.g. species composition)",10,0.114942528735632
-"101","Plants/Trees/Shrubs","Tourism","Negative (detrimental)",14,0.160919540229885
-"102","Plants/Trees/Shrubs","Tourism","Neutral (only when there is absolutely no difference in metrics)",7,0.0804597701149425
-"103","Plants/Trees/Shrubs","Tourism","Positive (beneficial)",13,0.149425287356322
-"104","Plants/Trees/Shrubs","Tourism","Unclear",1,0.0114942528735632
-"105","Plants/Trees/Shrubs","Trade","Changed (e.g. species composition)",1,0.0114942528735632
-"106","Plants/Trees/Shrubs","Trade","Negative (detrimental)",3,0.0344827586206897
-"107","Plants/Trees/Shrubs","Trade","Neutral (only when there is absolutely no difference in metrics)",2,0.0229885057471264
-"108","Plants/Trees/Shrubs","Trade","Positive (beneficial)",3,0.0344827586206897
-"109","Plants/Trees/Shrubs","Trade;Species Dispersal","Negative (detrimental)",1,0.0114942528735632
-"110","Plants/Trees/Shrubs","Water Transfer","Negative (detrimental)",2,0.0229885057471264
-"111","Plants/Trees/Shrubs","Water Transfer","Positive (beneficial)",1,0.0114942528735632
-"112","Plants/Trees/Shrubs","Water Transfer;Waste Transfer","Negative (detrimental)",2,0.0229885057471264
-"113","Plants/Trees/Shrubs",NA,"Positive (beneficial)",1,0.0114942528735632
-"114","Reptiles","Investment","Negative (detrimental)",1,0.1
-"115","Reptiles","Tourism","Negative (detrimental)",2,0.2
-"116","Reptiles","Tourism","Neutral (only when there is absolutely no difference in metrics)",2,0.2
-"117","Reptiles","Tourism","Unclear",1,0.1
-"118","Reptiles","Trade","Negative (detrimental)",1,0.1
-"119","Reptiles","Trade","Neutral (only when there is absolutely no difference in metrics)",1,0.1
-"120","Reptiles","Trade","Unclear",2,0.2
+"2","Birds","Energy Transfer","Negative (detrimental)",5,0.0147058823529412
+"3","Birds","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",8,0.0235294117647059
+"4","Birds","Energy Transfer","Positive (beneficial)",7,0.0205882352941176
+"5","Birds","Investment","Negative (detrimental)",2,0.00588235294117647
+"6","Birds","Investment","Positive (beneficial)",4,0.0117647058823529
+"7","Birds","Knowledge Transfer","Changed (e.g. species composition)",42,0.123529411764706
+"8","Birds","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",12,0.0352941176470588
+"9","Birds","Knowledge Transfer","Positive (beneficial)",8,0.0235294117647059
+"10","Birds","Knowledge Transfer","Unclear",1,0.00294117647058824
+"11","Birds","Knowledge Transfer;Investment","Negative (detrimental)",2,0.00588235294117647
+"12","Birds","Knowledge Transfer;Investment","Positive (beneficial)",4,0.0117647058823529
+"13","Birds","Migration (human)","Negative (detrimental)",3,0.00882352941176471
+"14","Birds","Species Dispersal","Changed (e.g. species composition)",1,0.00294117647058824
+"15","Birds","Species Dispersal","Negative (detrimental)",3,0.00882352941176471
+"16","Birds","Species Dispersal","Positive (beneficial)",4,0.0117647058823529
+"17","Birds","Species Dispersal","Unclear",3,0.00882352941176471
+"18","Birds","Species Dispersal;Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1,0.00294117647058824
+"19","Birds","Tourism","Negative (detrimental)",18,0.0529411764705882
+"20","Birds","Tourism","Positive (beneficial)",6,0.0176470588235294
+"21","Birds","Trade","Changed (e.g. species composition)",2,0.00588235294117647
+"22","Birds","Trade","Negative (detrimental)",26,0.0764705882352941
+"23","Birds","Trade","Neutral (only when there is absolutely no difference in metrics)",162,0.476470588235294
+"24","Birds","Trade","Positive (beneficial)",8,0.0235294117647059
+"25","Birds","Trade;Energy Transfer","Negative (detrimental)",1,0.00294117647058824
+"26","Birds","Trade;Energy Transfer","Positive (beneficial)",2,0.00588235294117647
+"27","Birds","Trade;Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1,0.00294117647058824
+"28","Birds","Trade;Knowledge Transfer","Positive (beneficial)",2,0.00588235294117647
+"29","Birds","Trade;Tourism;Knowledge Transfer","Negative (detrimental)",2,0.00588235294117647
+"30","Fish","Energy Transfer","Changed (e.g. species composition)",15,0.2
+"31","Fish","Energy Transfer","Negative (detrimental)",7,0.0933333333333333
+"32","Fish","Energy Transfer","Neutral (only when there is absolutely no difference in metrics)",13,0.173333333333333
+"33","Fish","Energy Transfer","Positive (beneficial)",4,0.0533333333333333
+"34","Fish","Species Dispersal","Negative (detrimental)",4,0.0533333333333333
+"35","Fish","Species Dispersal","Positive (beneficial)",1,0.0133333333333333
+"36","Fish","Tourism","Changed (e.g. species composition)",1,0.0133333333333333
+"37","Fish","Tourism","Negative (detrimental)",2,0.0266666666666667
+"38","Fish","Tourism","Neutral (only when there is absolutely no difference in metrics)",2,0.0266666666666667
+"39","Fish","Tourism","Positive (beneficial)",5,0.0666666666666667
+"40","Fish","Tourism","Unclear",1,0.0133333333333333
+"41","Fish","Tourism;Investment","Changed (e.g. species composition)",1,0.0133333333333333
+"42","Fish","Tourism;Investment","Positive (beneficial)",1,0.0133333333333333
+"43","Fish","Tourism;Investment","Unclear",2,0.0266666666666667
+"44","Fish","Trade","Negative (detrimental)",8,0.106666666666667
+"45","Fish","Trade","Positive (beneficial)",2,0.0266666666666667
+"46","Fish","Trade;Species Dispersal","Negative (detrimental)",1,0.0133333333333333
+"47","Fish","Water Transfer","Changed (e.g. species composition)",1,0.0133333333333333
+"48","Fish","Water Transfer","Negative (detrimental)",1,0.0133333333333333
+"49","Fish","Water Transfer;Energy Transfer","Changed (e.g. species composition)",3,0.04
+"50","Invertebrates","Species Dispersal","Changed (e.g. species composition)",20,0.125786163522013
+"51","Invertebrates","Species Dispersal","Negative (detrimental)",4,0.0251572327044025
+"52","Invertebrates","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",3,0.0188679245283019
+"53","Invertebrates","Tourism","Changed (e.g. species composition)",15,0.0943396226415094
+"54","Invertebrates","Tourism","Negative (detrimental)",67,0.421383647798742
+"55","Invertebrates","Tourism","Neutral (only when there is absolutely no difference in metrics)",10,0.0628930817610063
+"56","Invertebrates","Tourism","Positive (beneficial)",9,0.0566037735849057
+"57","Invertebrates","Tourism","Unclear",5,0.0314465408805031
+"58","Invertebrates","Tourism;Investment","Neutral (only when there is absolutely no difference in metrics)",1,0.00628930817610063
+"59","Invertebrates","Tourism;Investment","Unclear",1,0.00628930817610063
+"60","Invertebrates","Trade","Negative (detrimental)",10,0.0628930817610063
+"61","Invertebrates","Trade","Positive (beneficial)",4,0.0251572327044025
+"62","Invertebrates","Trade;Tourism","Neutral (only when there is absolutely no difference in metrics)",1,0.00628930817610063
+"63","Invertebrates","Waste Transfer","Neutral (only when there is absolutely no difference in metrics)",5,0.0314465408805031
+"64","Invertebrates",NA,"Changed (e.g. species composition)",1,0.00628930817610063
+"65","Invertebrates",NA,"Unclear",3,0.0188679245283019
+"66","Mammals","Energy Transfer","Negative (detrimental)",1,0.0222222222222222
+"67","Mammals","Migration (human)","Negative (detrimental)",1,0.0222222222222222
+"68","Mammals","Tourism","Negative (detrimental)",18,0.4
+"69","Mammals","Tourism","Neutral (only when there is absolutely no difference in metrics)",5,0.111111111111111
+"70","Mammals","Tourism","Positive (beneficial)",5,0.111111111111111
+"71","Mammals","Tourism","Unclear",4,0.0888888888888889
+"72","Mammals","Trade","Negative (detrimental)",4,0.0888888888888889
+"73","Mammals","Trade;Migration (human)","Changed (e.g. species composition)",1,0.0222222222222222
+"74","Mammals","Trade;Migration (human)","Negative (detrimental)",6,0.133333333333333
+"75","Multiple","Investment","Positive (beneficial)",1,0.0588235294117647
+"76","Multiple","Species Dispersal","Negative (detrimental)",1,0.0588235294117647
+"77","Multiple","Tourism","Negative (detrimental)",8,0.470588235294118
+"78","Multiple","Trade","Negative (detrimental)",4,0.235294117647059
+"79","Multiple","Trade","Positive (beneficial)",2,0.117647058823529
+"80","Multiple","Trade","Unclear",1,0.0588235294117647
+"81","Plants/Trees/Shrubs","Knowledge Transfer","Negative (detrimental)",6,0.0705882352941176
+"82","Plants/Trees/Shrubs","Knowledge Transfer","Neutral (only when there is absolutely no difference in metrics)",1,0.0117647058823529
+"83","Plants/Trees/Shrubs","Knowledge Transfer;Investment","Positive (beneficial)",1,0.0117647058823529
+"84","Plants/Trees/Shrubs","Migration (human)","Positive (beneficial)",3,0.0352941176470588
+"85","Plants/Trees/Shrubs","Species Dispersal","Changed (e.g. species composition)",1,0.0117647058823529
+"86","Plants/Trees/Shrubs","Species Dispersal","Negative (detrimental)",9,0.105882352941176
+"87","Plants/Trees/Shrubs","Species Dispersal","Neutral (only when there is absolutely no difference in metrics)",1,0.0117647058823529
+"88","Plants/Trees/Shrubs","Species Dispersal","Positive (beneficial)",4,0.0470588235294118
+"89","Plants/Trees/Shrubs","Tourism","Changed (e.g. species composition)",10,0.117647058823529
+"90","Plants/Trees/Shrubs","Tourism","Negative (detrimental)",14,0.164705882352941
+"91","Plants/Trees/Shrubs","Tourism","Neutral (only when there is absolutely no difference in metrics)",7,0.0823529411764706
+"92","Plants/Trees/Shrubs","Tourism","Positive (beneficial)",13,0.152941176470588
+"93","Plants/Trees/Shrubs","Tourism","Unclear",1,0.0117647058823529
+"94","Plants/Trees/Shrubs","Trade","Changed (e.g. species composition)",1,0.0117647058823529
+"95","Plants/Trees/Shrubs","Trade","Negative (detrimental)",3,0.0352941176470588
+"96","Plants/Trees/Shrubs","Trade","Neutral (only when there is absolutely no difference in metrics)",2,0.0235294117647059
+"97","Plants/Trees/Shrubs","Trade","Positive (beneficial)",3,0.0352941176470588
+"98","Plants/Trees/Shrubs","Trade;Species Dispersal","Negative (detrimental)",1,0.0117647058823529
+"99","Plants/Trees/Shrubs","Water Transfer","Negative (detrimental)",1,0.0117647058823529
+"100","Plants/Trees/Shrubs","Water Transfer","Positive (beneficial)",1,0.0117647058823529
+"101","Plants/Trees/Shrubs","Water Transfer;Waste Transfer","Negative (detrimental)",2,0.0235294117647059
+"102","Reptiles","Investment","Negative (detrimental)",1,0.111111111111111
+"103","Reptiles","Tourism","Negative (detrimental)",2,0.222222222222222
+"104","Reptiles","Tourism","Neutral (only when there is absolutely no difference in metrics)",2,0.222222222222222
+"105","Reptiles","Tourism","Unclear",1,0.111111111111111
+"106","Reptiles","Trade","Negative (detrimental)",1,0.111111111111111
+"107","Reptiles","Trade","Neutral (only when there is absolutely no difference in metrics)",1,0.111111111111111
+"108","Reptiles","Trade","Unclear",1,0.111111111111111
