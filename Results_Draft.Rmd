@@ -1,15 +1,18 @@
 ---
-title: 'MCBD Results'
+title: "MCBD Results"
 author: "Ciara Hovis, CSIS Lab, Michigan State University"
 date: "October 6, 2020"
-output: 
+output:
   html_document:
     keep_tex: yes
     toc: yes
     toc_depth: 4
-    toc_float: true
+    toc_float: yes
     df_print: paged
-editor_options: 
+  word_document:
+    toc: yes
+    toc_depth: '4'
+editor_options:
   chunk_output_type: console
 ---
 
@@ -199,10 +202,6 @@ quick_plot
                 scale_fill_manual(values=majeff_col) +
                 xlab("")
 
-# save image
-  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_hab2.png"),
-         plot=quick_plot, height = 6, width = 11)
-  
 # view
   quick_plot
 ```
@@ -220,9 +219,6 @@ quick_plot
                 scale_fill_manual(values=majeff_col) +
                 xlab("")
 
-# save image
-  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_taxa.png"),
-         plot=quick_plot, height = 6, width = 11)
 ```
 
 ```{r}
@@ -277,10 +273,7 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
                 scale_fill_manual(values=majeff_col) +
                 xlab("")
 
-# save image
-  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_flow2.png"),
-         plot=quick_plot, height = 6, width = 11)
-  
+
 # view
   quick_plot
 ```
@@ -295,12 +288,9 @@ quick_plot
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-                scale_fill_manual(values=sigeff_col) +
+                scale_fill_manual(values=majeff_col) +
                 xlab("")
 
-# save image
-  ggsave(filename=paste0(fig.dir,"Figure_Xtra_effects_by_flow.png"),
-         plot=quick_plot, height = 6, width = 11)
 
 ```
 
@@ -446,7 +436,7 @@ Convert to long format, where metric is indicated.
                         guide = guide_legend(reverse = FALSE))  + 
                         scale_y_discrete(position='right',expand=c(0,0))+
                     # style
-                      theme_gray(base_size=10)+
+                      theme_gray(base_size=8)+
                       theme(
                         axis.title=element_blank(),
                         axis.line=element_blank(),
@@ -468,13 +458,6 @@ Convert to long format, where metric is indicated.
                     # labels
                       ylab('') + xlab('')
                 
-# save image
-  ggsave(metric_flow_fig,
-         filename=paste0(fig.dir,
-                         #'synthesis_sig_effects_metric_type_and_flow_Vert.png'),
-                         'synthesis_sig_effects_metric_type_and_flow_Horz.png'),
-         #height=6.5,width=7,units='in',
-         dpi=600)
 
 
 # display image
@@ -725,8 +708,6 @@ fig2 <- ggplot(data = shp_df) +
 fig2
 dir
 fname <- paste0(fig.dir, 'Fig_map_country_bio.jpg'); fname
-ggsave(fname, fig2, width = 18, height = 9, units = 'cm', limitsize = FALSE,
-       bg = "transparent")
 
 ## Percentage of telecoupling
 
