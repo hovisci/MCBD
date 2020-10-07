@@ -119,6 +119,16 @@ Next, show levels of couplings
 levels(as.factor(s23$tele_cat))
 ```
 
+Fix paper 3081 based on CLH notes (10/7/2020)
+
+```{r}
+#need to change tele cat and effect for both entries
+s23[which(s23$paper_id == 3081 & s23$entry_id == 1),]
+
+s23$tc[which(s23$paper_id == 3081 & s23$entry_id == 1)] <- 'Trade;Knowledge Transfer'   # change tc to just trade and knowledge 
+s23$tc[which(s23$paper_id == 3081 & s23$entry_id == 2)] <- 'Tourism'                    # change tc to just tourism
+  
+```
 
 # 6. Classify Impact and Significance Category
 
