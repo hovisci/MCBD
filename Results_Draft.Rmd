@@ -3,15 +3,18 @@ title: "MCBD Results"
 author: "Ciara Hovis, CSIS Lab, Michigan State University"
 date: "6 October 2020 (Updated 7 Octobter 2020)"
 output:
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
   html_document:
     keep_tex: yes
     toc: yes
     toc_depth: 4
     toc_float: yes
     df_print: paged
-  word_document:
-    toc: yes
-    toc_depth: '4'
 editor_options:
   chunk_output_type: console
 ---
@@ -1048,7 +1051,9 @@ Figure code
   metric_flow_fig <- ggplot(metric_flow) + 
                     aes(x='', y = count, fill = sig_effect) +
                     geom_bar(position='fill',
-                             stat='identity', width = 1, size = 0.01) +
+                             stat='identity',
+                             width = 1,
+                             size = 0.01) +
                     # activate for vertical or horizontal version
                       facet_grid(metric_type ~ metric ~ tc, switch='y') + #horizontal
                       #facet_grid(tc ~ metric, switch='y') +  #vertical
@@ -1143,7 +1148,8 @@ filled_nr_metric_tele$metricType <- factor(filled_nr_metric_tele$metricType,
 heatmap_telemetric <- ggplot(filled_nr_metric_tele,
                       aes(x=telecoupling, y=metricType, fill=count_factor)) +
                       geom_tile(color = "white", size=0.25) +
-                      scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+                    geom_text(aes(label = count )) +
+ scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
                                                "#4E91CC","#3F76A6","#274866"))+
                       labs(x="",y="")+
                       scale_y_discrete(expand=c(0,0))+

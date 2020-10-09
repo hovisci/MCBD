@@ -1,0 +1,1707 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={MCBD Results},
+  pdfauthor={Ciara Hovis, CSIS Lab, Michigan State University},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{MCBD Results}
+\author{Ciara Hovis, CSIS Lab, Michigan State University}
+\date{6 October 2020 (Updated 7 Octobter 2020)}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{4}
+\tableofcontents
+}
+\hypertarget{summary}{%
+\section{1. Summary}\label{summary}}
+
+Synthesis of survey 2 and 3 results for metacoupling/biodiversity
+systematic review. It consists of response summaries and visualizations
+of the accepted papers.
+
+\hypertarget{r-setup}{%
+\section{2. R Setup}\label{r-setup}}
+
+The script presented here was done using R (version 4.0.2; R Core Team
+2020) and its packages.
+
+Load libraries, directories, and custom functions from source file.
+
+\hypertarget{load-data}{%
+\section{3. Load data}\label{load-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# surveys}
+\NormalTok{  ab_screen <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir, }\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{AbsScreen1_Merge.csv'}\NormalTok{))}
+\NormalTok{  ab_maybes <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir, }\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{AbsScreen2_maybes_to_keep.csv'}\NormalTok{))}
+\NormalTok{  ab_yeses <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,  }\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{final_sample_for_coding.csv'}\NormalTok{))}
+\NormalTok{  assignments <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Coding_MergeAssign_R1.csv'}\NormalTok{))}
+
+
+\NormalTok{  survey1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'survey1_cleaned.csv'}\NormalTok{))}
+\NormalTok{  s2 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'survey2_cleaned.csv'}\NormalTok{))}
+\NormalTok{  survey3 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'survey3_cleaned.csv'}\NormalTok{))}
+\NormalTok{  s23 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'s23.csv'}\NormalTok{))}
+\CommentTok{# factor format}
+\NormalTok{  s23}\OperatorTok{$}\NormalTok{maj_eff<-}\KeywordTok{factor}\NormalTok{(s23}\OperatorTok{$}\NormalTok{maj_eff, }\KeywordTok{c}\NormalTok{(}\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Detrimental"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{, }\StringTok{"Mixed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\NormalTok{  s23_maj <-}\StringTok{ }\NormalTok{s23[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(s23}\OperatorTok{$}\NormalTok{paper_id),]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{survey-1-2-results}{%
+\section{4. Survey 1 \& 2 Results}\label{survey-1-2-results}}
+
+\hypertarget{sample-results}{%
+\subsection{4.1 Sample Results}\label{sample-results}}
+
+Accepted/rejected published papers over time
+
+Total number of papers at the coding stage = 591
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total numbers but also ensure both values here match}
+  \KeywordTok{nrow}\NormalTok{(survey1)}
+  \KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{paper_id))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 591
+## [1] 591
+\end{verbatim}
+
+Number of accepted and rejected papers.
+
+Accepted = 131 (22\%) , Rejected = 460 (78\%)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+  \KeywordTok{ddply}\NormalTok{(survey1, .(status), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(status))}
+\KeywordTok{sum}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{status }\OperatorTok{==}\StringTok{ 'accept'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey1)}
+\KeywordTok{sum}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{status }\OperatorTok{==}\StringTok{ 'reject'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   status count
+## 1 accept   131
+## 2 reject   460
+## [1] 0.2216582
+## [1] 0.7783418
+\end{verbatim}
+
+Visualizing accepted papers over time, including the ones from the
+abstract screening process.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# all abstract screened papers (n=7306)}
+\NormalTok{  ab_screen <-}\StringTok{ }\NormalTok{ab_screen[}\OperatorTok{!}\NormalTok{ab_screen}\OperatorTok{$}\NormalTok{PY}\OperatorTok{==}\DecValTok{2020}\NormalTok{,] }\CommentTok{#remove 2020 studies}
+\NormalTok{  ab_all <-}\StringTok{ }\NormalTok{ab_screen[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(ab_screen}\OperatorTok{$}\NormalTok{TITLE),];}\KeywordTok{nrow}\NormalTok{(ab_all)}
+
+\CommentTok{# remove the papers accepted in screening from the abstract screening list (n=6665)}
+\NormalTok{  ab_reject <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(ab_all,ab_maybes,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"TITLE"}\NormalTok{))}
+\NormalTok{  ab_reject <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(ab_reject,ab_yeses,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"TITLE"}\NormalTok{))}
+\NormalTok{  ab_reject <-}\StringTok{ }\NormalTok{ab_reject[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(ab_reject}\OperatorTok{$}\NormalTok{TITLE,ab_reject}\OperatorTok{$}\NormalTok{PY),];}\KeywordTok{nrow}\NormalTok{(ab_reject)}
+    
+\CommentTok{# all papers that were accepted from abstract screening (n=641)}
+\NormalTok{  ab_accept <-}\StringTok{ }\NormalTok{ab_yeses[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(ab_yeses}\OperatorTok{$}\NormalTok{TITLE),]}
+
+  
+\CommentTok{# accepted papers from the assignment list for full review (n=595)}
+\NormalTok{  papers_reviewed <-}\StringTok{ }\NormalTok{assignments[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(assignments}\OperatorTok{$}\NormalTok{TITLE),]}
+
+\CommentTok{# papers with PDF not available or rejected because of language (n=46)}
+\NormalTok{  paper_unavail <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(ab_accept,papers_reviewed,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"TITLE"}\NormalTok{))}
+\NormalTok{  paper_unavail <-}\StringTok{ }\NormalTok{paper_unavail[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(paper_unavail}\OperatorTok{$}\NormalTok{TITLE),]}
+  
+\CommentTok{# rejected papers or not yet reviewed (n=460)}
+  
+\NormalTok{  keep <-}\StringTok{  }\KeywordTok{subset}\NormalTok{(survey1, status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{)}
+\NormalTok{  reject <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(survey1,keep)}
+
+\NormalTok{  papers_rejected <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(papers_reviewed,keep,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID.1"}\NormalTok{=}\StringTok{"paper_id"}\NormalTok{))}
+\NormalTok{  papers_rejected <-}\StringTok{ }\NormalTok{papers_rejected[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(papers_rejected}\OperatorTok{$}\NormalTok{TITLE),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7306
+## [1] 6665
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# show numbers:}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'original number of papers in WOS search:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_screen))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of duplicates in WOS search:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_screen)}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(ab_all))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of abstracts screened:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_all))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of accepted abstracts:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_accept))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of rejected abstracts:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_reject))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of accepted papers unavailable or non-English:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(paper_unavail))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of papers available for full review:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(papers_reviewed))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of full papers accepted for synthesis:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(keep)) }
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of full papers rejected from synthesis:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(reject))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of full papers not yet reviewed for synthesis:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(papers_rejected)}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(reject)}\OperatorTok{-}\DecValTok{5}\NormalTok{)}
+  
+\CommentTok{# num of full papers not yet reviewed is -1, idk why. Maybe due to common papers? The check below is True so I'm not worried.    }
+  
+  
+\CommentTok{# test if they add up correctly}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'COUNT TESTS:'}\NormalTok{)}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'total full papers:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(papers_reviewed) }\OperatorTok{==}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ab_accept) }\OperatorTok{-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(paper_unavail))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'total abstract screen:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(ab_all) }\OperatorTok{==}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ab_reject) }\OperatorTok{+}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ab_accept))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "original number of papers in WOS search: 7318"
+## [1] "number of duplicates in WOS search: 12"
+## [1] "number of abstracts screened: 7306"
+## [1] "number of accepted abstracts: 641"
+## [1] "number of rejected abstracts: 6665"
+## [1] "number of accepted papers unavailable or non-English: 46"
+## [1] "number of papers available for full review: 595"
+## [1] "number of full papers accepted for synthesis: 131"
+## [1] "number of full papers rejected from synthesis: 460"
+## [1] "number of full papers not yet reviewed for synthesis: -1"
+## [1] "COUNT TESTS:"
+## [1] "total full papers: TRUE"
+## [1] "total abstract screen: TRUE"
+\end{verbatim}
+
+Next, simplify columns and combine for three tiers in the plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# select columns}
+  \CommentTok{# papers found in WOS but don't meet criteria}
+\NormalTok{    reject_abstract_level <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(ab_reject,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID"}\NormalTok{,}\StringTok{"PY"}\NormalTok{))}
+  \CommentTok{# WOS papers that meet criteria but don't directly look at coupling effects on biodiv}
+\NormalTok{    reject_paper_level <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(papers_rejected,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID.1"}\NormalTok{,}\StringTok{"PY"}\NormalTok{))}
+\NormalTok{    reject_paper_level2 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(paper_unavail,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID"}\NormalTok{,}\StringTok{"PY"}\NormalTok{))}
+  \CommentTok{# papers that do look at coupling effects on biodiv}
+\NormalTok{    accept_paper_level <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(keep,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"paper_id"}\NormalTok{,}\StringTok{"year_pub"}\NormalTok{))}
+  
+\CommentTok{# rename columns}
+  \KeywordTok{colnames}\NormalTok{(reject_abstract_level) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'year_pub'}\NormalTok{)}
+  \KeywordTok{colnames}\NormalTok{(reject_paper_level) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'year_pub'}\NormalTok{)}
+  \KeywordTok{colnames}\NormalTok{(reject_paper_level2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'year_pub'}\NormalTok{)}
+  
+\CommentTok{# add columns}
+  \CommentTok{#papers that discuss tc effects on biodiv in...}
+\NormalTok{  reject_abstract_level}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'search but not abstract'}
+\NormalTok{  reject_paper_level}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'abstract but not paper'}
+\NormalTok{  reject_paper_level2}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'abstract but not paper'}
+\NormalTok{  accept_paper_level}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'abstract and paper'}
+  
+\CommentTok{# rbind (should be 7307 rows)}
+\NormalTok{  papers <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(reject_abstract_level,reject_paper_level,}
+\NormalTok{                  reject_paper_level2, }\CommentTok{# <-- NOT SURE IF UNAVAILABLE PAPERS BELONG HERE}
+\NormalTok{                  accept_paper_level)}
+
+\CommentTok{# check}
+  \KeywordTok{nrow}\NormalTok{(papers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7306
+\end{verbatim}
+
+Plot image.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Get a count of records per year}
+\NormalTok{  paper_ct <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(papers, .(year_pub,type), summarize, }\DataTypeTok{count=}\KeywordTok{length}\NormalTok{(year_pub))}
+
+\CommentTok{# Change to factors}
+\NormalTok{  paper_ct}\OperatorTok{$}\NormalTok{year_pub <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(paper_ct}\OperatorTok{$}\NormalTok{year_pub)}
+\NormalTok{  paper_ct}\OperatorTok{$}\NormalTok{type <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(paper_ct}\OperatorTok{$}\NormalTok{type,}
+                        \DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{'search but not abstract'}\NormalTok{,}
+                                   \StringTok{'abstract but not paper'}\NormalTok{,}
+                                   \StringTok{'abstract and paper'}\NormalTok{))}
+              
+\NormalTok{  papers.fig <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(paper_ct, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{year_pub, }\DataTypeTok{y=}\NormalTok{count)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                  }\KeywordTok{geom_area}\NormalTok{(}\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{,}
+                            \KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{fill =}\NormalTok{ type, }\DataTypeTok{group =}\NormalTok{ type), }\DataTypeTok{alpha=}\FloatTok{0.6}\NormalTok{) }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{count, }\DataTypeTok{color =}\NormalTok{ type, }\DataTypeTok{group =}\NormalTok{ type))}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{count, }\DataTypeTok{color =}\NormalTok{ type, }\DataTypeTok{group =}\NormalTok{ type))}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label=}\NormalTok{count),}\DataTypeTok{size=}\DecValTok{3}\NormalTok{,}
+                            \DataTypeTok{position=}\KeywordTok{position_dodge}\NormalTok{(.}\DecValTok{7}\NormalTok{),}
+                            \DataTypeTok{vjust=}\OperatorTok{-}\NormalTok{.}\DecValTok{7}\NormalTok{,}
+                            \DataTypeTok{check_overlap=}\OtherTok{TRUE}\NormalTok{)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{scale_color_manual}\NormalTok{(}
+                  \DataTypeTok{name=}\KeywordTok{expression}\NormalTok{(}\KeywordTok{italic}\NormalTok{(}\StringTok{"telecoupling effects}\CharTok{\textbackslash{}n}\StringTok{on biodiversity in..."}\NormalTok{)),}
+                  \DataTypeTok{values=}\NormalTok{paper_col)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{scale_fill_manual}\NormalTok{(}
+                  \DataTypeTok{name=}\KeywordTok{expression}\NormalTok{(}\KeywordTok{italic}\NormalTok{(}\StringTok{"telecoupling effects}\CharTok{\textbackslash{}n}\StringTok{on biodiversity in..."}\NormalTok{)),}
+                  \DataTypeTok{values=}\NormalTok{paper_col)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"publication year"}\NormalTok{)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"number of articles"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{860}\NormalTok{)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{850}\NormalTok{,}\DecValTok{100}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{theme_classic}\NormalTok{()}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.22}\NormalTok{,}\FloatTok{0.87}\NormalTok{))}
+  
+\CommentTok{# show here}
+\NormalTok{  papers.fig}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+Acceptance rate for abstract screening.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total abstract acceptance rate}
+  \KeywordTok{sum}\NormalTok{(ab_all}\OperatorTok{$}\NormalTok{INCLUDE}\OperatorTok{==}\StringTok{'YES'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(ab_all)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.08007117
+\end{verbatim}
+
+Acceptance rate for papers that were reviewed (\textbf{NOTE:} this
+includes the 5 common surveys).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total paper acceptance rate}
+  \KeywordTok{sum}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2216582
+\end{verbatim}
+
+Acceptance rate per person (\textbf{NOTE:} this excludes the 5 common
+surveys per person, but has a rate for it on its own as ``all'').
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+\NormalTok{  acr <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(survey1, .(coder_id), summarize,}
+              \CommentTok{# total count of entries     }
+              \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(coder_id),}
+              \DataTypeTok{accept=}\KeywordTok{sum}\NormalTok{(status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{),}
+              \DataTypeTok{reject=}\KeywordTok{sum}\NormalTok{(status}\OperatorTok{==}\StringTok{'reject'}\NormalTok{),}
+              \CommentTok{# percent acceptance}
+              \DataTypeTok{accept_rate=}\KeywordTok{sum}\NormalTok{(status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{)}\OperatorTok{/}\KeywordTok{length}\NormalTok{(coder_id))}
+\NormalTok{  acr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        coder_id count accept reject accept_rate
+## 1  A_Herzberger    63     20     43   0.3174603
+## 2      A_Torres    51      7     44   0.1372549
+## 3           all     5      4      1   0.8000000
+## 4       C_Hovis    92     19     73   0.2065217
+## 5        E_Dean    43      7     36   0.1627907
+## 6        E_Xing    43      9     34   0.2093023
+## 7      K_Kapsar    52     11     41   0.2115385
+## 8         M_Lei    43     15     28   0.3488372
+## 9      MG_Chung    43      5     38   0.1162791
+## 10         X_Wu    67     18     49   0.2686567
+## 11        Y_Dou     5      0      5   0.0000000
+## 12         Y_Li    32      2     30   0.0625000
+## 13      Y_Zhang    52     14     38   0.2692308
+\end{verbatim}
+
+Average per-person acceptance rates
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# mean per-person acceptance rate }
+  \KeywordTok{mean}\NormalTok{(acr}\OperatorTok{$}\NormalTok{accept_rate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2392594
+\end{verbatim}
+
+\hypertarget{general-results}{%
+\subsection{4.2 General Results}\label{general-results}}
+
+Counts of papers that were inferred (accepted papers only)
+
+Total rate of \textbf{inferring} across papers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total papers for which the tc relationships were inferred}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number inferred papers:'}\NormalTok{,}\KeywordTok{sum}\NormalTok{(keep}\OperatorTok{$}\NormalTok{explicit_distant_impacts}\OperatorTok{==}\StringTok{'No'}\NormalTok{))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number explicit papers:'}\NormalTok{,}\KeywordTok{sum}\NormalTok{(keep}\OperatorTok{$}\NormalTok{explicit_distant_impacts}\OperatorTok{==}\StringTok{'Yes'}\NormalTok{))}
+  
+\CommentTok{# get total inferring rate}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'inferred percent:'}\NormalTok{,}\KeywordTok{sum}\NormalTok{(keep}\OperatorTok{$}\NormalTok{explicit_distant_impacts}\OperatorTok{==}\StringTok{'No'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(keep))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'explicit percent:'}\NormalTok{,}\KeywordTok{sum}\NormalTok{(keep}\OperatorTok{$}\NormalTok{explicit_distant_impacts}\OperatorTok{==}\StringTok{'Yes'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(keep))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "number inferred papers: 46"
+## [1] "number explicit papers: 76"
+## [1] "inferred percent: 0.351145038167939"
+## [1] "explicit percent: 0.580152671755725"
+\end{verbatim}
+
+Percent of papers inferred per person per person
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+  \KeywordTok{ddply}\NormalTok{(keep, .(coder_id), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(coder_id),}
+        \DataTypeTok{inferred=}\KeywordTok{sum}\NormalTok{(explicit_distant_impacts}\OperatorTok{==}\StringTok{'No'}\NormalTok{),}
+        \DataTypeTok{explicit=}\KeywordTok{sum}\NormalTok{(explicit_distant_impacts}\OperatorTok{==}\StringTok{'Yes'}\NormalTok{),}
+        \CommentTok{# percent inferred}
+        \DataTypeTok{inferred_rate=}\KeywordTok{sum}\NormalTok{(explicit_distant_impacts}\OperatorTok{==}\StringTok{'No'}\NormalTok{)}\OperatorTok{/}\KeywordTok{length}\NormalTok{(coder_id))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        coder_id count inferred explicit inferred_rate
+## 1  A_Herzberger    20        9       11     0.4500000
+## 2      A_Torres     7        2        5     0.2857143
+## 3           all     4        2        2     0.5000000
+## 4       C_Hovis    19        5       14     0.2631579
+## 5        E_Dean     7        2        5     0.2857143
+## 6        E_Xing     9        0        0     0.0000000
+## 7      K_Kapsar    11        7        4     0.6363636
+## 8         M_Lei    15        6        9     0.4000000
+## 9      MG_Chung     5        1        4     0.2000000
+## 10         X_Wu    18        2       16     0.1111111
+## 11         Y_Li     2        0        2     0.0000000
+## 12      Y_Zhang    14       10        4     0.7142857
+\end{verbatim}
+
+Counts of study types (accepted papers only)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+  \KeywordTok{ddply}\NormalTok{(keep, .(C4_study), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(C4_study),}
+        \DataTypeTok{percent=}\KeywordTok{length}\NormalTok{(C4_study)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(keep))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                  C4_study count     percent
+## 1                                      Experimental study     3 0.022900763
+## 2 Modeling study (using empirical data and not projected)    11 0.083969466
+## 3                                     Observational study   116 0.885496183
+## 4                            Observational/Modeling study     1 0.007633588
+\end{verbatim}
+
+Habitat Frequency (study level, n= 131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{habitat.study <-}\StringTok{ }\KeywordTok{count}\NormalTok{(s2, }\StringTok{'habitat'}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(habitat.study)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(s2}\OperatorTok{$}\NormalTok{habitat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                      habitat freq
+## 1                 Freshwater   22
+## 2          Freshwater;Marine    1
+## 3                     Marine   25
+## 4 Not specified/Global study    2
+## 5                Terrestrial   75
+## 6     Terrestrial;Freshwater    4
+## 7         Terrestrial;Marine    2
+## 
+##                 Freshwater          Freshwater;Marine 
+##                0.167938931                0.007633588 
+##                     Marine Not specified/Global study 
+##                0.190839695                0.015267176 
+##                Terrestrial     Terrestrial;Freshwater 
+##                0.572519084                0.030534351 
+##         Terrestrial;Marine 
+##                0.015267176
+\end{verbatim}
+
+Taxa Frequency (study level, n=131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{desired_length <-}\StringTok{ }\DecValTok{8} 
+\NormalTok{empty_list <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =}\NormalTok{ desired_length)}
+
+\NormalTok{taxa <-}\StringTok{ }\NormalTok{(s2}\OperatorTok{$}\NormalTok{taxa)}
+\KeywordTok{table}\NormalTok{(taxa)}
+\NormalTok{taxa.list <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Mammals'}\NormalTok{, }\StringTok{'Plants'}\NormalTok{, }\StringTok{'Reptiles'}\NormalTok{, }\StringTok{'Amphibians'}\NormalTok{, }\StringTok{'Birds'}\NormalTok{, }\StringTok{'Fish'}\NormalTok{, }\StringTok{'Invertebrates'}\NormalTok{, }\StringTok{'Other'}\NormalTok{)}
+\NormalTok{taxa.count <-}\StringTok{ }\NormalTok{empty_list}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(taxa.list)) \{}
+  
+\NormalTok{  taxa.count[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{str_count}\NormalTok{(taxa, taxa.list[i]))}
+\NormalTok{    \}}
+
+\NormalTok{taxa.count <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(taxa.list,taxa.count)}
+\NormalTok{taxa.count}
+
+\NormalTok{multiple <-}\StringTok{ }\KeywordTok{str_count}\NormalTok{(taxa, }\StringTok{';'}\NormalTok{)}
+\NormalTok{multiple <-}\StringTok{ }\NormalTok{multiple }\OperatorTok{!=}\StringTok{ }\DecValTok{0}
+\NormalTok{multiple <-}\StringTok{ }\KeywordTok{table}\NormalTok{(multiple) [}\StringTok{"TRUE"}\NormalTok{]}
+\NormalTok{multiple}
+
+\CommentTok{# Others? Not a big deal since taxa is clarified in survey 3.Not a big deal.}
+
+\NormalTok{othTaxa <-}\StringTok{ }\NormalTok{s2[}\KeywordTok{which}\NormalTok{(s2}\OperatorTok{$}\NormalTok{taxa }\OperatorTok{==}\StringTok{ 'Other'}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## taxa
+##                              Amphibians; Plants 
+##                                               1 
+##                                           Birds 
+##                                              36 
+##                                  Birds; Mammals 
+##                                               1 
+##              Birds; Mammals; Amphibians; Plants 
+##                                               1 
+## Birds; Mammals; Reptiles; Invertebrates; Plants 
+##                                               1 
+##                                 Birds; Reptiles 
+##                                               1 
+##                                            Fish 
+##                                              14 
+##                             Fish; Invertebrates 
+##                                               1 
+##                                   Invertebrates 
+##                                              23 
+##                           Invertebrates; Plants 
+##                                               2 
+##                            Invertebrates;Plants 
+##                                               1 
+##                                         Mammals 
+##                                              14 
+##    Mammals; Reptiles; Amphibians; Invertebrates 
+##                                               1 
+##                                           Other 
+##                                               3 
+##                                          Plants 
+##                                              26 
+##                       Plants; habitat pollution 
+##                                               1 
+##                                        Reptiles 
+##                                               3 
+##                             Reptiles;Amphibians 
+##                                               1 
+##            [,1]      [,2]     [,3]       [,4]         [,5]    [,6]  
+## taxa.list  "Mammals" "Plants" "Reptiles" "Amphibians" "Birds" "Fish"
+## taxa.count 18        33       7          4            40      15    
+##            [,7]            [,8]   
+## taxa.list  "Invertebrates" "Other"
+## taxa.count 29              3      
+## TRUE 
+##   12
+\end{verbatim}
+
+Flow frequency (study level, n=131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{desired_length <-}\StringTok{ }\DecValTok{10} 
+\NormalTok{empty_list <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{'list'}\NormalTok{, }\DataTypeTok{length =}\NormalTok{ desired_length)}
+
+\NormalTok{tc <-}\StringTok{ }\NormalTok{s2}\OperatorTok{$}\NormalTok{tele_cat}
+\NormalTok{tc.list <-}\KeywordTok{c}\NormalTok{(}\StringTok{"Energy Transfer"}\NormalTok{,}\StringTok{"Investment"}\NormalTok{,}\StringTok{"Knowledge Transfer"}\NormalTok{,}
+                                 \StringTok{"Migration (human)"}\NormalTok{,}\StringTok{"Migration (non-human)"}\NormalTok{,}
+                                 \StringTok{"Species Dispersal"}\NormalTok{,}\StringTok{"Tourism"}\NormalTok{,}\StringTok{"Trade"}\NormalTok{,}\StringTok{"Waste Transfer"}\NormalTok{,}\StringTok{"Water Transfer"}\NormalTok{)}
+\NormalTok{tc.count <-}\StringTok{ }\NormalTok{empty_list}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(tc.list)) \{}
+  
+\NormalTok{  tc.count[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{str_count}\NormalTok{(tc, tc.list[i]))}
+\NormalTok{    \}}
+
+\NormalTok{tc.count <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(tc.list,tc.count)}
+\NormalTok{tc.count}
+
+
+\CommentTok{# Can't get loop to count the migration values for some reason, manual input code below}
+\CommentTok{# Migration (human) n=4     # Migration (non-human) n=0}
+\NormalTok{tc.table <-}\StringTok{ }\KeywordTok{table}\NormalTok{(s2}\OperatorTok{$}\NormalTok{tele_cat)}
+
+\NormalTok{tc.count[}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{] <-}\StringTok{ }\NormalTok{tc.table[}\DecValTok{5}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{tc.table[}\DecValTok{13}\NormalTok{]      }\CommentTok{# Migration (human) n=6     # Migration (non-human) n-7}
+
+\NormalTok{tc.count}
+
+\CommentTok{#gather(tc.count)}
+
+\NormalTok{multiple <-}\StringTok{ }\KeywordTok{str_count}\NormalTok{(tc, }\StringTok{';'}\NormalTok{)}
+\NormalTok{multiple <-}\StringTok{ }\NormalTok{multiple }\OperatorTok{!=}\StringTok{ }\DecValTok{0}
+\NormalTok{multiple <-}\StringTok{ }\KeywordTok{table}\NormalTok{(multiple) [}\StringTok{"TRUE"}\NormalTok{]}
+\NormalTok{multiple}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          [,1]              [,2]         [,3]                
+## tc.list  "Energy Transfer" "Investment" "Knowledge Transfer"
+## tc.count 9                 8            13                  
+##          [,4]                [,5]                    [,6]               
+## tc.list  "Migration (human)" "Migration (non-human)" "Species Dispersal"
+## tc.count 0                   0                       17                 
+##          [,7]      [,8]    [,9]             [,10]           
+## tc.list  "Tourism" "Trade" "Waste Transfer" "Water Transfer"
+## tc.count 57        34      2                4               
+##          [,1]              [,2]         [,3]                
+## tc.list  "Energy Transfer" "Investment" "Knowledge Transfer"
+## tc.count 9                 8            13                  
+##          [,4]                [,5]                    [,6]               
+## tc.list  "Migration (human)" "Migration (non-human)" "Species Dispersal"
+## tc.count 4                   0                       17                 
+##          [,7]      [,8]    [,9]             [,10]           
+## tc.list  "Tourism" "Trade" "Waste Transfer" "Water Transfer"
+## tc.count 57        34      2                4               
+## TRUE 
+##   16
+\end{verbatim}
+
+Number of metrics reported by each paper
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+  \KeywordTok{ddply}\NormalTok{(survey3, .(paper_id), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{num_entries=}\KeywordTok{length}\NormalTok{(entry_id),}
+        \DataTypeTok{perc_dataset=}\KeywordTok{length}\NormalTok{(entry_id)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey3),}
+        \DataTypeTok{num_taxa=}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(taxa))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(perc_dataset))}
+
+\NormalTok{num.metric <-}\StringTok{ }\KeywordTok{count}\NormalTok{(survey3}\OperatorTok{$}\NormalTok{paper_id)}
+\KeywordTok{range}\NormalTok{(num.metric}\OperatorTok{$}\NormalTok{freq)}
+\KeywordTok{sum}\NormalTok{(num.metric}\OperatorTok{$}\NormalTok{freq)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     paper_id num_entries perc_dataset num_taxa
+## 1         84         162  0.221614227        1
+## 2       4060          57  0.077975376        1
+## 3       1551          27  0.036935705        1
+## 4       3772          22  0.030095759        1
+## 5       6502          21  0.028727770        1
+## 6        134          20  0.027359781        1
+## 7       4155          20  0.027359781        1
+## 8       4552          15  0.020519836        1
+## 9        479          14  0.019151847        1
+## 10      3112          13  0.017783858        1
+## 11      3989          12  0.016415869        1
+## 12      4831          11  0.015047880        1
+## 13      1007          10  0.013679891        1
+## 14      2606           9  0.012311902        1
+## 15      5844           8  0.010943912        1
+## 16      6254           8  0.010943912        1
+## 17      1376           7  0.009575923        2
+## 18      5756           7  0.009575923        1
+## 19      6948           7  0.009575923        1
+## 20       227           6  0.008207934        1
+## 21       264           6  0.008207934        1
+## 22      1893           6  0.008207934        2
+## 23      3122           6  0.008207934        1
+## 24      3485           6  0.008207934        1
+## 25      3849           6  0.008207934        1
+## 26      4551           6  0.008207934        1
+## 27      5076           6  0.008207934        1
+## 28      5905           6  0.008207934        1
+## 29      6511           6  0.008207934        1
+## 30       357           5  0.006839945        1
+## 31      1366           5  0.006839945        1
+## 32      1743           5  0.006839945        1
+## 33      2050           5  0.006839945        1
+## 34      2642           5  0.006839945        1
+## 35      5926           5  0.006839945        1
+## 36      6396           5  0.006839945        1
+## 37       292           4  0.005471956        1
+## 38       302           4  0.005471956        1
+## 39       471           4  0.005471956        1
+## 40       826           4  0.005471956        1
+## 41      1299           4  0.005471956        1
+## 42      1590           4  0.005471956        1
+## 43      1616           4  0.005471956        1
+## 44      2401           4  0.005471956        1
+## 45      2546           4  0.005471956        1
+## 46      2998           4  0.005471956        1
+## 47      3484           4  0.005471956        1
+## 48      4020           4  0.005471956        1
+## 49      4063           4  0.005471956        1
+## 50      4257           4  0.005471956        1
+## 51      4293           4  0.005471956        1
+## 52      5746           4  0.005471956        1
+## 53       379           3  0.004103967        1
+## 54       483           3  0.004103967        1
+## 55       518           3  0.004103967        1
+## 56      1270           3  0.004103967        1
+## 57      2345           3  0.004103967        1
+## 58      3247           3  0.004103967        1
+## 59      3361           3  0.004103967        1
+## 60      4209           3  0.004103967        1
+## 61      4445           3  0.004103967        1
+## 62      5063           3  0.004103967        1
+## 63      6321           3  0.004103967        2
+## 64        80           2  0.002735978        2
+## 65       339           2  0.002735978        2
+## 66       396           2  0.002735978        1
+## 67       425           2  0.002735978        1
+## 68       466           2  0.002735978        1
+## 69       510           2  0.002735978        1
+## 70       708           2  0.002735978        1
+## 71       713           2  0.002735978        1
+## 72      1565           2  0.002735978        1
+## 73      1799           2  0.002735978        1
+## 74      2201           2  0.002735978        1
+## 75      2670           2  0.002735978        1
+## 76      3081           2  0.002735978        1
+## 77      3151           2  0.002735978        1
+## 78      3165           2  0.002735978        1
+## 79      3511           2  0.002735978        1
+## 80      3583           2  0.002735978        1
+## 81      3697           2  0.002735978        1
+## 82      4760           2  0.002735978        1
+## 83      4832           2  0.002735978        1
+## 84      5175           2  0.002735978        1
+## 85      5875           2  0.002735978        1
+## 86      5966           2  0.002735978        1
+## 87      6331           2  0.002735978        1
+## 88      6845           2  0.002735978        1
+## 89        17           1  0.001367989        1
+## 90        44           1  0.001367989        1
+## 91        45           1  0.001367989        1
+## 92       311           1  0.001367989        1
+## 93       523           1  0.001367989        1
+## 94       654           1  0.001367989        1
+## 95       813           1  0.001367989        1
+## 96       897           1  0.001367989        1
+## 97       992           1  0.001367989        1
+## 98      1040           1  0.001367989        1
+## 99      1349           1  0.001367989        1
+## 100     1368           1  0.001367989        1
+## 101     1681           1  0.001367989        1
+## 102     1821           1  0.001367989        1
+## 103     2222           1  0.001367989        1
+## 104     2253           1  0.001367989        1
+## 105     2284           1  0.001367989        1
+## 106     3243           1  0.001367989        1
+## 107     3668           1  0.001367989        1
+## 108     3868           1  0.001367989        1
+## 109     4087           1  0.001367989        1
+## 110     4393           1  0.001367989        1
+## 111     4509           1  0.001367989        1
+## 112     4518           1  0.001367989        1
+## 113     4574           1  0.001367989        1
+## 114     4850           1  0.001367989        1
+## 115     5125           1  0.001367989        1
+## 116     5309           1  0.001367989        1
+## 117     5314           1  0.001367989        1
+## 118     5477           1  0.001367989        1
+## 119     5486           1  0.001367989        1
+## 120     5577           1  0.001367989        1
+## 121     5773           1  0.001367989        1
+## 122     5782           1  0.001367989        1
+## 123     5804           1  0.001367989        1
+## 124     5853           1  0.001367989        1
+## 125     6195           1  0.001367989        1
+## 126     6820           1  0.001367989        1
+## 127  3790002           1  0.001367989        1
+## [1]   1 162
+## [1] 731
+\end{verbatim}
+
+Number of metrics by taxa and paper
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(survey3, .(taxa), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{num_entries=}\KeywordTok{length}\NormalTok{(entry_id),}
+        \DataTypeTok{perc_dataset=}\KeywordTok{length}\NormalTok{(entry_id)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey3),}
+        \DataTypeTok{num_papers=}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(paper_id)),}
+        \DataTypeTok{perc_papers=}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(paper_id))}\OperatorTok{/}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(survey3}\OperatorTok{$}\NormalTok{paper_id))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{      }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(perc_dataset))}
+
+\CommentTok{# view}
+\NormalTok{  a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  taxa num_entries perc_dataset num_papers perc_papers
+## 1               Birds         340  0.465116279         36 0.283464567
+## 2       Invertebrates         159  0.217510260         28 0.220472441
+## 3 Plants/Trees/Shrubs          85  0.116279070         30 0.236220472
+## 4                Fish          75  0.102599179         15 0.118110236
+## 5             Mammals          45  0.061559508         13 0.102362205
+## 6            Multiple          17  0.023255814          5 0.039370079
+## 7            Reptiles           9  0.012311902          4 0.031496063
+## 8          Amphibians           1  0.001367989          1 0.007874016
+\end{verbatim}
+
+\hypertarget{biodiversity-and-flow-categories-by-country}{%
+\subsection{4.3 Biodiversity and Flow Categories by
+Country}\label{biodiversity-and-flow-categories-by-country}}
+
+Biodiversity country map
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shp <-}\StringTok{ }\KeywordTok{ne_countries}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{50}\NormalTok{, }\DataTypeTok{returnclass =} \StringTok{'sf'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{#st_as_sf() %>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(name, iso_a3) }\OperatorTok{%>%}\StringTok{ }\CommentTok{## , economy, income_grp}
+\StringTok{  }\CommentTok{# filter(name != 'Antarctica') %>%}
+\StringTok{  }\CommentTok{# filter(name == 'France') %>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}
+    \DataTypeTok{iso_a3 =} \KeywordTok{if_else}\NormalTok{(name }\OperatorTok{==}\StringTok{ 'France'}\NormalTok{, }\StringTok{'FRA'}\NormalTok{, iso_a3),}
+    \DataTypeTok{iso_a3 =} \KeywordTok{if_else}\NormalTok{(name }\OperatorTok{==}\StringTok{ 'Norway'}\NormalTok{, }\StringTok{'NOR'}\NormalTok{, iso_a3))}
+\CommentTok{# plot(shp[1])}
+
+\NormalTok{shp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(name }\OperatorTok{==}\StringTok{ 'Norway'}\NormalTok{)}
+
+\CommentTok{### add new country name that are consistant with names uned in SDG data}
+\CommentTok{# library(readxl)}
+\CommentTok{# xls.shp.info <- paste0(dir, '/update_0503_SUM_dist/_input_data/ne_10m_admin_0_countries/Table/ne_10m_admin_0_countries-Export_Output.xls')}
+\CommentTok{#}
+\CommentTok{# nation_new_name <-}
+\CommentTok{#   read_excel(path = xls.shp.info,}
+\CommentTok{#              sheet = "dat", col_names = T) %>%}
+\CommentTok{#   select(ADMIN, ADM0_A3, nation_name)}
+\CommentTok{# names(nation_new_name)}
+\CommentTok{# nation_new_name <- as.data.frame(nation_new_name[,-c(3,4)])}
+
+
+
+
+\CommentTok{### theme, font --------------------------------------------------------------------------------------}
+\NormalTok{font      <-}\StringTok{ 'sans'} \CommentTok{## = "TT Arial"}
+\NormalTok{font_size <-}\StringTok{ }\FloatTok{6.5} \CommentTok{## max = 7; min = 5 for Nature Sustainability}
+\NormalTok{map_theme <-}\StringTok{ }\NormalTok{ggpubr}\OperatorTok{::}\KeywordTok{theme_transparent}\NormalTok{()}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}
+    \DataTypeTok{axis.title.x=}\KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{axis.title.y=}\KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{axis.text.x=}\KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{panel.grid.major =} \KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{panel.grid.minor =} \KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
+    \DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.09}\NormalTok{, }\FloatTok{0.38}\NormalTok{),}
+    \DataTypeTok{legend.key.size =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.3}\NormalTok{, }\StringTok{"cm"}\NormalTok{),}
+    \CommentTok{# legend.key.height = unit(0.5, "cm"),}
+    \DataTypeTok{legend.key =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NA}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.25}\NormalTok{),}
+    
+    \DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"transparent"}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NA}\NormalTok{),}
+    \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"transparent"}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NA}\NormalTok{),}
+    \DataTypeTok{legend.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"transparent"}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NA}\NormalTok{),}
+    \DataTypeTok{legend.box.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"transparent"}\NormalTok{, }\DataTypeTok{colour =} \OtherTok{NA}\NormalTok{),}
+    \DataTypeTok{text=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{family=}\NormalTok{font, }\DataTypeTok{size=}\NormalTok{font_size))}
+
+
+\CommentTok{### - Read in Data}
+
+\NormalTok{df99 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir, }\StringTok{'survey2_cleaned.csv'}\NormalTok{))}
+
+
+\CommentTok{### - list_countries}
+\NormalTok{ctr_sys <-}\StringTok{ }\NormalTok{df99 }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(paper_id, list_countries) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{data.frame}\NormalTok{(., }\KeywordTok{do.call}\NormalTok{(rbind, }\KeywordTok{str_split}\NormalTok{(.}\OperatorTok{$}\NormalTok{list_countries,}\StringTok{';'}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{'key'}\NormalTok{, }\DataTypeTok{value =}\NormalTok{ list_countries, }\DecValTok{3}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(.)) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{list_countries =} \KeywordTok{trimws}\NormalTok{(list_countries)) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{distinct}\NormalTok{(paper_id, list_countries, }\DataTypeTok{.keep_all =}\NormalTok{ T) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(list_countries }\OperatorTok{!=}\StringTok{ ''}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(paper_id) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(list_countries) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tally}\NormalTok{()}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(n)) }\CommentTok{#%>%}
+\CommentTok{# str(ctr_sys)}
+
+
+\CommentTok{### join new name table}
+\NormalTok{shp_df <-}\StringTok{ }\NormalTok{shp }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(., ctr_sys, }\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"iso_a3"}\NormalTok{ =}\StringTok{ "list_countries"}\NormalTok{))}
+
+\CommentTok{### check the join}
+\NormalTok{shp_df_check <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(}
+\NormalTok{  shp, ctr_sys, }\DataTypeTok{by.x =} \StringTok{"iso_a3"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"list_countries"}\NormalTok{, }\DataTypeTok{all.y=}\NormalTok{T) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_drop_geometry}\NormalTok{()}
+
+\CommentTok{# str(shp_df)}
+\KeywordTok{unique}\NormalTok{(shp_df}\OperatorTok{$}\NormalTok{n)}
+
+
+\CommentTok{### breaks and colors}
+\NormalTok{var <-}\StringTok{ }\NormalTok{shp_df}\OperatorTok{$}\NormalTok{n}
+\NormalTok{max <-}\StringTok{ }\KeywordTok{max}\NormalTok{(var, }\DataTypeTok{na.rm =}\NormalTok{ T); max}
+\NormalTok{min <-}\StringTok{ }\KeywordTok{min}\NormalTok{(var, }\DataTypeTok{na.rm =}\NormalTok{ T); min}
+
+\NormalTok{breaks <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(min, max, }\DecValTok{2}\NormalTok{); breaks; }\KeywordTok{length}\NormalTok{(breaks)}
+\NormalTok{breaks <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(shp_df}\OperatorTok{$}\NormalTok{n)); breaks; }\KeywordTok{length}\NormalTok{(breaks)}
+\NormalTok{myPalette <-}\StringTok{ }\KeywordTok{colorRampPalette}\NormalTok{((}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{8}\NormalTok{, }\StringTok{"Greens"}\NormalTok{)));}\CommentTok{# myPalette; rev}
+\NormalTok{colors <-}\StringTok{ }\KeywordTok{myPalette}\NormalTok{(}\KeywordTok{length}\NormalTok{(breaks)); colors}
+\NormalTok{title <-}\StringTok{ 'Entire system}\CharTok{\textbackslash{}n}\StringTok{Number of papers'}
+
+
+\CommentTok{### - biodiv_countries}
+\NormalTok{ctr_bio <-}\StringTok{ }\NormalTok{df99 }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(paper_id, biodiv_countries) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{data.frame}\NormalTok{(., }\KeywordTok{do.call}\NormalTok{(rbind, }\KeywordTok{str_split}\NormalTok{(.}\OperatorTok{$}\NormalTok{biodiv_countries,}\StringTok{';'}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{'key'}\NormalTok{, }\DataTypeTok{value =}\NormalTok{ biodiv_countries, }\DecValTok{3}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(.)) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{biodiv_countries =} \KeywordTok{trimws}\NormalTok{(biodiv_countries)) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{distinct}\NormalTok{(paper_id, biodiv_countries, }\DataTypeTok{.keep_all =}\NormalTok{ T) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(biodiv_countries }\OperatorTok{!=}\StringTok{ ''}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(paper_id) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(biodiv_countries) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tally}\NormalTok{()}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(n)) }\CommentTok{#%>%}
+\CommentTok{# str(ctr_bio)}
+
+
+\CommentTok{### join new name table}
+\NormalTok{shp_df <-}\StringTok{ }\NormalTok{shp }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(., ctr_bio, }\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"iso_a3"}\NormalTok{ =}\StringTok{ "biodiv_countries"}\NormalTok{))}
+
+\CommentTok{# str(shp_df)}
+\KeywordTok{unique}\NormalTok{(shp_df}\OperatorTok{$}\NormalTok{n)}
+
+\CommentTok{### check the join}
+\NormalTok{shp_df_check <-}\StringTok{ }\NormalTok{shp }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{right_join}\NormalTok{(., ctr_bio, }\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"iso_a3"}\NormalTok{ =}\StringTok{ "biodiv_countries"}\NormalTok{))}
+
+\CommentTok{### breaks and colors}
+\NormalTok{var <-}\StringTok{ }\NormalTok{shp_df}\OperatorTok{$}\NormalTok{n}
+\NormalTok{max <-}\StringTok{ }\KeywordTok{max}\NormalTok{(var, }\DataTypeTok{na.rm =}\NormalTok{ T); max}
+\NormalTok{min <-}\StringTok{ }\KeywordTok{min}\NormalTok{(var, }\DataTypeTok{na.rm =}\NormalTok{ T); min}
+
+\NormalTok{breaks <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(min, max, }\DecValTok{2}\NormalTok{); breaks; }\KeywordTok{length}\NormalTok{(breaks)}
+\NormalTok{breaks <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(shp_df}\OperatorTok{$}\NormalTok{n)); breaks; }\KeywordTok{length}\NormalTok{(breaks)}
+\NormalTok{myPalette <-}\StringTok{ }\KeywordTok{colorRampPalette}\NormalTok{((}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{8}\NormalTok{, }\StringTok{"Purples"}\NormalTok{)));}\CommentTok{# myPalette; rev}
+\NormalTok{colors <-}\StringTok{ }\KeywordTok{myPalette}\NormalTok{(}\KeywordTok{length}\NormalTok{(breaks)); colors}
+\NormalTok{title <-}\StringTok{ 'Biodiversity system}\CharTok{\textbackslash{}n}\StringTok{Number of papers'}
+
+\CommentTok{### plot}
+\NormalTok{fig2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ shp_df) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =}\NormalTok{ n), }\DataTypeTok{color=}\StringTok{'gray50'}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.01}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_gradientn}\NormalTok{(}
+    \DataTypeTok{name =}\NormalTok{ title,}
+    \DataTypeTok{colours=}\NormalTok{ colors, }\DataTypeTok{na.value =} \StringTok{"gray90"}\NormalTok{,}
+    \DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(min,max), }\DataTypeTok{breaks =}\NormalTok{ breaks) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{guides}\NormalTok{(}\DataTypeTok{fill =} \KeywordTok{guide_legend}\NormalTok{(}\DataTypeTok{label.hjust =} \DecValTok{0}\NormalTok{, }\DataTypeTok{label =}\NormalTok{ T,}
+                             \DataTypeTok{reverse =}\NormalTok{ T, }\DataTypeTok{title =}\NormalTok{ title))}\OperatorTok{+}
+\StringTok{  }\NormalTok{map_theme}
+\NormalTok{fig2}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dir}
+\NormalTok{fname <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(fig.dir, }\StringTok{'Fig_map_country_bio.jpg'}\NormalTok{); fname}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 1 feature and 2 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -9.098877 ymin: 58.02095 xmax: 33.6293 ymax: 80.47783
+## CRS:            +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+##     name iso_a3                       geometry
+## 1 Norway    NOR MULTIPOLYGON (((5.08584 60....
+##  [1] NA  3  2  9  4  1 18 11  5  8  6  7 13
+## [1] 18
+## [1] 1
+## [1]  1  3  5  7  9 11 13 15 17
+## [1] 9
+##  [1]  1  2  3  4  5  6  7  8  9 11 13 18
+## [1] 12
+##  [1] "#F7FCF5" "#EBF7E7" "#DCF1D7" "#C9EAC2" "#B2E0AB" "#98D594" "#7CC77C"
+##  [8] "#5CB86A" "#3EA85A" "#2B934B" "#16793E" "#005A32"
+##  [1] NA  1  3  8  2 19  4 10  5  6  7 13
+## [1] 19
+## [1] 1
+##  [1]  1  3  5  7  9 11 13 15 17 19
+## [1] 10
+##  [1]  1  2  3  4  5  6  7  8 10 13 19
+## [1] 11
+##  [1] "#FCFBFD" "#F2F1F7" "#E6E5F1" "#D6D7E9" "#C2C2DF" "#ADABD2" "#9794C5"
+##  [8] "#827FBB" "#7262AC" "#603E9A" "#4A1486"
+## [1] "C:/Users/Ciara Hovis/Desktop/GradSchool/Co-author papers/MetaBD/MCBD_Root"
+## [1] "C:/Users/Ciara Hovis/Desktop/GradSchool/Co-author papers/MetaBD/MCBD_Root/images/Fig_map_country_bio.jpg"
+\end{verbatim}
+
+Continent distribution, study level (n=131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries)}
+
+\CommentTok{# install.packages("jsonlite", repos="https://cran.rstudio.com/")}
+\KeywordTok{library}\NormalTok{(}\StringTok{"jsonlite"}\NormalTok{)}
+\NormalTok{json_file <-}\StringTok{ 'https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/datapackage.json'}
+\NormalTok{json_data <-}\StringTok{ }\KeywordTok{fromJSON}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\KeywordTok{readLines}\NormalTok{(json_file), }\DataTypeTok{collapse=}\StringTok{""}\NormalTok{))}
+\CommentTok{# get list of all resources:}
+\KeywordTok{print}\NormalTok{(json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{name)}
+
+\CommentTok{# print all tabular data(if exists any) to 'data'}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{datahub}\OperatorTok{$}\NormalTok{type))\{}
+  \ControlFlowTok{if}\NormalTok{(json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{datahub}\OperatorTok{$}\NormalTok{type[i]}\OperatorTok{==}\StringTok{'derived/csv'}\NormalTok{)\{}
+\NormalTok{    path_to_file =}\StringTok{ }\NormalTok{json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{path[i]}
+\NormalTok{    data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{url}\NormalTok{(path_to_file))}
+    \KeywordTok{print}\NormalTok{(data)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\NormalTok{cont <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(data}\OperatorTok{$}\NormalTok{Continent_Name,data}\OperatorTok{$}\NormalTok{Country_Name,data}\OperatorTok{$}\NormalTok{Three_Letter_Country_Code)}
+\NormalTok{cont <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(cont)}
+
+\CommentTok{# Match continent and country name to biodiversity countries}
+\KeywordTok{names}\NormalTok{(cont)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"continent"}\NormalTok{,}\StringTok{"ctr_name"}\NormalTok{,}\StringTok{"ctr_code"}\NormalTok{)}
+
+\NormalTok{ctr_bio}\OperatorTok{$}\NormalTok{continent <-}\StringTok{ }\NormalTok{cont}\OperatorTok{$}\NormalTok{continent[}\KeywordTok{match}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries,cont}\OperatorTok{$}\NormalTok{ctr_code)]  }\CommentTok{# add continent name}
+\NormalTok{ctr_bio}\OperatorTok{$}\NormalTok{ctr_name <-}\StringTok{ }\NormalTok{cont}\OperatorTok{$}\NormalTok{ctr_name[}\KeywordTok{match}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries,cont}\OperatorTok{$}\NormalTok{ctr_code)]  }\CommentTok{# add country name}
+
+
+\NormalTok{BUC <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ ctr_bio}\OperatorTok{$}\NormalTok{n,}
+                               \DataTypeTok{by =} \KeywordTok{list}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{continent),}
+                               \DataTypeTok{FUN =}\NormalTok{ sum)}
+\NormalTok{zz <-}\StringTok{ }\NormalTok{ctr_bio[}\OperatorTok{-}\KeywordTok{which}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries }\OperatorTok{==}\StringTok{ 'BRA'} \OperatorTok{|}
+\StringTok{                    }\NormalTok{ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries }\OperatorTok{==}\StringTok{ 'USA'} \OperatorTok{|}
+\StringTok{                    }\NormalTok{ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries }\OperatorTok{==}\StringTok{ 'CHN'}\NormalTok{),]}
+\NormalTok{BUC.no <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ zz}\OperatorTok{$}\NormalTok{n,}
+                               \DataTypeTok{by =} \KeywordTok{list}\NormalTok{(zz}\OperatorTok{$}\NormalTok{continent),}
+                               \DataTypeTok{FUN =}\NormalTok{ sum)}
+\end{Highlighting}
+\end{Shaded}
+
+heat map table of countries and flow type
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{## Percentage of telecoupling}
+
+\NormalTok{k <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(df99}\OperatorTok{$}\NormalTok{biodiv_countries, df99}\OperatorTok{$}\NormalTok{tele_cat))}
+\KeywordTok{colnames}\NormalTok{(k) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'ctr'}\NormalTok{, }\StringTok{'tc'}\NormalTok{)}
+
+\NormalTok{ctr_ls <-}\StringTok{ }\NormalTok{ctr_bio[}\DecValTok{1}\NormalTok{]}
+
+\NormalTok{k}\OperatorTok{$}\NormalTok{ctr[k}\OperatorTok{$}\NormalTok{ctr }\OperatorTok{==}\StringTok{ ""}\NormalTok{] <-}\StringTok{ }\OtherTok{NA}
+
+\NormalTok{k}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(k}\OperatorTok{$}\NormalTok{tc)}
+
+\NormalTok{poo <-}\StringTok{ }\KeywordTok{separate_rows}\NormalTok{(k, tc, }\DataTypeTok{sep=}\StringTok{";"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{doo <-}\KeywordTok{separate_rows}\NormalTok{(poo, ctr, }\DataTypeTok{sep=}\StringTok{";"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{)}
+
+
+\NormalTok{woo <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(doo}\OperatorTok{$}\NormalTok{ctr, }\StringTok{'_'}\NormalTok{, doo}\OperatorTok{$}\NormalTok{tc)}
+\NormalTok{woot <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(woo))}
+
+\NormalTok{ok <-}\StringTok{ }\KeywordTok{str_split_fixed}\NormalTok{(woot}\OperatorTok{$}\NormalTok{woo, }\StringTok{'_'}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\NormalTok{woot}\OperatorTok{$}\NormalTok{ctr <-}\StringTok{ }\NormalTok{ok[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{woot}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\NormalTok{ok[,}\DecValTok{2}\NormalTok{]}
+
+
+\CommentTok{### count by ctr and tc}
+\NormalTok{booty <-}\StringTok{ }\NormalTok{doo }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(ctr, tc) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{### how many tcs in total for each ctr?}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(ctr) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{add_tally}\NormalTok{(}\DataTypeTok{name =} \StringTok{'total_tc'}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\CommentTok{### the number of each tc}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{group_by}\NormalTok{(ctr, total_tc) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{count}\NormalTok{(tc, }\DataTypeTok{name =} \StringTok{'n_tc'}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(ctr) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pct_tc =}\NormalTok{ n_tc}\OperatorTok{/}\NormalTok{total_tc}\OperatorTok{*}\DecValTok{100}\NormalTok{)}
+
+
+\NormalTok{booty_check <-}\StringTok{  }\NormalTok{booty }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{group_by}\NormalTok{(ctr) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{sum =} \KeywordTok{sum}\NormalTok{(pct_tc, }\DataTypeTok{na.rm =}\NormalTok{ T))}
+
+\NormalTok{booty2 <-}\StringTok{ }\NormalTok{booty[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{booty}\OperatorTok{$}\NormalTok{total_tc,booty}\OperatorTok{$}\NormalTok{ctr, }\OperatorTok{-}\NormalTok{booty}\OperatorTok{$}\NormalTok{n_tc),]}
+
+\CommentTok{# Load data of number of studies by taxa and flow}
+\NormalTok{nr_ctr <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ booty2}\OperatorTok{$}\NormalTok{n_tc,}
+                               \DataTypeTok{by =} \KeywordTok{list}\NormalTok{(booty2}\OperatorTok{$}\NormalTok{ctr,booty2}\OperatorTok{$}\NormalTok{tc),}
+                               \DataTypeTok{FUN =}\NormalTok{ sum)}
+
+
+
+\CommentTok{# Rename columns}
+
+\KeywordTok{names}\NormalTok{(nr_ctr)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ctr"}\NormalTok{,}\StringTok{"tc"}\NormalTok{,}\StringTok{"count"}\NormalTok{)}
+
+\CommentTok{# Fill the gaps}
+
+\NormalTok{mat_nr_ctr <-}\KeywordTok{dcast}\NormalTok{(nr_ctr, ctr }\OperatorTok{~}\StringTok{ }\NormalTok{tc, }\DataTypeTok{value.var =} \StringTok{'count'}\NormalTok{)}
+\NormalTok{filled_nr_ctr <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(mat_nr_ctr, }\DataTypeTok{id=}\KeywordTok{c}\NormalTok{(}\StringTok{"ctr"}\NormalTok{))}
+\NormalTok{filled_nr_ctr[}\KeywordTok{is.na}\NormalTok{(filled_nr_ctr)] <-}\StringTok{ }\DecValTok{0}
+\KeywordTok{names}\NormalTok{(filled_nr_ctr)[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"tc"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\CommentTok{# Subset for countries >5 total tc}
+
+\NormalTok{filled_nr_ctr}\OperatorTok{$}\NormalTok{n_tc <-}\StringTok{ }\NormalTok{booty2}\OperatorTok{$}\NormalTok{total_tc[}\KeywordTok{match}\NormalTok{(filled_nr_ctr}\OperatorTok{$}\NormalTok{ctr, booty2}\OperatorTok{$}\NormalTok{ctr)]}
+\NormalTok{filled_nr_ctr<-}\StringTok{ }\NormalTok{filled_nr_ctr[}\KeywordTok{which}\NormalTok{(filled_nr_ctr}\OperatorTok{$}\NormalTok{n_tc }\OperatorTok{>}\StringTok{ }\DecValTok{5}\NormalTok{),]}
+\NormalTok{filled_nr_ctr<-filled_nr_ctr[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{filled_nr_ctr}\OperatorTok{$}\NormalTok{n_tc),]}
+
+
+\CommentTok{# Change order of factor levels for consistency with other figures}
+
+\NormalTok{filled_nr_ctr}\OperatorTok{$}\NormalTok{ctr <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(filled_nr_ctr}\OperatorTok{$}\NormalTok{ctr,}\DataTypeTok{levels=}\KeywordTok{c}\NormalTok{(}\KeywordTok{unique}\NormalTok{(filled_nr_ctr}\OperatorTok{$}\NormalTok{ctr[}\KeywordTok{order}\NormalTok{(filled_nr_ctr}\OperatorTok{$}\NormalTok{n_tc)])))}
+
+\NormalTok{filled_nr_ctr}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(filled_nr_ctr}\OperatorTok{$}\NormalTok{tc,}\DataTypeTok{levels=}\KeywordTok{c}\NormalTok{(}\StringTok{"Energy Transfer"}\NormalTok{,}\StringTok{"Investment"}\NormalTok{,}\StringTok{"Knowledge Transfer"}\NormalTok{,}
+                                                      \StringTok{"Migration (human)"}\NormalTok{,}\StringTok{"Migration (non-human)"}\NormalTok{,}\StringTok{"Species Dispersal"}\NormalTok{,}
+                                                      \StringTok{"Tourism"}\NormalTok{,}\StringTok{"Trade"}\NormalTok{,}\StringTok{"Waste Transfer"}\NormalTok{,}\StringTok{"Water Transfer"}\NormalTok{))}
+
+        
+\CommentTok{# Heatmap plot}
+
+
+\NormalTok{heatmap_ctr <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(filled_nr_ctr,}
+                      \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{tc, }\DataTypeTok{y=}\NormalTok{ctr, }\DataTypeTok{fill=}\NormalTok{count)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_tile}\NormalTok{(}\DataTypeTok{color =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ count )) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{""}\NormalTok{,}\DataTypeTok{y=}\StringTok{""}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme_grey}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_fill_gradientn}\NormalTok{(}\DataTypeTok{colours =} \KeywordTok{c}\NormalTok{(}\StringTok{'#FFFFFF'}\NormalTok{,}\StringTok{'gray30'}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{),}
+                      \DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{),}
+                      \DataTypeTok{plot.background=}\KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{plot.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.title=} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.text.x.top =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{,}
+                                                     \DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                      \DataTypeTok{axis.text.y.left =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{360}\NormalTok{, }\DataTypeTok{vjust=}\FloatTok{0.5}\NormalTok{,}
+                                                      \DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                      \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{),}
+                      \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{"lines"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{position =} \StringTok{"top"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"number of entries"}\NormalTok{)}
+
+\NormalTok{heatmap_ctr}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\hypertarget{telecoupling-impact-by-taxa}{%
+\section{5. Telecoupling Impact by
+Taxa}\label{telecoupling-impact-by-taxa}}
+
+Note that there are five papers that reported more than one taxa. The
+maj\_effect is not accurate for those five papers currently. This will
+be addressed soon.
+
+\begin{itemize}
+\tightlist
+\item
+  When studies reported significant results, the majority were
+  significantly detrimental for biodiversity.
+\item
+  Studies that quantified impacts to mammals were overwhelmingly
+  detrimental compared to the other groups.
+\item
+  Birds and plants had more beneficial impacts, relative to the other
+  groups.
+\item
+  Amphibians were greatly underrepresented.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(s23_maj, .(taxa, maj_eff), summarize,}
+          \CommentTok{# total count of entries     }
+          \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(taxa)) }\OperatorTok{%>%}
+\StringTok{          }\CommentTok{# percents of effects within totals per taxa}
+\StringTok{          }\KeywordTok{group_by}\NormalTok{(taxa) }\OperatorTok{%>%}
+\StringTok{            }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{perc_per_taxa=}\KeywordTok{map}\NormalTok{(data, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{count}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{$}\NormalTok{count))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(data, perc_per_taxa))}
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)}
+
+\CommentTok{# Stack plot (count)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff, }\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{x=}\NormalTok{taxa)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Stack plot (percentage)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff, }\DataTypeTok{y=}\NormalTok{perc_per_taxa, }\DataTypeTok{x=}\NormalTok{taxa)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{telecoupling-impact-by-habitat}{%
+\section{6. Telecoupling Impact by
+Habitat}\label{telecoupling-impact-by-habitat}}
+
+\begin{itemize}
+\tightlist
+\item
+  Terrestrial habitats were studied the most.
+\item
+  All habitats had more detrimental impacts on their respective
+  biodiversity metrics.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(s23_maj, .(hab, maj_eff), summarize,}
+          \CommentTok{# total count of entries     }
+          \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(hab)) }\OperatorTok{%>%}
+\StringTok{          }\CommentTok{# percents of effects within totals per hab}
+\StringTok{          }\KeywordTok{group_by}\NormalTok{(hab) }\OperatorTok{%>%}
+\StringTok{            }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{perc_per_hab=}\KeywordTok{map}\NormalTok{(data, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{count}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{$}\NormalTok{count))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(data, perc_per_hab))}
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_hab.csv'), row.names = TRUE)}
+
+\CommentTok{# Stack plot (count)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff, }\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{x=}\NormalTok{hab)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+
+\CommentTok{# view}
+\NormalTok{  quick_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Stack plot (percent)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff, }\DataTypeTok{y=}\NormalTok{perc_per_hab, }\DataTypeTok{x=}\NormalTok{hab)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+\NormalTok{quick_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\hypertarget{telecoupling-impact-by-flow}{%
+\section{7. Telecoupling Impact by
+Flow}\label{telecoupling-impact-by-flow}}
+
+Duplicate rows with multiple flow types. This means that effects and
+other results will be \emph{duplicated} as well.
+
+The reason for doing this is so that we can attribute biodiversity
+impacts to the specific flows that may have been studied together, and
+whose individual impacts cannot be decoupled.
+
+\begin{itemize}
+\tightlist
+\item
+  Tourism and Trade were the most represented in our sample and both had
+  majority detrimental imapcts reported.
+\item
+  The flow categories that showed somewhat beneficial impacts where
+  Investment, Water Transfer, and Knowledge Transfer.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# set as character}
+\NormalTok{  s23_maj}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(s23_maj}\OperatorTok{$}\NormalTok{tc)}
+
+\CommentTok{# show original length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Original number of rows:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(s23_maj)))}
+
+\CommentTok{# split multiple flows listed in a row into other new rows}
+\NormalTok{  tcRep_maj <-}\StringTok{ }\KeywordTok{separate_rows}\NormalTok{(s23_maj, tc, }\DataTypeTok{sep=}\StringTok{";"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{  tcRep_maj}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(tcRep_maj}\OperatorTok{$}\NormalTok{tc)}
+
+\CommentTok{# show new length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Number of rows after separating multiple flows per paper:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(tcRep_maj)))}
+
+\CommentTok{# show levels}
+\CommentTok{#  summary(tcRep$tc)}
+
+\CommentTok{# get summary}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(tcRep_maj, .(tc, maj_eff), summarize,}
+          \CommentTok{# total count of entries     }
+          \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(tc)) }\OperatorTok{%>%}
+\StringTok{          }\CommentTok{# percents of effects within totals per tc}
+\StringTok{          }\KeywordTok{group_by}\NormalTok{(tc) }\OperatorTok{%>%}
+\StringTok{            }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{perc_per_tc=}\KeywordTok{map}\NormalTok{(data, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{count}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{$}\NormalTok{count))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(data, perc_per_tc))}
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),row.names = TRUE)}
+  
+\CommentTok{# Stack plot (count)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff, }\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{x=}\NormalTok{tc)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+
+
+\CommentTok{# view}
+\NormalTok{  quick_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+\begin{verbatim}
+## [1] "Original number of rows: 127"
+## [1] "Number of rows after separating multiple flows per paper: 143"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Stack plot (percent)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff, }\DataTypeTok{y=}\NormalTok{perc_per_tc, }\DataTypeTok{x=}\NormalTok{tc)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+
+\NormalTok{quick_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+\hypertarget{telecoupling-impacts-by-metric-type-and-flow}{%
+\section{8. Telecoupling impacts by metric type and
+flow}\label{telecoupling-impacts-by-metric-type-and-flow}}
+
+Replicate TC flows by entry
+
+\begin{itemize}
+\tightlist
+\item
+  This figure shows the direction of telecoupling impacts at the entry
+  level (i.e.~all 700+ metrics recorded)
+\item
+  Most studies report multiple species richness and abundance.
+\item
+  Most habitat metrics were significantly detrimental, except in the
+  case of knowledge transfer telecouplings.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# set as character}
+\NormalTok{  s23}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(s23}\OperatorTok{$}\NormalTok{tc)}
+\NormalTok{  poo<-s23[}\KeywordTok{is.na}\NormalTok{(s23}\OperatorTok{$}\NormalTok{tc),]}
+  
+  
+\CommentTok{# show original length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Original number of rows:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(s23)))}
+
+\CommentTok{# split multiple flows listed in a row into other new rows}
+\NormalTok{  tcRep <-}\StringTok{ }\KeywordTok{separate_rows}\NormalTok{(s23, tc, }\DataTypeTok{sep=}\StringTok{";"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{  tcRep}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(tcRep}\OperatorTok{$}\NormalTok{tc)}
+
+\CommentTok{# show new length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Number of rows after separating multiple flows per paper:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(tcRep)))}
+  
+\NormalTok{  tcRep_maj <-}\StringTok{ }\NormalTok{tcRep[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(tcRep}\OperatorTok{$}\NormalTok{paper_id),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Original number of rows: 731"
+## [1] "Number of rows after separating multiple flows per paper: 771"
+\end{verbatim}
+
+Convert to long format, where metric is indicated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# subset}
+\NormalTok{  metrics <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(tcRep,}
+                    \DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'entry_id'}\NormalTok{,}
+                            \StringTok{'taxa'}\NormalTok{,}\StringTok{'tc'}\NormalTok{,}\StringTok{'sig_effect'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_1sp'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_multsp'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_habitat'}\NormalTok{))}
+\CommentTok{# melt}
+\NormalTok{  metrics_long <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(metrics, }\DataTypeTok{id.vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'entry_id'}\NormalTok{,}
+                            \StringTok{'taxa'}\NormalTok{,}\StringTok{'tc'}\NormalTok{,}\StringTok{'sig_effect'}\NormalTok{))}
+  
+\CommentTok{# remove NA fields}
+\NormalTok{  metrics_long <-}\StringTok{ }\NormalTok{metrics_long[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{value),]}
+
+\CommentTok{# change colnames}
+  \KeywordTok{colnames}\NormalTok{(metrics_long)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ 'metric_type'}
+  \KeywordTok{colnames}\NormalTok{(metrics_long)[}\DecValTok{7}\NormalTok{] <-}\StringTok{ 'metric'}
+
+
+\CommentTok{# change levels}
+  \KeywordTok{levels}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric_type) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Single species'}\NormalTok{,}
+                                        \StringTok{'Multiple species'}\NormalTok{,}
+                                        \StringTok{'Habitat'}\NormalTok{)}
+
+  \KeywordTok{levels}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+
+\CommentTok{# remove parentheses}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s*}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{([^}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)]+}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{, }\StringTok{''}\NormalTok{,}
+                          \KeywordTok{as.character}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+
+\CommentTok{# capitalize each word}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\NormalTok{tools}\OperatorTok{::}\KeywordTok{toTitleCase}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric)}
+  
+\CommentTok{# adjust name}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"With-in"}\NormalTok{, }\StringTok{'Within'}\NormalTok{,}
+                        \KeywordTok{as.character}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+  
+\CommentTok{# change levels, moving other to the end}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric,}
+                                \KeywordTok{c}\NormalTok{(}\StringTok{"Abundance/Density"}\NormalTok{,}
+                                   \StringTok{"Amount"}\NormalTok{,}
+                                   \StringTok{"Composition"}\NormalTok{,}
+                                   \StringTok{"Detection"}\NormalTok{,}
+                                   \StringTok{"Diversity Index"}\NormalTok{,}
+                                   \StringTok{"Evenness"}\NormalTok{,}
+                                   \StringTok{"Movement"}\NormalTok{,}
+                                   \StringTok{"Occurrence"}\NormalTok{,}
+                                   \StringTok{"Population Dynamics"}\NormalTok{,}
+                                   \StringTok{"Quality"}\NormalTok{,}
+                                   \StringTok{"Richness"}\NormalTok{,}
+                                   \StringTok{"Within Species Diversity"}
+\NormalTok{                                  ))}
+  
+\CommentTok{# check levels}
+  \KeywordTok{levels}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+
+\CommentTok{# get summary}
+\NormalTok{  metric_flow <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(metrics_long,}
+\NormalTok{                       .(metric_type, metric, tc, sig_effect),}
+\NormalTok{                       summarize,}
+                      \CommentTok{# total count of entries     }
+                        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(metric))}
+
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(metric_flow, paste0(tab.dir,'synthesis_sig_effects_metric_and_flow.csv'),row.names = TRUE)}
+
+\CommentTok{# sig_effects level change}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{sig_effect <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s*}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{([^}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)]+}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{, }\StringTok{''}\NormalTok{,}
+                          \KeywordTok{as.character}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{sig_effect))}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{sig_effect <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{sig_effect,}
+                             \KeywordTok{c}\NormalTok{( }\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Detrimental"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\CommentTok{# telecoupling level change}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{tc,}
+                                \KeywordTok{c}\NormalTok{(}\StringTok{"Energy Transfer"}\NormalTok{,}\StringTok{"Investment"}\NormalTok{,}\StringTok{"Knowledge Transfer"}\NormalTok{,}
+                                 \StringTok{"Migration (human)"}\NormalTok{,}\StringTok{"Migration (non-human)"}\NormalTok{,}
+                                 \StringTok{"Species Dispersal"}\NormalTok{,}\StringTok{"Tourism"}\NormalTok{,}\StringTok{"Trade"}\NormalTok{,}\StringTok{"Waste Transfer"}\NormalTok{,}\StringTok{"Water Transfer"}
+\NormalTok{                                ))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Abundance/Density (biomass, mass, number of individuals, individuals/unit area)"
+##  [2] "Abundance/Density (number of individuals, individuals/unit area, biomass)"      
+##  [3] "Amount (e.g. land use change from non-habitat to habitat)"                      
+##  [4] "Composition (what species?)"                                                    
+##  [5] "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"           
+##  [6] "Evenness"                                                                       
+##  [7] "Movement"                                                                       
+##  [8] "Occurrence"                                                                     
+##  [9] "Occurrence (presence, range, persistence, etc., NOT detection)"                 
+## [10] "Population dynamics (survival, fitness, reproduction, mortality, etc.)"         
+## [11] "Quality (pollution, connectence, disturbance, etc.)"                            
+## [12] "Richness (number of species)"                                                   
+## [13] "With-in species diversity (genetic diversity, age structure, etc.)"             
+##  [1] "Abundance/Density"        "Amount"                  
+##  [3] "Composition"              "Detection"               
+##  [5] "Diversity Index"          "Evenness"                
+##  [7] "Movement"                 "Occurrence"              
+##  [9] "Population Dynamics"      "Quality"                 
+## [11] "Richness"                 "Within Species Diversity"
+\end{verbatim}
+
+Figure code
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Matrix of pie charts}
+\NormalTok{  sig_effect_cols <-}\StringTok{ }\NormalTok{sigeff_col}
+
+\NormalTok{  metric_flow_fig <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(metric_flow) }\OperatorTok{+}\StringTok{ }
+\StringTok{                    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\StringTok{''}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ count, }\DataTypeTok{fill =}\NormalTok{ sig_effect) }\OperatorTok{+}
+\StringTok{                    }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{'fill'}\NormalTok{,}
+                             \DataTypeTok{stat=}\StringTok{'identity'}\NormalTok{, }\DataTypeTok{width =} \DecValTok{1}\NormalTok{, }\DataTypeTok{size =} \FloatTok{0.01}\NormalTok{) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# activate for vertical or horizontal version}
+\StringTok{                      }\KeywordTok{facet_grid}\NormalTok{(metric_type }\OperatorTok{~}\StringTok{ }\NormalTok{metric }\OperatorTok{~}\StringTok{ }\NormalTok{tc, }\DataTypeTok{switch=}\StringTok{'y'}\NormalTok{) }\OperatorTok{+}\StringTok{ }\CommentTok{#horizontal}
+\StringTok{                      }\CommentTok{#facet_grid(tc ~ metric, switch='y') +  #vertical}
+\StringTok{                    }\CommentTok{# convert to pie chart}
+\StringTok{                      }\KeywordTok{coord_polar}\NormalTok{(}\DataTypeTok{theta =} \StringTok{'y'}\NormalTok{) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# colors}
+\StringTok{                      }\KeywordTok{scale_fill_manual}\NormalTok{(}
+                        \DataTypeTok{values=}\NormalTok{sig_effect_cols,}
+                        \DataTypeTok{guide =} \KeywordTok{guide_legend}\NormalTok{(}\DataTypeTok{reverse =} \OtherTok{FALSE}\NormalTok{))  }\OperatorTok{+}\StringTok{ }
+\StringTok{                        }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{position=}\StringTok{'right'}\NormalTok{,}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                    }\CommentTok{# style}
+\StringTok{                      }\KeywordTok{theme_gray}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}
+                        \DataTypeTok{axis.title=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.line=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.ticks=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.text=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid.major =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid.minor =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(),}
+                        \DataTypeTok{plot.title=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{strip.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{,}
+                                          \DataTypeTok{angle=}\DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                        \DataTypeTok{strip.text.y.left =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{,}
+                                          \DataTypeTok{angle=}\DecValTok{0}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                        \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{'white'}\NormalTok{),}
+                        \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{'lines'}\NormalTok{)}
+\NormalTok{                        ) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# labels}
+\StringTok{                      }\KeywordTok{ylab}\NormalTok{(}\StringTok{''}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{xlab}\NormalTok{(}\StringTok{''}\NormalTok{)}
+                
+
+
+\CommentTok{# display image}
+\NormalTok{  metric_flow_fig}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-32-1.pdf}
+
+Heatmap
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Load data of number of studies by taxa and flow}
+\NormalTok{nr_metric_tele <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ metric_flow}\OperatorTok{$}\NormalTok{count,}
+                               \DataTypeTok{by =} \KeywordTok{list}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{metric_type,metric_flow}\OperatorTok{$}\NormalTok{metric, metric_flow}\OperatorTok{$}\NormalTok{tc),}
+                               \DataTypeTok{FUN =}\NormalTok{ sum)}
+
+ 
+
+\CommentTok{# Rename columns}
+
+\KeywordTok{names}\NormalTok{(nr_metric_tele)[}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"type"}\NormalTok{,}\StringTok{"metric"}\NormalTok{, }\StringTok{"telecoupling"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\NormalTok{nr_metric_tele}\OperatorTok{$}\NormalTok{metricType <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(nr_metric_tele}\OperatorTok{$}\NormalTok{type,nr_metric_tele}\OperatorTok{$}\NormalTok{metric)   }
+
+\CommentTok{# Fill the gaps}
+
+\NormalTok{mat_nr_metric_tele <-}\KeywordTok{dcast}\NormalTok{(nr_metric_tele, metricType }\OperatorTok{~}\StringTok{ }\NormalTok{telecoupling, }\DataTypeTok{value.var =} \StringTok{'count'}\NormalTok{)}
+\NormalTok{filled_nr_metric_tele <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(mat_nr_metric_tele, }\DataTypeTok{id=}\KeywordTok{c}\NormalTok{(}\StringTok{"metricType"}\NormalTok{))}
+\NormalTok{filled_nr_metric_tele[}\KeywordTok{is.na}\NormalTok{(filled_nr_metric_tele)] <-}\StringTok{ }\DecValTok{0}
+\KeywordTok{names}\NormalTok{(filled_nr_metric_tele)[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"telecoupling"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\CommentTok{# Create 'count' categories for representation}
+
+\NormalTok{filled_nr_metric_tele}\OperatorTok{$}\NormalTok{count_factor <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{count,}
+                                          \DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{20}\NormalTok{,}\DecValTok{50}\NormalTok{,}\DecValTok{100}\NormalTok{,}\KeywordTok{max}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{count,}\DataTypeTok{na.rm=}\NormalTok{T)),}
+                                          \DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"0"}\NormalTok{,}\StringTok{"1-5"}\NormalTok{,}\StringTok{"5-10"}\NormalTok{,}\StringTok{"10-20"}\NormalTok{,}\StringTok{"20-50"}\NormalTok{,}\StringTok{"50-100"}\NormalTok{,}\StringTok{">100"}\NormalTok{))}
+
+
+\CommentTok{# Change order of factor levels for consistency with other figures}
+
+\NormalTok{filled_nr_metric_tele}\OperatorTok{$}\NormalTok{metricType <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{metricType)}
+
+\NormalTok{filled_nr_metric_tele}\OperatorTok{$}\NormalTok{metricType <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{metricType,}
+          \DataTypeTok{levels=}\KeywordTok{c}\NormalTok{(}\StringTok{"Habitat Quality"}\NormalTok{,}
+                   \StringTok{"Habitat Amount"}\NormalTok{,}
+                   \StringTok{"Multiple species Richness"}\NormalTok{,}
+                   \StringTok{"Multiple species Population Dynamics"}\NormalTok{,}
+                   \StringTok{"Multiple species Occurrence"}\NormalTok{,}
+                   \StringTok{"Multiple species Evenness"}\NormalTok{,}
+                   \StringTok{"Multiple species Diversity Index"}\NormalTok{,}
+                   \StringTok{"Multiple species Composition"}\NormalTok{,}
+                   \StringTok{"Multiple species Abundance/Density"}\NormalTok{,}
+                   \StringTok{"Single species Within Species Diversity"}\NormalTok{,}
+                   \StringTok{"Single species Population Dynamics"}\NormalTok{,}
+                   \StringTok{"Single species Occurrence"}\NormalTok{,}
+                   \StringTok{"Single species Movement"}\NormalTok{,}
+                   \StringTok{"Single species Abundance/Density"}
+\NormalTok{          ))}
+\CommentTok{# Heatmap plot}
+
+\NormalTok{heatmap_telemetric <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(filled_nr_metric_tele,}
+                      \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{telecoupling, }\DataTypeTok{y=}\NormalTok{metricType, }\DataTypeTok{fill=}\NormalTok{count_factor)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_tile}\NormalTok{(}\DataTypeTok{color =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\KeywordTok{c}\NormalTok{(}\StringTok{"grey90"}\NormalTok{,}\StringTok{"#BCDDF5"}\NormalTok{,}\StringTok{"#8FCBF5"}\NormalTok{,}\StringTok{"#4EA6E6"}\NormalTok{,}
+                                               \StringTok{"#4E91CC"}\NormalTok{,}\StringTok{"#3F76A6"}\NormalTok{,}\StringTok{"#274866"}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{""}\NormalTok{,}\DataTypeTok{y=}\StringTok{""}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme_grey}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{),}
+                      \DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{face=}\StringTok{"bold"}\NormalTok{),}
+                      \DataTypeTok{plot.background=}\KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{plot.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.title=} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.text.x.top =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{,}
+                                                     \DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                      \DataTypeTok{axis.text.y.left =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{360}\NormalTok{, }\DataTypeTok{vjust=}\FloatTok{0.5}\NormalTok{,}
+                                                      \DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                      \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{),}
+                      \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{"lines"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{position =} \StringTok{"top"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"number of entries"}\NormalTok{)}
+
+\NormalTok{heatmap_telemetric}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_files/figure-latex/unnamed-chunk-33-1.pdf}
+
+\end{document}
