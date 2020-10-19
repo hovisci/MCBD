@@ -1,6 +1,6 @@
 ---
 author: "Ciara Hovis & Veronica F. Frans, CSIS Lab, Michigan State University"
-date: "May 30, 2020 (Updated: September 16, 2020)"
+date: "May 30, 2020 (Updated: October 19, 2020)"
 output: 
   html_document:
     keep_tex: yes
@@ -178,7 +178,7 @@ table(not.eval$effect)
     else if(s23$effect[i] == 'Negative (detrimental)' &&
        (s23$significant[i] == 'TRUE' || s23$significant[i] == 'Not evaluated') )
     {
-    s23$sig_effect[i] = 'Detrimental';
+    s23$sig_effect[i] = 'Harmful';
     }
 
     # changed impact AND True/NotEval Sig == CHANGED
@@ -228,7 +228,7 @@ maj_effect <- s23 %>%
     add_tally(name = 'total_sigeff') %>%
     dplyr::ungroup() %>%
     dplyr::group_by(paper_id, total_sigeff) %>%
-    dplyr::mutate(maj_effect = Mode(sig_effect))
+    dplyr::mutate(maj_effect = Mode(sig_effect)) %>%
     arrange(paper_id) 
 
 maj_effect2 <- s23 %>%
@@ -271,28 +271,78 @@ s23$maj_eff <- maj_effect3$V2[match(s23$paper_id, maj_effect3$V1)]
 
 ```
 
-Determine Majority effect by paper and taxa  (NEED TO FINISH)
+Determine Majority effect by paper and taxa  
 
 ```{r}
 # repeat taxa rows
 
 taxID <- s23
-taxID$taxID <- paste0(taxID$paper_id,'_',taxID$taxa)
+taxID$tax_ID <- paste0(taxID$paper_id,'_',taxID$taxa)
 nrow(taxID)
 length(unique(taxID$paper_id))    # number of papers n=127
-length(unique(taxID$taxID))       # number of paper:taxa n=132
-length(unique(taxID$taxID)) - length(unique(taxID$paper_id))  # number of papers with multiple taxa (n=5)       
+length(unique(taxID$tax_ID))       # number of paper:taxa n=132
+length(unique(taxID$tax_ID)) - length(unique(taxID$paper_id))  # number of papers with multiple taxa (n=5)       
 
-q <- as.data.frame(table(unique(taxID$taxID))) 
+q <- as.data.frame(table(unique(taxID$tax_ID))) 
 
 p <- q %>% tidyr::separate(Var1, c("ID"), extra='drop')
 
 q <-cbind(p,q)
 m <- as.data.frame(table(q$ID))
-n <- m[which(m$Freq >1),]
+n <- m[which(m$Freq >1),] # paper_ids reporting >1 taxa metric
 
 
-       
+# Determine sig_effect based on tax_ID, rather than paper_ID
+
+maj_effect_taxa <- taxID %>%
+    dplyr::select(tax_ID, sig_effect) %>%
+    ungroup() %>%
+    group_by(tax_ID) %>%
+    add_tally(name = 'total_sigeff') %>%
+    dplyr::ungroup() %>%
+    dplyr::group_by(tax_ID, total_sigeff) %>%
+    dplyr::mutate(maj_eff_taxa = Mode(sig_effect)) %>%
+    arrange(tax_ID) 
+
+maj_effect2_taxa <- taxID %>%
+    dplyr::select(tax_ID, sig_effect) %>%
+    ungroup() %>%
+    group_by(tax_ID) %>%
+    add_tally(name = 'total_sigeff') %>%
+    dplyr::ungroup() %>%
+    dplyr::group_by(tax_ID, total_sigeff) %>%
+    dplyr::count(sig_effect, name = 'n_sigeff') %>%
+    arrange(tax_ID) %>%
+    dplyr::mutate(pct_sigeff = n_sigeff/total_sigeff*100) %>% 
+    ungroup()
+
+taxID$maj_eff_taxa <- maj_effect_taxa$maj_eff_taxa[match(taxID$tax_ID,maj_effect_taxa$tax_ID)]
+
+maj_effect2_taxa$maj_eff_taxa <- NA
+maj.table.taxa <- as.data.frame(cbind(maj_effect_taxa$tax_ID, maj_effect_taxa$maj_eff_taxa))
+
+
+maj.table.taxa<-maj.table.taxa[!duplicated(maj.table.taxa),]
+
+
+maj_effect2_taxa$maj_eff_taxa <- maj.table.taxa$V2[match(maj_effect2_taxa$tax_ID,maj.table.taxa$V1)]
+
+# Deal with ties
+
+for (i in 1:nrow(maj_effect2_taxa)){
+  
+    x <- maj_effect2_taxa[which(maj_effect2_taxa$tax_ID == maj_effect2_taxa$tax_ID[i]), 5]
+    ifelse(var(x) == 0, maj_effect2_taxa$maj_eff_taxa[i] <- 'Mixed', maj_effect2_taxa$maj_eff_taxa[i] <- maj_effect2_taxa$maj_eff_taxa[i])
+  }
+
+write.csv(maj_effect2_taxa, paste0(tab.dir, 'maj_effect_taxa.csv'))
+
+maj_effect3 <- cbind(maj_effect2_taxa$tax_ID,maj_effect2_taxa$maj_eff_taxa)
+maj_effect3 <- as.data.frame(maj_effect3)
+maj_effect3 <- maj_effect3[!duplicated(maj_effect3),]
+
+taxID$maj_eff_taxa <- maj_effect3$V2[match(taxID$tax_ID, maj_effect3$V1)]
+
 
 
 ```
@@ -304,5 +354,7 @@ The table to be exported here will be used in another script for synthesis, data
 ```{r}
 # save as csv
   write.csv(s23, paste0(dat.dir,'s23.csv'), row.names = FALSE)
+  write.csv(taxID, paste0(dat.dir,'tax_eff.csv'), row.names = FALSE)
+
 ```
 

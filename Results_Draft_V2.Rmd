@@ -1,7 +1,7 @@
 ---
-title: "MCBD Results"
+title: "TCBD Results - Draft V2"
 author: "Ciara Hovis, CSIS Lab, Michigan State University"
-date: "6 October 2020 (Updated 7 Octobter 2020)"
+date: "14 October 2020"
 output:
   html_document:
     keep_tex: yes
@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
 
 # 1. Summary
 
-Synthesis of survey 2 and 3 results for metacoupling/biodiversity systematic review. It consists of response summaries and visualizations of the accepted papers.
+Synthesis of results for telacoupling/biodiversity systematic review. It consists of response summaries and visualizations of the accepted papers.
 
 # 2. R Setup
 
@@ -64,6 +64,7 @@ library('classInt')
 library('devtools')
 library('rnaturalearthhires')
 library('rgeos')
+library('ggnewscale')
 getwd()
 
 ### Directories & Set up ###
@@ -86,10 +87,14 @@ getwd()
  tab.check.dir <- paste0(dir,'/issues/',date(Sys.Date()),'/')
 
 # custom colors
+# Color blind     gray        orange    l.blue    green       yellow      d.blue    orange     pink                   
+ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+ 
   paper_col <- c('#DDCC77','#009988','#882255')
   effect_cols <- c('#9A709E','#999999','#A50026','#FDB366','#6EA6CD')
-  sigeff_col <- c("#00CC00", "#FF0000","#FF9933", "#C0C0C0")
-  majeff_col <- c("#00CC00","#FF0000","#FF9933","#2274CD","#C0C0C0")
+  
+  sigeff_col <- c("#009E73", "#D55E00","#E69F00", "#999999")
+  majeff_col <- c("#009E73","#D55E00","#E69F00","#56B4E9","#999999")
 
 ## customized theme (I just copied this from app3) ##
 
@@ -117,10 +122,16 @@ getwd()
   s2 <- read.csv(paste0(dat.dir,'survey2_cleaned.csv'))
   survey3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
   s23 <- read.csv(paste0(dat.dir,'s23.csv'))
+  
+  taxEff<- read.csv(paste0(dat.dir,'tax_eff.csv'))
+  
 # factor format
-  s23$maj_eff<-factor(s23$maj_eff, c("Beneficial","Detrimental","Changed", "Mixed","Not significant or unclear"))
+  s23$maj_eff<-factor(s23$maj_eff, c("Beneficial","Harmful","Changed", "Mixed","Not significant or unclear"))
   s23_maj <- s23[!duplicated(s23$paper_id),]
   
+  taxEff$maj_eff_taxa<-factor(taxEff$maj_eff_taxa, c("Beneficial","Harmful","Changed", "Mixed","Not significant or unclear"))
+  taxEff_maj <- taxEff[!duplicated(taxEff$tax_ID),]
+
 ```
 
 
@@ -777,19 +788,19 @@ heatmap_ctr
 ```
 
 
-# 5. Telecoupling Impact by Taxa
+# 5. Telecoupling Impact by Taxa 
 
-Note that there are five papers that reported more than one taxa. The maj_effect is not accurate for those five papers currently. This will be addressed soon. 
+Note that n=132, some papers reported metrics for multiple taxa. Maj_eff was determined based on paper and taxa for these figures. 
 
-- When studies reported significant results, the majority were significantly detrimental for biodiversity.
-- Studies that quantified impacts to mammals were overwhelmingly detrimental compared to the other groups. 
+- When studies reported significant results, the majority were significantly Harmful for biodiversity.
+- Studies that quantified impacts to mammals were overwhelmingly Harmful compared to the other groups. 
 - Birds and plants had more beneficial impacts, relative to the other groups.
-- Amphibians were greatly underrepresented. 
+- Amphibians were greatly underrepresented. Only one paper measured amphibian diversity separate from other groups. 
 
 
 ```{r}
 # get summary
-  a <- ddply(s23_maj, .(taxa, maj_eff), summarize,
+  a <- ddply(taxEff_maj, .(taxa, maj_eff_taxa), summarize,
           # total count of entries     
           count=length(taxa)) %>%
           # percents of effects within totals per taxa
@@ -801,31 +812,34 @@ Note that there are five papers that reported more than one taxa. The maj_effect
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)
 
 # Stack plot (count)
-  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=taxa)) + 
+  quick_plot <- ggplot(a, aes(fill=maj_eff_taxa, y=count, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                 scale_fill_manual(values=majeff_col) +
                 xlab("")
-
+quick_plot
 ```
 
 
 ```{r}
 # Stack plot (percentage)
-  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_taxa, x=taxa)) + 
+  quick_plot <- ggplot(a, aes(fill=maj_eff_taxa, y=perc_per_taxa, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                 scale_fill_manual(values=majeff_col) +
                 xlab("")
+quick_plot
 ```
 
 
 # 6. Telecoupling Impact by Habitat
 
+Figure moving to supp.
+
 - Terrestrial habitats were studied the most.
-- All habitats had more detrimental impacts on their respective biodiversity metrics.
+- All habitats had more Harmful impacts on their respective biodiversity metrics.
 
 ```{r}
 # get summary
@@ -871,7 +885,7 @@ Duplicate rows with multiple flow types. This means that effects and other resul
 
 The reason for doing this is so that we can attribute biodiversity impacts to the specific flows that may have been studied together, and whose individual impacts cannot be decoupled.
 
-- Tourism and Trade were the most represented in our sample and both had majority detrimental imapcts reported.
+- Tourism and Trade were the most represented in our sample and both had majority Harmful imapcts reported.
 - The flow categories that showed somewhat beneficial impacts where Investment, Water Transfer, and Knowledge Transfer.
 
 ```{r}
@@ -930,13 +944,13 @@ quick_plot
 ```
 
 
-# 8. Telecoupling impacts by metric type and flow
+# 8. Telecoupling impacts by at the entry level
 
-Replicate TC flows by entry
+##Replicate TC flows by entry
 
 - This figure shows the direction of telecoupling impacts at the entry level (i.e. all 700+ metrics recorded)
 - Most studies report multiple species richness and abundance. 
-- Most habitat metrics were significantly detrimental, except in the case of knowledge transfer telecouplings.
+- Most habitat metrics were significantly Harmful, except in the case of knowledge transfer telecouplings.
 
 ```{r}
 # set as character
@@ -1032,7 +1046,7 @@ Convert to long format, where metric is indicated.
   metric_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
                           as.character(metric_flow$sig_effect))
   metric_flow$sig_effect <- factor(metric_flow$sig_effect,
-                             c( "Beneficial","Detrimental","Changed","Not significant or unclear"))
+                             c( "Beneficial","Harmful","Changed","Not significant or unclear"))
 # telecoupling level change
   metric_flow$tc <- factor(metric_flow$tc,
                                 c("Energy Transfer","Investment","Knowledge Transfer",
@@ -1046,7 +1060,7 @@ Metric & Flow Figure code
 
 ```{r}
 # Matrix of pie charts
-  sig_effect_cols <- sigeff_col
+sig_effect_cols <- sigeff_col
 
   metric_flow_fig <- ggplot(metric_flow) + 
                     aes(x='', y = count, fill = sig_effect) +
@@ -1089,8 +1103,10 @@ Metric & Flow Figure code
                 
 
 
+
 # display image
   metric_flow_fig
+
 ```
 
 Metric & Flow Heatmap
@@ -1180,7 +1196,79 @@ heatmap_telemetric
 ```
 
 
-Flow & Taxa data
+Metric & Flow fig with sample size --CAN'T FIGURE OUT 10-19
+```{r}
+# Matrix of pie charts
+# 
+# sig_effect_cols <- sigeff_col
+# 
+# var <- metric_flow$count
+# max <- max(var, na.rm = T); max
+# min <- min(var, na.rm = T); min
+# 
+# breaks <- seq(min, max, 2); breaks; length(breaks)
+# breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
+# myPalette <- colorRampPalette((brewer.pal(8, "Purples")));# myPalette; rev
+# colors <- myPalette(length(breaks)); colors
+# 
+# metric_flow_fig <- ggplot(metric_flow) + 
+#                    aes(x='', y = count, fill = sig_effect) +
+#     
+#                    geom_bar(position='fill',
+#                             stat='identity',
+#                             width = 1,
+#                             size = 0.01) +
+#     
+#                     # activate for vertical or horizontal version
+#                       facet_grid(metric_type ~ metric ~ tc, switch='y') + #horizontal
+#                       #facet_grid(tc ~ metric, switch='y') +  #vertical
+#                     
+#                     # convert to pie chart
+#                       coord_polar(theta = 'y') +
+#                     
+#                     # colors for pies
+#                       scale_fill_manual("Pies", values=sig_effect_cols, guide = guide_legend(reverse = FALSE))  +
+#                       scale_y_discrete(position='right',expand=c(0,0)) +
+#   
+#                       new_scale("fill") +   # add new scale
+#           
+#                     # attempt at showing sample size
+#                       geom_tile(data = filled_nr_metric_tele, aes(fill = count_factor)) +
+#                       scale_fill_manual("Tiles",values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+#                                                  "#4E91CC","#3F76A6","#274866"))+
+#                    
+#                     # style
+#                       theme_gray(base_size=8)+
+#                       theme(
+#                         axis.title=element_blank(),
+#                         axis.line=element_blank(),
+#                         axis.ticks=element_blank(),
+#                         axis.text=element_blank(),
+#                         panel.border = element_blank(),
+#                         panel.grid=element_blank(),
+#                         panel.grid.major = element_blank(),
+#                         panel.grid.minor = element_blank(),
+#                         plot.background = element_rect(),
+#                         plot.title=element_blank(),
+#                         strip.text.x = element_text(size=10,
+#                                           angle=90, vjust=0, hjust = 0),
+#                         strip.text.y.left = element_text(size=10,
+#                                           angle=0, vjust=0, hjust = 0),
+#                         strip.background = element_rect(fill='white'),
+#                         panel.spacing = unit(0.1, 'lines')
+#                         ) +
+#                     # labels
+#                       ylab('') + xlab('')
+#                 
+# 
+# 
+# 
+# # display image
+#   metric_flow_fig
+# 
+```
+
+##Flow & Taxa data
 Convert to long format, where metric is indicated.
 
 ```{r}
@@ -1199,7 +1287,7 @@ Convert to long format, where metric is indicated.
   metric_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
                           as.character(metric_flow$sig_effect))
   metric_flow$sig_effect <- factor(metric_flow$sig_effect,
-                             c( "Beneficial","Detrimental","Changed","Not significant or unclear"))
+                             c( "Beneficial","Harmful","Changed","Not significant or unclear"))
 # telecoupling level change
   metric_flow$tc <- factor(metric_flow$tc,
                                 c("Energy Transfer","Investment","Knowledge Transfer",
@@ -1213,52 +1301,52 @@ Convert to long format, where metric is indicated.
 Flow and taxa figure
 
 ```{r}
-# Matrix of pie charts
-  sig_effect_cols <- sigeff_col
-
-  metric_flow_fig <- ggplot(metric_flow) + 
-                    aes(x='', y = count, fill = sig_effect) +
-                    geom_bar(position='fill',
-                             stat='identity',
-                             width = 1,
-                             size = 0.01) +
-                    # activate for vertical or horizontal version
-                      facet_grid(taxa ~ tc, switch='y') + #horizontal
-                      #facet_grid(tc ~ metric, switch='y') +  #vertical
-                    # convert to pie chart
-                      coord_polar(theta = 'y') +
-                    # colors
-                      scale_fill_manual(
-                        values=sig_effect_cols,
-                        guide = guide_legend(reverse = FALSE))  + 
-                        scale_y_discrete(position='right',expand=c(0,0))+
-                    # style
-                      theme_gray(base_size=8)+
-                      theme(
-                        axis.title=element_blank(),
-                        axis.line=element_blank(),
-                        axis.ticks=element_blank(),
-                        axis.text=element_blank(),
-                        panel.border = element_blank(),
-                        panel.grid=element_blank(),
-                        panel.grid.major = element_blank(),
-                        panel.grid.minor = element_blank(),
-                        plot.background = element_rect(),
-                        plot.title=element_blank(),
-                        strip.text.x = element_text(size=10,
-                                          angle=90, vjust=0, hjust = 0),
-                        strip.text.y.left = element_text(size=10,
-                                          angle=0, vjust=0, hjust = 0),
-                        strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
-                    # labels
-                      ylab('') + xlab('')
-                
-
-
-# display image
-  metric_flow_fig
+# # Matrix of pie charts
+#   sig_effect_cols <- sigeff_col
+# 
+#   metric_flow_fig <- ggplot(metric_flow) + 
+#                     aes(x='', y = count, fill = sig_effect) +
+#                     geom_bar(position='fill',
+#                              stat='identity',
+#                              width = 1,
+#                              size = 0.01) +
+#                     # activate for vertical or horizontal version
+#                       facet_grid(taxa ~ tc, switch='y') + #horizontal
+#                       #facet_grid(tc ~ metric, switch='y') +  #vertical
+#                     # convert to pie chart
+#                       coord_polar(theta = 'y') +
+#                     # colors
+#                       scale_fill_manual(
+#                         values=sig_effect_cols,
+#                         guide = guide_legend(reverse = FALSE))  + 
+#                         scale_y_discrete(position='right',expand=c(0,0))+
+#                     # style
+#                       theme_gray(base_size=8)+
+#                       theme(
+#                         axis.title=element_blank(),
+#                         axis.line=element_blank(),
+#                         axis.ticks=element_blank(),
+#                         axis.text=element_blank(),
+#                         panel.border = element_blank(),
+#                         panel.grid=element_blank(),
+#                         panel.grid.major = element_blank(),
+#                         panel.grid.minor = element_blank(),
+#                         plot.background = element_rect(),
+#                         plot.title=element_blank(),
+#                         strip.text.x = element_text(size=10,
+#                                           angle=90, vjust=0, hjust = 0),
+#                         strip.text.y.left = element_text(size=10,
+#                                           angle=0, vjust=0, hjust = 0),
+#                         strip.background = element_rect(fill='white'),
+#                         panel.spacing = unit(0.1, 'lines')
+#                         ) +
+#                     # labels
+#                       ylab('') + xlab('')
+#                 
+# 
+# 
+# # display image
+#   metric_flow_fig
 ```
 
 
@@ -1330,3 +1418,8 @@ heatmap_telemetric
                     
 
 ```
+
+
+## Country/Region Entry Effects
+
+TBD
