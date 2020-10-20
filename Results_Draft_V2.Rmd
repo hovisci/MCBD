@@ -3,18 +3,18 @@ title: "TCBD Results - Draft V2"
 author: "Ciara Hovis, CSIS Lab, Michigan State University"
 date: "14 October 2020"
 output:
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
   html_document:
     keep_tex: yes
     toc: yes
     toc_depth: 4
     toc_float: yes
     df_print: paged
-  pdf_document:
-    toc: yes
-    toc_depth: '4'
-  word_document:
-    toc: yes
-    toc_depth: '4'
 editor_options:
   chunk_output_type: console
 ---
@@ -65,6 +65,8 @@ library('devtools')
 library('rnaturalearthhires')
 library('rgeos')
 library('ggnewscale')
+library('gridExtra')
+library('egg')
 getwd()
 
 ### Directories & Set up ###
@@ -812,13 +814,16 @@ Note that n=132, some papers reported metrics for multiple taxa. Maj_eff was det
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)
 
 # Stack plot (count)
-  quick_plot <- ggplot(a, aes(fill=maj_eff_taxa, y=count, x=taxa)) + 
+  taxa_bar <- ggplot(a, aes(fill=maj_eff_taxa, y=count, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                 scale_fill_manual(values=majeff_col) +
-                xlab("")
-quick_plot
+                xlab("") + 
+                ylim(0,50) +
+               theme(legend.position = "bottom",legend.justification='center',   
+                     legend.direction='horizontal',legend.title = element_blank())
+taxa_bar
 ```
 
 
@@ -919,16 +924,17 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),row.names = TRUE)
   
 # Stack plot (count)
-  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=tc)) + 
+  flow_bar <- ggplot(a, aes(fill=maj_eff, y=count, x=tc)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                 scale_fill_manual(values=majeff_col) +
-                xlab("")
+                xlab("") +
+                ylim(0,50)
 
 
 # view
-  quick_plot
+  flow_bar
 ```
 
 ```{r}
@@ -943,10 +949,40 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
 quick_plot
 ```
 
+Side by side♣ plot of taxa barchart and flow barchart
+
+```{r}
+
+taxa_bar2 <- taxa_bar + theme(legend.position = 'none') 
+
+flow_bar2 <- flow_bar + ylab(element_blank()) + theme(legend.position = 'none') 
+  
+  
+  
+# theme(legend.position = "bottom",legend.justification='center',   
+# legend.direction='horizontal',legend.title = element_blank())
+
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend<-g_legend(taxa_bar)
+
+merge_bar <- grid.arrange(arrangeGrob(taxa_bar2,flow_bar2,nrow=1),mylegend, nrow=2,heights=c(10, 1))
+
+
+#merge_bar <- ggarrange(taxa_bar2, flow_bar2, mylegend,ncol=2, nrow=2,labels = c('a', 'b'))
+#merge_bar
+
+```
 
 # 8. Telecoupling impacts by at the entry level
 
-##Replicate TC flows by entry
+Replicate TC flows by entry
 
 - This figure shows the direction of telecoupling impacts at the entry level (i.e. all 700+ metrics recorded)
 - Most studies report multiple species richness and abundance. 
@@ -972,6 +1008,8 @@ quick_plot
 
 
 ```
+
+## Impacts by metric 
 
 Convert to long format, where metric is indicated.
 
@@ -1105,7 +1143,7 @@ sig_effect_cols <- sigeff_col
 
 
 # display image
-  metric_flow_fig
+#  metric_flow_fig
 
 ```
 
@@ -1186,7 +1224,7 @@ heatmap_telemetric <- ggplot(filled_nr_metric_tele,
                       scale_x_discrete(position = "top") +
                       labs(fill = "number of entries")
 
-heatmap_telemetric
+#heatmap_telemetric
 
                    
 
@@ -1268,7 +1306,8 @@ Metric & Flow fig with sample size --CAN'T FIGURE OUT 10-19
 # 
 ```
 
-##Flow & Taxa data
+## Flow & Taxa data
+
 Convert to long format, where metric is indicated.
 
 ```{r}
@@ -1298,55 +1337,61 @@ Convert to long format, where metric is indicated.
 ```
 
 
-Flow and taxa figure
+##Flow and taxa figure
 
 ```{r}
-# # Matrix of pie charts
-#   sig_effect_cols <- sigeff_col
-# 
-#   metric_flow_fig <- ggplot(metric_flow) + 
-#                     aes(x='', y = count, fill = sig_effect) +
-#                     geom_bar(position='fill',
-#                              stat='identity',
-#                              width = 1,
-#                              size = 0.01) +
-#                     # activate for vertical or horizontal version
-#                       facet_grid(taxa ~ tc, switch='y') + #horizontal
-#                       #facet_grid(tc ~ metric, switch='y') +  #vertical
-#                     # convert to pie chart
-#                       coord_polar(theta = 'y') +
-#                     # colors
-#                       scale_fill_manual(
-#                         values=sig_effect_cols,
-#                         guide = guide_legend(reverse = FALSE))  + 
-#                         scale_y_discrete(position='right',expand=c(0,0))+
-#                     # style
-#                       theme_gray(base_size=8)+
-#                       theme(
-#                         axis.title=element_blank(),
-#                         axis.line=element_blank(),
-#                         axis.ticks=element_blank(),
-#                         axis.text=element_blank(),
-#                         panel.border = element_blank(),
-#                         panel.grid=element_blank(),
-#                         panel.grid.major = element_blank(),
-#                         panel.grid.minor = element_blank(),
-#                         plot.background = element_rect(),
-#                         plot.title=element_blank(),
-#                         strip.text.x = element_text(size=10,
-#                                           angle=90, vjust=0, hjust = 0),
-#                         strip.text.y.left = element_text(size=10,
-#                                           angle=0, vjust=0, hjust = 0),
-#                         strip.background = element_rect(fill='white'),
-#                         panel.spacing = unit(0.1, 'lines')
-#                         ) +
-#                     # labels
-#                       ylab('') + xlab('')
-#                 
-# 
-# 
-# # display image
-#   metric_flow_fig
+# Matrix of pie charts
+  sig_effect_cols <- sigeff_col
+
+  metric_flow_fig <- ggplot(metric_flow) +
+                    aes(x='', y = count, fill = sig_effect) +
+                    geom_bar(position='fill',
+                             stat='identity',
+                             width = 1,
+                             size = 0.01) +
+                    # activate for vertical or horizontal version
+                      facet_grid(taxa ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
+                    # convert to pie chart
+                      coord_polar(theta = 'y') +
+                    # colors
+                      scale_fill_manual(
+                        values=sig_effect_cols,
+                        guide = guide_legend(reverse = FALSE))  +
+                        scale_y_discrete(position='right',expand=c(0,0))+
+                    # style
+                      theme_gray(base_size=8)+
+                      theme(
+                        axis.title=element_blank(),
+                        axis.line=element_blank(),
+                        axis.ticks=element_blank(),
+                        axis.text=element_blank(),
+                        
+                        legend.position = "bottom",
+                        legend.justification='center',
+                        legend.direction='horizontal',
+                        legend.title = element_blank(),
+                        
+                        panel.border = element_blank(),
+                        panel.grid=element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        plot.background = element_rect(),
+                        plot.title=element_blank(),
+                        strip.text.x = element_text(size=10,
+                                          angle=90, vjust=0, hjust = 0),
+                        strip.text.y.left = element_text(size=10,
+                                          angle=0, vjust=0, hjust = 0),
+                        strip.background = element_rect(fill='white'),
+                        panel.spacing = unit(0.1, 'lines')
+                        ) +
+                    # labels
+                      ylab('') + xlab('')
+
+
+
+# display image
+  metric_flow_fig
 ```
 
 
@@ -1388,23 +1433,23 @@ filled_nr_metric_tele$taxa <- factor(filled_nr_metric_tele$taxa, c('Reptiles','P
 heatmap_telemetric <- ggplot(filled_nr_metric_tele,
                       aes(x=telecoupling, y=taxa, fill=count_factor)) +
                       geom_tile(color = "white", size=0.25) +
-                    geom_text(aes(label = count )) +
- scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+                      geom_text(aes(label = count )) +
+                      scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
                                                "#4E91CC","#3F76A6","#274866"))+
                       labs(x="",y="")+
                       scale_y_discrete(expand=c(0,0))+
                       theme_grey(base_size=8)+
 
-                      theme(legend.title = element_text(size = 10),
-                      legend.text = element_text(size = 10, face="bold"),
+                      theme(legend.title = element_blank(),
+                      legend.text = element_blank(),
+                      legend.position = "none",
                       plot.background=element_blank(),
                       plot.title = element_blank(),
                       axis.title= element_blank(),
                       axis.ticks = element_blank(),
                       axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
                                                      hjust = 0),
-                      axis.text.y.left = element_text(size=10, angle = 360, vjust=0.5,
-                                                      hjust = 0),
+                      axis.text.y.left = element_blank(),
                       strip.background = element_rect(fill="white"),
                       panel.spacing = unit(0.1, "lines")) +
                       scale_x_discrete(position = "top") +
@@ -1418,6 +1463,14 @@ heatmap_telemetric
                     
 
 ```
+
+Side by side plot
+```{r}
+
+# grid.arrange(metric_flow_fig, heatmap_telemetric, ncol=2)
+ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
+```
+
 
 
 ## Country/Region Entry Effects
