@@ -1671,3 +1671,29 @@ ggarrange(ctr_tc_fig, heatmap_tele_ctr, ncol=2)
 
 ```
 
+```{r}
+heyo <- ctr_tc_count %>%
+  dplyr::select(continent, tc) %>%
+  ungroup() %>%
+  group_by(continent) %>%
+  add_tally(name='cont_total') %>%
+  dplyr::ungroup() %>%
+  dplyr::group_by(continent, cont_total) %>%
+  dplyr::count(tc, name = 'n_tc') %>%
+  arrange(continent) %>%
+  dplyr::mutate(pct_tc = n_tc/cont_total*100)
+            
+deyo <- ctr_tc_count %>%
+  dplyr::select(continent,maj_eff) %>%
+  ungroup() %>%
+  group_by(continent) %>%
+  add_tally(name='cont_total') %>%
+  dplyr::ungroup() %>%
+  dplyr::group_by(continent, cont_total) %>%
+  dplyr::count(maj_eff, name = 'n_eff') %>%
+  arrange(continent) %>%
+  dplyr::mutate(pct_eff = n_eff/cont_total*100)
+
+
+```
+
