@@ -84,11 +84,13 @@ Merge survey 3 with the 5 common paper survey result (note that the structures h
 # drop columns
   survey3.5 <- subset(survey3.5,
                       select=-c(entry,final_decision))
-
+survey3 <- survey3[,-16]
+summary(survey3)
+summary(survey3.5)
 # change structure
-  survey3.5$entry_id <- as.character(survey3.5$entry_id)
+  survey3.5$biodiv_cat_habitat <- as.character(survey3.5$biodiv_cat_habitat)
   survey3.5$p_value <- as.character(survey3.5$p_value)
-  
+ 
 # bind rows
   survey3 <- bind_rows(survey3,survey3.5)
 ```
@@ -1114,7 +1116,8 @@ survey3$biodiv_cat_multsp[survey3$paper_id == '510' & survey3$entry_id == 2] <- 
 survey3 <- survey3[which(survey3$paper_id != '4257'),]                          # drop old entry for paper 4257
 kelly_fix <- read.csv(paste0(dir,'/issues/dataFixes/KellySppCompEntryAdd.csv')) # read in Kelly's fixes
 colnames(kelly_fix) <- colnames(survey3)                                        # make col names match
-survey3 <- rbind(survey3, kelly_fix)                                            # Add kelly's entries (total in survey 3 should be 797)
+
+survey3 <- rbind(survey3, kelly_fix)            # Add kelly's entries (total in survey 3 should be 797)
 
 
 
@@ -1384,5 +1387,5 @@ Numbers instead of percents
   write.csv(survey3,paste0(dat.dir,'survey3_cleaned.csv'),row.names=FALSE)
 
 ```
-
+|
 -------------------------------------------------------------

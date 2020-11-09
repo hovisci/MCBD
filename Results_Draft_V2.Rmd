@@ -332,8 +332,31 @@ Average per-person acceptance rates
   mean(acr$accept_rate)
 ```
 
+Unique study ids for survey 2 and 3
+```{r}
+length(unique(s2$paper_id)) 
+length(unique(survey3$paper_id))
+length(unique(s23$paper_id))
+
+`%notin%` <- Negate(`%in%`)
+
+halp <- s2[which(unique(s2$paper_id) %notin% unique(survey3$paper_id)),]
+```
 
 ## 4.2 General Results
+
+proportion of effects
+```{r}
+# Table of maj_eff
+table(taxEff_maj$maj_eff_taxa)
+prop.table(table(taxEff_maj$maj_eff_tax))
+
+# Table of sig_eff
+table(s23$sig_effect)
+prop.table(table(s23$sig_effect))
+
+```
+
 
 Counts of papers that were inferred (accepted papers only)
 
@@ -375,9 +398,9 @@ Counts of study types (accepted papers only)
 Habitat Frequency (study level, n= 131)
 
 ```{r}
-habitat.study <- count(s2, 'habitat')
+habitat.study <- count(s23_maj, 'hab')
 print(habitat.study)
-prop.table(table(s2$habitat))
+prop.table(table(s23_maj$hab))
 
 ```
 
@@ -387,9 +410,9 @@ Taxa Frequency (study level, n=131)
 desired_length <- 8 
 empty_list <- vector(mode = "list", length = desired_length)
 
-taxa <- (s2$taxa)
+taxa <- (taxEff_maj$taxa)
 table(taxa)
-taxa.list <- c('Mammals', 'Plants', 'Reptiles', 'Amphibians', 'Birds', 'Fish', 'Invertebrates', 'Other')
+taxa.list <- c('Mammals', 'Plants', 'Reptiles', 'Amphibians', 'Birds', 'Fish', 'Invertebrates', 'Multiple')
 taxa.count <- empty_list
 
 for (i in 1:length(taxa.list)) {
@@ -399,11 +422,11 @@ for (i in 1:length(taxa.list)) {
 
 taxa.count <- rbind(taxa.list,taxa.count)
 taxa.count
+prop.table((taxa.count))
 
-multiple <- str_count(taxa, ';')
-multiple <- multiple != 0
-multiple <- table(multiple) ["TRUE"]
-multiple
+mult <- as.data.frame((table(taxEff_maj$paper_id)))
+mult <- mult[which(mult$Freq != 1),]
+num.mult <- sum(nrow(mult),(taxa.count[2,8])) # WHATEVER ITS 10
 
 # Others? Not a big deal since taxa is clarified in survey 3.Not a big deal.
 
@@ -461,6 +484,8 @@ Number of metrics reported by each paper
     arrange(desc(perc_dataset))
 
 num.metric <- count(survey3$paper_id)
+mult.metric <- num.metric[num.metric$freq > 1,]
+
 range(num.metric$freq)
 sum(num.metric$freq)
 
@@ -931,6 +956,7 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
                 scale_fill_manual(values=majeff_col) +
                 xlab("") +
                 ylim(0,50)
+
 
 
 # view

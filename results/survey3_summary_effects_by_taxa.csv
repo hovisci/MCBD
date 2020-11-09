@@ -1,25 +1,25 @@
 "","taxa","effect","count","perc_per_taxa"
 "1","Amphibians","Changed (e.g. species composition)",1,1
-"2","Birds","Changed (e.g. species composition)",45,0.132352941176471
-"3","Birds","Negative (detrimental)",62,0.182352941176471
-"4","Birds","Neutral (only when there is absolutely no difference in metrics)",184,0.541176470588235
-"5","Birds","Positive (beneficial)",45,0.132352941176471
-"6","Birds","Unclear",4,0.0117647058823529
+"2","Birds","Changed (e.g. species composition)",46,0.126373626373626
+"3","Birds","Negative (detrimental)",80,0.21978021978022
+"4","Birds","Neutral (only when there is absolutely no difference in metrics)",184,0.505494505494505
+"5","Birds","Positive (beneficial)",48,0.131868131868132
+"6","Birds","Unclear",6,0.0164835164835165
 "7","Fish","Changed (e.g. species composition)",21,0.28
 "8","Fish","Negative (detrimental)",23,0.306666666666667
 "9","Fish","Neutral (only when there is absolutely no difference in metrics)",15,0.2
 "10","Fish","Positive (beneficial)",13,0.173333333333333
 "11","Fish","Unclear",3,0.04
-"12","Invertebrates","Changed (e.g. species composition)",36,0.226415094339623
-"13","Invertebrates","Negative (detrimental)",81,0.509433962264151
-"14","Invertebrates","Neutral (only when there is absolutely no difference in metrics)",20,0.125786163522013
-"15","Invertebrates","Positive (beneficial)",13,0.0817610062893082
-"16","Invertebrates","Unclear",9,0.0566037735849057
-"17","Mammals","Changed (e.g. species composition)",1,0.0222222222222222
-"18","Mammals","Negative (detrimental)",30,0.666666666666667
-"19","Mammals","Neutral (only when there is absolutely no difference in metrics)",5,0.111111111111111
-"20","Mammals","Positive (beneficial)",5,0.111111111111111
-"21","Mammals","Unclear",4,0.0888888888888889
+"12","Invertebrates","Changed (e.g. species composition)",38,0.236024844720497
+"13","Invertebrates","Negative (detrimental)",81,0.503105590062112
+"14","Invertebrates","Neutral (only when there is absolutely no difference in metrics)",20,0.124223602484472
+"15","Invertebrates","Positive (beneficial)",13,0.0807453416149068
+"16","Invertebrates","Unclear",9,0.0559006211180124
+"17","Mammals","Changed (e.g. species composition)",1,0.0181818181818182
+"18","Mammals","Negative (detrimental)",35,0.636363636363636
+"19","Mammals","Neutral (only when there is absolutely no difference in metrics)",5,0.0909090909090909
+"20","Mammals","Positive (beneficial)",9,0.163636363636364
+"21","Mammals","Unclear",5,0.0909090909090909
 "22","Multiple","Negative (detrimental)",13,0.764705882352941
 "23","Multiple","Positive (beneficial)",3,0.176470588235294
 "24","Multiple","Unclear",1,0.0588235294117647
