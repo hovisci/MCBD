@@ -64,6 +64,8 @@ Final figures are stored here:
 # surveys
   survey2 <- read.csv(paste0(dat.dir,'survey2_cleaned.csv'))
   survey3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
+  names(survey2)
+  names(survey3)
 ```
 
 # 4. Data formatting
@@ -81,7 +83,7 @@ survey3$tc <-NA
 tc.table <- as.data.frame(cbind(survey2$paper_id, survey2$tele_cat))
 survey3$tc <- tc.table$V2[match(survey3$paper_id,tc.table$V1)]
 
-s23 <- left_join(survey3,survey2,by=c("paper_id","coder_id"))
+s23 <- left_join(survey3,survey2,by=c("paper_id"))
 ```
 
 Show column names

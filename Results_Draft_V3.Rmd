@@ -1,0 +1,1673 @@
+---
+title: "TCBD Results - Draft V2"
+author: "Ciara Hovis, CSIS Lab, Michigan State University"
+date: "14 October 2020"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+  html_document:
+    keep_tex: yes
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, cache.comments = FALSE,
+                      warning = FALSE, message = FALSE, results='hold')
+```
+
+# 1. Summary
+
+Synthesis of results for telacoupling/biodiversity systematic review. It consists of response summaries and visualizations of the accepted papers.
+
+# 2. R Setup
+
+The script presented here was done using R (version 4.0.2; R Core Team 2020) and its packages.
+
+Load libraries, directories, and custom functions from source file.
+
+```{r, include= FALSE}
+# Source file
+rm(list=ls())                         # clear Console Window
+options(show.error.locations = TRUE); # show line numbers on error
+
+# test
+
+### libraries ###
+library("ggplot2")      # include all GGPlot2 functions
+library("tidyverse")    # plots and working with complex tables
+library("RColorBrewer") # colors for graphics
+library("plyr")         # sort data
+library("reshape")      # sort data
+library("reshape2")     # sort data
+library('tmap')         # visualizing maps
+library("sp")           # working with maps
+library("lubridate")    # time data
+library("tm")           # text mining
+library("wordcloud")    # word clouds
+library("gplots")       # venn diagrams
+library("stringr")
+library("writexl")
+library("rnaturalearthdata")
+library("rnaturalearth")
+library("sf")
+library("psych")
+library('classInt')
+library('devtools')
+library('rnaturalearthhires')
+library('rgeos')
+library('ggnewscale')
+library('gridExtra')
+library('egg')
+getwd()
+
+### Directories & Set up ###
+
+# Root directory
+#  setwd('..')           # set directory by one folder up
+  dir <- paste0(getwd()); dir
+
+# Data directory
+  dat.dir <- paste0(dir,'/data/')
+
+# Final tables
+  tab.dir <- paste0(dir,'/results/')
+
+# Final figures
+  fig.dir <- paste0(dir,'/images/')
+
+# Tables for manual edits/error checks
+ dir.create(paste0(dir,'/issues/',date(Sys.Date())),recursive=TRUE)
+ tab.check.dir <- paste0(dir,'/issues/',date(Sys.Date()),'/')
+
+# custom colors
+# Color blind     gray        orange    l.blue    green       yellow      d.blue    orange     pink                   
+ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+ 
+  paper_col <- c('#DDCC77','#009988','#882255')
+  effect_cols <- c('#9A709E','#999999','#A50026','#FDB366','#6EA6CD')
+  
+  sigeff_col <- c("#009E73", "#D55E00","#E69F00", "#999999")
+  majeff_col <- c("#009E73","#D55E00","#E69F00","#56B4E9","#999999")
+
+## customized theme (I just copied this from app3) ##
+
+# my_theme = function()
+# {
+# theme( axis.text.y = element_text(angle = 45),
+#        plot.subtitle = element_text(color ="purple", size = 11),
+#        axis.text.x = element_text(face = 'italic', color = 'purple')) 
+# }
+
+
+```
+
+# 3. Load data
+
+```{r}
+# surveys
+  ab_screen <- read.csv(paste0(dat.dir, 'absScreening\\AbsScreen1_Merge.csv'))
+  ab_maybes <- read.csv(paste0(dat.dir, 'absScreening\\AbsScreen2_maybes_to_keep.csv'))
+  ab_yeses <- read.csv(paste0(dat.dir,  'absScreening\\final_sample_for_coding.csv'))
+  assignments <- read.csv(paste0(dat.dir,'absScreening\\Coding_MergeAssign_R1.csv'))
+
+
+  survey1 <- read.csv(paste0(dat.dir,'survey1_cleaned.csv'))
+  s2 <- read.csv(paste0(dat.dir,'survey2_cleaned.csv'))
+  survey3 <- read.csv(paste0(dat.dir,'survey3_cleaned.csv'))
+  s23 <- read.csv(paste0(dat.dir,'s23.csv'))
+  
+  taxEff<- read.csv(paste0(dat.dir,'tax_eff.csv'))
+  
+# factor format
+  s23$maj_eff<-factor(s23$maj_eff, c("Beneficial","Harmful","Changed", "Mixed","Not significant or unclear"))
+  s23_maj <- s23[!duplicated(s23$paper_id),]
+  
+  taxEff$maj_eff_taxa<-factor(taxEff$maj_eff_taxa, c("Beneficial","Harmful","Changed", "Mixed","Not significant or unclear"))
+  taxEff_maj <- taxEff[!duplicated(taxEff$tax_ID),]
+
+```
+
+
+# 4. Survey 1 & 2 Results
+
+## 4.1 Sample Results
+
+Accepted/rejected published papers over time
+
+Total number of papers at the coding stage = 591
+
+```{r}
+# get total numbers but also ensure both values here match
+  nrow(survey1)
+  length(unique(survey1$paper_id))
+```
+
+Number of accepted and rejected papers.
+
+Accepted = 131 (22%) , Rejected = 460 (78%)
+
+```{r}
+# get summary
+  ddply(survey1, .(status), summarize,
+        # total count of entries     
+        count=length(status))
+sum(survey1$status == 'accept')/nrow(survey1)
+sum(survey1$status == 'reject')/nrow(survey1)
+
+```
+
+Visualizing accepted papers over time, including the ones from the abstract screening process.
+
+```{r}
+# all abstract screened papers (n=7306)
+  ab_screen <- ab_screen[!ab_screen$PY==2020,] #remove 2020 studies
+  ab_all <- ab_screen[!duplicated(ab_screen$TITLE),];nrow(ab_all)
+
+# remove the papers accepted in screening from the abstract screening list (n=6665)
+  ab_reject <- anti_join(ab_all,ab_maybes,by=c("TITLE"))
+  ab_reject <- anti_join(ab_reject,ab_yeses,by=c("TITLE"))
+  ab_reject <- ab_reject[!duplicated(ab_reject$TITLE,ab_reject$PY),];nrow(ab_reject)
+    
+# all papers that were accepted from abstract screening (n=641)
+  ab_accept <- ab_yeses[!duplicated(ab_yeses$TITLE),]
+
+  
+# accepted papers from the assignment list for full review (n=595)
+  papers_reviewed <- assignments[!duplicated(assignments$TITLE),]
+
+# papers with PDF not available or rejected because of language (n=46)
+  paper_unavail <- anti_join(ab_accept,papers_reviewed,by=c("TITLE"))
+  paper_unavail <- paper_unavail[!duplicated(paper_unavail$TITLE),]
+  
+# rejected papers or not yet reviewed (n=460)
+  
+  keep <-  subset(survey1, status=='accept')
+  reject <- anti_join(survey1,keep)
+
+  papers_rejected <- anti_join(papers_reviewed,keep,by=c("STUDY_ID.1"="paper_id"))
+  papers_rejected <- papers_rejected[!duplicated(papers_rejected$TITLE),]
+
+```
+
+```{r}
+# show numbers:
+  paste('original number of papers in WOS search:',nrow(ab_screen))
+  paste('number of duplicates in WOS search:',nrow(ab_screen)-nrow(ab_all))
+  paste('number of abstracts screened:',nrow(ab_all))
+  paste('number of accepted abstracts:',nrow(ab_accept))
+  paste('number of rejected abstracts:',nrow(ab_reject))
+  paste('number of accepted papers unavailable or non-English:',
+        nrow(paper_unavail))
+  paste('number of papers available for full review:',
+        nrow(papers_reviewed))
+  paste('number of full papers accepted for synthesis:',
+        nrow(keep)) 
+  paste('number of full papers rejected from synthesis:',nrow(reject))
+  paste('number of full papers not yet reviewed for synthesis:',
+        nrow(papers_rejected)-nrow(reject)-5)
+  
+# num of full papers not yet reviewed is -1, idk why. Maybe due to common papers? The check below is True so I'm not worried.    
+  
+  
+# test if they add up correctly
+  paste('COUNT TESTS:')
+  paste('total full papers:',
+        nrow(papers_reviewed) == nrow(ab_accept) - nrow(paper_unavail))
+  paste('total abstract screen:',
+        nrow(ab_all) == nrow(ab_reject) + nrow(ab_accept))
+```
+
+Next, simplify columns and combine for three tiers in the plot.
+
+```{r}
+# select columns
+  # papers found in WOS but don't meet criteria
+    reject_abstract_level <- subset(ab_reject,select=c("STUDY_ID","PY"))
+  # WOS papers that meet criteria but don't directly look at coupling effects on biodiv
+    reject_paper_level <- subset(papers_rejected,select=c("STUDY_ID.1","PY"))
+    reject_paper_level2 <- subset(paper_unavail,select=c("STUDY_ID","PY"))
+  # papers that do look at coupling effects on biodiv
+    accept_paper_level <- subset(keep,select=c("paper_id","year_pub"))
+  
+# rename columns
+  colnames(reject_abstract_level) <- c('paper_id','year_pub')
+  colnames(reject_paper_level) <- c('paper_id','year_pub')
+  colnames(reject_paper_level2) <- c('paper_id','year_pub')
+  
+# add columns
+  #papers that discuss tc effects on biodiv in...
+  reject_abstract_level$type <- 'search but not abstract'
+  reject_paper_level$type <- 'abstract but not paper'
+  reject_paper_level2$type <- 'abstract but not paper'
+  accept_paper_level$type <- 'abstract and paper'
+  
+# rbind (should be 7307 rows)
+  papers <- rbind(reject_abstract_level,reject_paper_level,
+                  reject_paper_level2, # <-- NOT SURE IF UNAVAILABLE PAPERS BELONG HERE
+                  accept_paper_level)
+
+# check
+  nrow(papers)
+```
+
+Plot image.
+
+```{r}
+# Get a count of records per year
+  paper_ct <- ddply(papers, .(year_pub,type), summarize, count=length(year_pub))
+
+# Change to factors
+  paper_ct$year_pub <- as.factor(paper_ct$year_pub)
+  paper_ct$type <- factor(paper_ct$type,
+                        levels = c('search but not abstract',
+                                   'abstract but not paper',
+                                   'abstract and paper'))
+              
+  papers.fig <- ggplot(paper_ct, aes(x=year_pub, y=count)) + 
+                  geom_area(position="identity",
+                            aes(y=count, fill = type, group = type), alpha=0.6) +
+                  geom_point(aes(y =count, color = type, group = type))+
+                  geom_line(aes(y =count, color = type, group = type))+
+                  geom_text(aes(label=count),size=3,
+                            position=position_dodge(.7),
+                            vjust=-.7,
+                            check_overlap=TRUE)+
+                  scale_color_manual(
+                  name=expression(italic("telecoupling effects\non biodiversity in...")),
+                  values=paper_col)+
+                  scale_fill_manual(
+                  name=expression(italic("telecoupling effects\non biodiversity in...")),
+                  values=paper_col)+
+                  xlab("publication year")+
+                  ylab("number of articles") + ylim(0,860)+
+                  scale_y_continuous(breaks=seq(0,850,100)) +
+                  theme_classic()+
+                  theme(legend.position = c(0.22,0.87))
+  
+# show here
+  papers.fig
+```
+
+Acceptance rate for abstract screening.
+
+```{r}
+# get total abstract acceptance rate
+  sum(ab_all$INCLUDE=='YES')/nrow(ab_all)
+```
+
+Acceptance rate for papers that were reviewed (**NOTE:** this includes the 5 common surveys).
+
+```{r}
+# get total paper acceptance rate
+  sum(survey1$status=='accept')/nrow(survey1)
+```
+
+Acceptance rate per person (**NOTE:** this excludes the 5 common surveys per person, but has a rate for it on its own as "all").
+
+```{r}
+# get summary
+  acr <- ddply(survey1, .(coder_id), summarize,
+              # total count of entries     
+              count=length(coder_id),
+              accept=sum(status=='accept'),
+              reject=sum(status=='reject'),
+              # percent acceptance
+              accept_rate=sum(status=='accept')/length(coder_id))
+  acr
+``` 
+
+Average per-person acceptance rates
+
+```{r}
+# mean per-person acceptance rate 
+  mean(acr$accept_rate)
+```
+
+Unique study ids for survey 2 and 3
+```{r}
+length(unique(s2$paper_id)) 
+length(unique(survey3$paper_id))
+length(unique(s23$paper_id))
+
+`%notin%` <- Negate(`%in%`)
+
+halp <- s2[which(unique(s2$paper_id) %notin% unique(survey3$paper_id)),]
+```
+
+## 4.2 General Results
+
+proportion of effects
+```{r}
+# Table of maj_eff
+table(taxEff_maj$maj_eff_taxa)
+prop.table(table(taxEff_maj$maj_eff_tax))
+
+# Table of sig_eff
+table(s23$sig_effect)
+prop.table(table(s23$sig_effect))
+
+```
+
+
+Counts of papers that were inferred (accepted papers only)
+
+Total rate of **inferring** across papers.
+
+```{r}
+# get total papers for which the tc relationships were inferred
+  paste('number inferred papers:',sum(keep$explicit_distant_impacts=='No'))
+  paste('number explicit papers:',sum(keep$explicit_distant_impacts=='Yes'))
+  
+# get total inferring rate
+  paste('inferred percent:',sum(keep$explicit_distant_impacts=='No')/nrow(keep))
+  paste('explicit percent:',sum(keep$explicit_distant_impacts=='Yes')/nrow(keep))
+```
+
+Percent of papers inferred per person per person
+
+```{r}
+# get summary
+  ddply(keep, .(coder_id), summarize,
+        # total count of entries     
+        count=length(coder_id),
+        inferred=sum(explicit_distant_impacts=='No'),
+        explicit=sum(explicit_distant_impacts=='Yes'),
+        # percent inferred
+        inferred_rate=sum(explicit_distant_impacts=='No')/length(coder_id))
+```
+
+Counts of study types (accepted papers only)
+
+```{r}
+# get summary
+  ddply(keep, .(C4_study), summarize,
+        # total count of entries     
+        count=length(C4_study),
+        percent=length(C4_study)/nrow(keep))
+```
+
+Habitat Frequency (study level, n= 131)
+
+```{r}
+habitat.study <- count(s23_maj, 'hab')
+print(habitat.study)
+prop.table(table(s23_maj$hab))
+
+```
+
+Taxa Frequency (study level, n=131)
+
+```{r}
+desired_length <- 8 
+empty_list <- vector(mode = "list", length = desired_length)
+
+taxa <- (taxEff_maj$taxa)
+table(taxa)
+taxa.list <- c('Mammals', 'Plants', 'Reptiles', 'Amphibians', 'Birds', 'Fish', 'Invertebrates', 'Multiple')
+taxa.count <- empty_list
+
+for (i in 1:length(taxa.list)) {
+  
+  taxa.count[i] <- sum(str_count(taxa, taxa.list[i]))
+    }
+
+taxa.count <- rbind(taxa.list,taxa.count)
+taxa.count
+prop.table((taxa.count))
+
+mult <- as.data.frame((table(taxEff_maj$paper_id)))
+mult <- mult[which(mult$Freq != 1),]
+num.mult <- sum(nrow(mult),(taxa.count[2,8])) # WHATEVER ITS 10
+
+# Others? Not a big deal since taxa is clarified in survey 3.Not a big deal.
+
+othTaxa <- s2[which(s2$taxa == 'Other'),]
+
+```
+
+Flow frequency (study level, n=131)
+
+```{r}
+desired_length <- 10 
+empty_list <- vector(mode = 'list', length = desired_length)
+
+tc <- s2$tele_cat
+tc.list <-c("Energy Transfer","Investment","Knowledge Transfer",
+                                 "Migration (human)","Migration (non-human)",
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer")
+tc.count <- empty_list
+
+for (i in 1:length(tc.list)) {
+  
+  tc.count[i] <- sum(str_count(tc, tc.list[i]))
+    }
+
+tc.count <- rbind(tc.list,tc.count)
+tc.count
+
+
+# Can't get loop to count the migration values for some reason, manual input code below
+# Migration (human) n=4     # Migration (non-human) n=0
+tc.table <- table(s2$tele_cat)
+
+tc.count[2,4] <- tc.table[5] + tc.table[13]      # Migration (human) n=6     # Migration (non-human) n-7
+
+tc.count
+
+#gather(tc.count)
+
+multiple <- str_count(tc, ';')
+multiple <- multiple != 0
+multiple <- table(multiple) ["TRUE"]
+multiple
+
+```
+
+Number of metrics reported by each paper
+
+```{r}
+# get summary
+  ddply(survey3, .(paper_id), summarize,
+        # total count of entries     
+        num_entries=length(entry_id),
+        perc_dataset=length(entry_id)/nrow(survey3),
+        num_taxa=length(unique(taxa))) %>% 
+    arrange(desc(perc_dataset))
+
+num.metric <- count(survey3$paper_id)
+mult.metric <- num.metric[num.metric$freq > 1,]
+
+range(num.metric$freq)
+sum(num.metric$freq)
+
+```
+
+Number of metrics by taxa and paper
+
+```{r}
+# get summary
+  a <- ddply(survey3, .(taxa), summarize,
+        # total count of entries     
+        num_entries=length(entry_id),
+        perc_dataset=length(entry_id)/nrow(survey3),
+        num_papers=length(unique(paper_id)),
+        perc_papers=length(unique(paper_id))/length(unique(survey3$paper_id))) %>% 
+      arrange(desc(perc_dataset))
+
+# view
+  a
+```
+
+## 4.3 Biodiversity and Flow Categories by Country
+
+Biodiversity country map
+
+```{r}
+shp <- ne_countries(scale = 50, returnclass = 'sf') %>% #st_as_sf() %>%
+  select(name, iso_a3) %>% ## , economy, income_grp
+  # filter(name != 'Antarctica') %>%
+  # filter(name == 'France') %>%
+  dplyr::mutate(
+    iso_a3 = if_else(name == 'France', 'FRA', iso_a3),
+    iso_a3 = if_else(name == 'Norway', 'NOR', iso_a3))
+# plot(shp[1])
+
+shp %>% filter(name == 'Norway')
+
+### add new country name that are consistant with names uned in SDG data
+# library(readxl)
+# xls.shp.info <- paste0(dir, '/update_0503_SUM_dist/_input_data/ne_10m_admin_0_countries/Table/ne_10m_admin_0_countries-Export_Output.xls')
+#
+# nation_new_name <-
+#   read_excel(path = xls.shp.info,
+#              sheet = "dat", col_names = T) %>%
+#   select(ADMIN, ADM0_A3, nation_name)
+# names(nation_new_name)
+# nation_new_name <- as.data.frame(nation_new_name[,-c(3,4)])
+
+
+
+
+### theme, font --------------------------------------------------------------------------------------
+font      <- 'sans' ## = "TT Arial"
+font_size <- 6.5 ## max = 7; min = 5 for Nature Sustainability
+map_theme <- ggpubr::theme_transparent()+
+  theme(
+    axis.title.x=element_blank(),
+    axis.title.y=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    legend.position = c(0.09, 0.38),
+    legend.key.size = unit(0.3, "cm"),
+    # legend.key.height = unit(0.5, "cm"),
+    legend.key = element_rect(fill = NA, colour = NA, size = 0.25),
+    
+    panel.background = element_rect(fill = "transparent", colour = NA),
+    plot.background = element_rect(fill = "transparent", colour = NA),
+    legend.background = element_rect(fill = "transparent", colour = NA),
+    legend.box.background = element_rect(fill = "transparent", colour = NA),
+    text=element_text(family=font, size=font_size))
+
+
+### - Read in Data
+
+df99 <- read.csv(paste0(dat.dir, 'survey2_cleaned.csv'))
+
+
+### - list_countries
+ctr_sys <- df99 %>%
+  select(paper_id, list_countries) %>%
+  data.frame(., do.call(rbind, str_split(.$list_countries,';'))) %>%
+  gather(key = 'key', value = list_countries, 3:ncol(.)) %>%
+  dplyr::mutate(list_countries = trimws(list_countries)) %>%
+  dplyr::distinct(paper_id, list_countries, .keep_all = T) %>%
+  filter(list_countries != '') %>%
+  arrange(paper_id) %>%
+  group_by(list_countries) %>%
+  tally()%>%
+  arrange(desc(n)) #%>%
+# str(ctr_sys)
+
+
+### join new name table
+shp_df <- shp %>%
+  left_join(., ctr_sys, by=c("iso_a3" = "list_countries"))
+
+### check the join
+shp_df_check <- merge(
+  shp, ctr_sys, by.x = "iso_a3", by.y = "list_countries", all.y=T) %>%
+  st_drop_geometry()
+
+# str(shp_df)
+unique(shp_df$n)
+
+
+### breaks and colors
+var <- shp_df$n
+max <- max(var, na.rm = T); max
+min <- min(var, na.rm = T); min
+
+breaks <- seq(min, max, 2); breaks; length(breaks)
+breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
+myPalette <- colorRampPalette((brewer.pal(8, "Greens")));# myPalette; rev
+colors <- myPalette(length(breaks)); colors
+title <- 'Entire system\nNumber of papers'
+
+
+### - biodiv_countries
+ctr_bio <- df99 %>%
+  select(paper_id, biodiv_countries) %>%
+  data.frame(., do.call(rbind, str_split(.$biodiv_countries,';'))) %>%
+  gather(key = 'key', value = biodiv_countries, 3:ncol(.)) %>%
+  dplyr::mutate(biodiv_countries = trimws(biodiv_countries)) %>%
+  dplyr::distinct(paper_id, biodiv_countries, .keep_all = T) %>%
+  filter(biodiv_countries != '') %>%
+  arrange(paper_id) %>%
+  group_by(biodiv_countries) %>%
+  tally()%>%
+  arrange(desc(n)) #%>%
+# str(ctr_bio)
+
+
+### join new name table
+shp_df <- shp %>%
+  left_join(., ctr_bio, by=c("iso_a3" = "biodiv_countries"))
+
+# str(shp_df)
+unique(shp_df$n)
+
+### check the join
+shp_df_check <- shp %>%
+  right_join(., ctr_bio, by=c("iso_a3" = "biodiv_countries"))
+
+### breaks and colors
+var <- shp_df$n
+max <- max(var, na.rm = T); max
+min <- min(var, na.rm = T); min
+
+breaks <- seq(min, max, 2); breaks; length(breaks)
+breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
+myPalette <- colorRampPalette((brewer.pal(8, "Purples")));# myPalette; rev
+colors <- myPalette(length(breaks)); colors
+title <- 'Biodiversity system\nNumber of papers'
+
+### plot
+fig2 <- ggplot(data = shp_df) +
+  geom_sf(aes(fill = n), color='gray50', size=0.01) +
+  scale_fill_gradientn(
+    name = title,
+    colours= colors, na.value = "gray90",
+    limits = c(min,max), breaks = breaks) +
+  guides(fill = guide_legend(label.hjust = 0, label = T,
+                             reverse = T, title = title))+
+  map_theme
+fig2
+dir
+fname <- paste0(fig.dir, 'Fig_map_country_bio.jpg'); fname
+
+
+```
+
+Continent distribution, study level (n=131)
+
+```{r, results='hide'}
+table(ctr_bio$biodiv_countries)
+
+# install.packages("jsonlite", repos="https://cran.rstudio.com/")
+library("jsonlite")
+json_file <- 'https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/datapackage.json'
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+# get list of all resources:
+print(json_data$resources$name)
+
+# print all tabular data(if exists any) to 'data'
+for(i in 1:length(json_data$resources$datahub$type)){
+  if(json_data$resources$datahub$type[i]=='derived/csv'){
+    path_to_file = json_data$resources$path[i]
+    data <- read.csv(url(path_to_file))
+    print(data)
+  }
+}
+
+cont <- cbind(data$Continent_Name,data$Country_Name,data$Three_Letter_Country_Code)
+cont <- as.data.frame(cont)
+
+# Match continent and country name to biodiversity countries
+names(cont)[1:3] <- c("continent","ctr_name","ctr_code")
+
+ctr_bio$continent <- cont$continent[match(ctr_bio$biodiv_countries,cont$ctr_code)]  # add continent name
+ctr_bio$ctr_name <- cont$ctr_name[match(ctr_bio$biodiv_countries,cont$ctr_code)]  # add country name
+
+
+BUC <- aggregate(x = ctr_bio$n,
+                               by = list(ctr_bio$continent),
+                               FUN = sum)
+zz <- ctr_bio[-which(ctr_bio$biodiv_countries == 'BRA' |
+                    ctr_bio$biodiv_countries == 'USA' |
+                    ctr_bio$biodiv_countries == 'CHN'),]
+BUC.no <- aggregate(x = zz$n,
+                               by = list(zz$continent),
+                               FUN = sum)
+```
+
+heat map table of countries and flow type
+
+```{r}
+
+## Percentage of telecoupling
+
+k <- as.data.frame(cbind(df99$biodiv_countries, df99$tele_cat))
+colnames(k) <- c('ctr', 'tc')
+
+ctr_ls <- ctr_bio[1]
+
+k$ctr[k$ctr == ""] <- NA
+
+k$tc <- as.character(k$tc)
+
+poo <- separate_rows(k, tc, sep=";", convert = TRUE)
+doo <-separate_rows(poo, ctr, sep=";", convert = TRUE)
+
+
+woo <- paste0(doo$ctr, '_', doo$tc)
+woot <- as.data.frame(table(woo))
+
+ok <- str_split_fixed(woot$woo, '_', 2)
+woot$ctr <- ok[,1]
+woot$tc <- ok[,2]
+
+
+### count by ctr and tc
+booty <- doo %>%
+  dplyr::select(ctr, tc) %>%
+  ### how many tcs in total for each ctr?
+  ungroup() %>%
+  group_by(ctr) %>%
+  add_tally(name = 'total_tc') %>%
+  ### the number of each tc
+  dplyr::ungroup() %>%
+  dplyr::group_by(ctr, total_tc) %>%
+  dplyr::count(tc, name = 'n_tc') %>%
+  arrange(ctr) %>%
+  dplyr::mutate(pct_tc = n_tc/total_tc*100)
+
+
+booty_check <-  booty %>%
+  dplyr::group_by(ctr) %>%
+  dplyr::summarise(sum = sum(pct_tc, na.rm = T))
+
+booty2 <- booty[order(-booty$total_tc,booty$ctr, -booty$n_tc),]
+
+# Load data of number of studies by taxa and flow
+nr_ctr <- aggregate(x = booty2$n_tc,
+                               by = list(booty2$ctr,booty2$tc),
+                               FUN = sum)
+
+
+
+# Rename columns
+
+names(nr_ctr)[1:3] <- c("ctr","tc","count")
+
+# Fill the gaps
+
+mat_nr_ctr <-dcast(nr_ctr, ctr ~ tc, value.var = 'count')
+filled_nr_ctr <- melt(mat_nr_ctr, id=c("ctr"))
+filled_nr_ctr[is.na(filled_nr_ctr)] <- 0
+names(filled_nr_ctr)[2:3] <- c("tc", "count")
+
+# Subset for countries >5 total tc
+
+filled_nr_ctr$n_tc <- booty2$total_tc[match(filled_nr_ctr$ctr, booty2$ctr)]
+filled_nr_ctr<- filled_nr_ctr[which(filled_nr_ctr$n_tc > 5),]
+filled_nr_ctr<-filled_nr_ctr[order(-filled_nr_ctr$n_tc),]
+
+
+# Change order of factor levels for consistency with other figures
+
+filled_nr_ctr$ctr <- factor(filled_nr_ctr$ctr,levels=c(unique(filled_nr_ctr$ctr[order(filled_nr_ctr$n_tc)])))
+
+filled_nr_ctr$tc <- factor(filled_nr_ctr$tc,levels=c("Energy Transfer","Investment","Knowledge Transfer",
+                                                      "Migration (human)","Migration (non-human)","Species Dispersal",
+                                                      "Tourism","Trade","Waste Transfer","Water Transfer"))
+
+        
+# Heatmap plot
+
+
+heatmap_ctr <- ggplot(filled_nr_ctr,
+                      aes(x=tc, y=ctr, fill=count)) +
+                      geom_tile(color = "white", size=0.25) +
+                      geom_text(aes(label = count )) +
+                      labs(x="",y="")+
+                      scale_y_discrete(expand=c(0,0))+
+                      theme_grey(base_size=8)+
+                      scale_fill_gradientn(colours = c('#FFFFFF','gray30')) +
+                      theme(legend.title = element_text(size = 10),
+                      legend.text = element_text(size = 10, face="bold"),
+                      plot.background=element_blank(),
+                      plot.title = element_blank(),
+                      axis.title= element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
+                                                     hjust = 0),
+                      axis.text.y.left = element_text(size=10, angle = 360, vjust=0.5,
+                                                      hjust = 0),
+                      strip.background = element_rect(fill="white"),
+                      panel.spacing = unit(0.1, "lines")) +
+                      scale_x_discrete(position = "top") +
+                      labs(fill = "number of entries")
+
+heatmap_ctr
+
+```
+
+
+# 5. Telecoupling Impact by Taxa 
+
+Note that n=132, some papers reported metrics for multiple taxa. Maj_eff was determined based on paper and taxa for these figures. 
+
+- When studies reported significant results, the majority were significantly Harmful for biodiversity.
+- Studies that quantified impacts to mammals were overwhelmingly Harmful compared to the other groups. 
+- Birds and plants had more beneficial impacts, relative to the other groups.
+- Amphibians were greatly underrepresented. Only one paper measured amphibian diversity separate from other groups. 
+
+
+```{r}
+# get summary
+  a <- ddply(taxEff_maj, .(taxa, maj_eff_taxa), summarize,
+          # total count of entries     
+          count=length(taxa)) %>%
+          # percents of effects within totals per taxa
+          group_by(taxa) %>%
+            nest() %>% 
+             mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_taxa))
+# save as csv
+#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)
+
+# Stack plot (count)
+  taxa_bar <- ggplot(a, aes(fill=maj_eff_taxa, y=count, x=taxa)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("") + 
+                ylim(0,50) +
+               theme(legend.position = "bottom",legend.justification='center',   
+                     legend.direction='horizontal',legend.title = element_blank())
+taxa_bar
+```
+
+
+```{r}
+# Stack plot (percentage)
+  quick_plot <- ggplot(a, aes(fill=maj_eff_taxa, y=perc_per_taxa, x=taxa)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("")
+quick_plot
+```
+
+
+# 6. Telecoupling Impact by Habitat
+
+Figure moving to supp.
+
+- Terrestrial habitats were studied the most.
+- All habitats had more Harmful impacts on their respective biodiversity metrics.
+
+```{r}
+# get summary
+  a <- ddply(s23_maj, .(hab, maj_eff), summarize,
+          # total count of entries     
+          count=length(hab)) %>%
+          # percents of effects within totals per hab
+          group_by(hab) %>%
+            nest() %>% 
+             mutate(perc_per_hab=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_hab))
+# save as csv
+#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_hab.csv'), row.names = TRUE)
+
+# Stack plot (count)
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("")
+
+# view
+  quick_plot
+```
+
+
+```{r}
+# Stack plot (percent)
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_hab, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("")
+quick_plot
+
+```
+
+# 7. Telecoupling Impact by Flow
+
+Duplicate rows with multiple flow types. This means that effects and other results will be *duplicated* as well.
+
+The reason for doing this is so that we can attribute biodiversity impacts to the specific flows that may have been studied together, and whose individual impacts cannot be decoupled.
+
+- Tourism and Trade were the most represented in our sample and both had majority Harmful imapcts reported.
+- The flow categories that showed somewhat beneficial impacts where Investment, Water Transfer, and Knowledge Transfer.
+
+```{r}
+
+# set as character
+  s23_maj$tc <- as.character(s23_maj$tc)
+
+# show original length of rows
+  print(paste('Original number of rows:',nrow(s23_maj)))
+
+# split multiple flows listed in a row into other new rows
+  tcRep_maj <- separate_rows(s23_maj, tc, sep=";", convert = TRUE)
+  tcRep_maj$tc <- as.factor(tcRep_maj$tc)
+
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep_maj)))
+
+# show levels
+#  summary(tcRep$tc)
+
+# get summary
+  a <- ddply(tcRep_maj, .(tc, maj_eff), summarize,
+          # total count of entries     
+          count=length(tc)) %>%
+          # percents of effects within totals per tc
+          group_by(tc) %>%
+            nest() %>% 
+             mutate(perc_per_tc=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_tc))
+# save as csv
+#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),row.names = TRUE)
+  
+# Stack plot (count)
+  flow_bar <- ggplot(a, aes(fill=maj_eff, y=count, x=tc)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("") +
+                ylim(0,50)
+
+
+
+# view
+  flow_bar
+```
+
+```{r}
+# Stack plot (percent)
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_tc, x=tc)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("")
+
+quick_plot
+```
+
+Side by side♣ plot of taxa barchart and flow barchart
+
+```{r}
+
+taxa_bar2 <- taxa_bar + theme(legend.position = 'none') 
+
+flow_bar2 <- flow_bar + ylab(element_blank()) + theme(legend.position = 'none') 
+  
+  
+  
+# theme(legend.position = "bottom",legend.justification='center',   
+# legend.direction='horizontal',legend.title = element_blank())
+
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend<-g_legend(taxa_bar)
+
+merge_bar <- grid.arrange(arrangeGrob(taxa_bar2,flow_bar2,nrow=1),mylegend, nrow=2,heights=c(10, 1))
+
+
+#merge_bar <- ggarrange(taxa_bar2, flow_bar2, mylegend,ncol=2, nrow=2,labels = c('a', 'b'))
+#merge_bar
+
+```
+
+# 8. Telecoupling impacts by at the entry level
+
+Replicate TC flows by entry
+
+- This figure shows the direction of telecoupling impacts at the entry level (i.e. all 700+ metrics recorded)
+- Most studies report multiple species richness and abundance. 
+- Most habitat metrics were significantly Harmful, except in the case of knowledge transfer telecouplings.
+
+```{r}
+# set as character
+  s23$tc <- as.character(s23$tc)
+  poo<-s23[is.na(s23$tc),]
+  
+  
+# show original length of rows
+  print(paste('Original number of rows:',nrow(s23)))
+
+# split multiple flows listed in a row into other new rows
+  tcRep <- separate_rows(s23, tc, sep=";", convert = TRUE)
+  tcRep$tc <- as.factor(tcRep$tc)
+
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(tcRep)))
+  
+  tcRep_maj <- tcRep[!duplicated(tcRep$paper_id),]
+
+
+```
+
+## Impacts by metric 
+
+Convert to long format, where metric is indicated.
+
+```{r}
+# subset
+  metrics <- subset(tcRep,
+                    select=c('paper_id','entry_id',
+                            'taxa','tc','sig_effect',
+                            'biodiv_cat_1sp',
+                            'biodiv_cat_multsp',
+                            'biodiv_cat_habitat'))
+# melt
+  metrics_long <- melt(metrics, id.vars=c('paper_id','entry_id',
+                            'taxa','tc','sig_effect'))
+  
+# remove NA fields
+  metrics_long <- metrics_long[!is.na(metrics_long$value),]
+
+# change colnames
+  colnames(metrics_long)[6] <- 'metric_type'
+  colnames(metrics_long)[7] <- 'metric'
+
+
+# change levels
+  levels(metrics_long$metric_type) <- c('Single species',
+                                        'Multiple species',
+                                        'Habitat')
+
+  levels(as.factor(metrics_long$metric))
+
+# remove parentheses
+  metrics_long$metric <- gsub("\\s*\\([^\\)]+\\)", '',
+                          as.character(metrics_long$metric))
+
+# capitalize each word
+  metrics_long$metric <- tools::toTitleCase(metrics_long$metric)
+  
+# adjust name
+  metrics_long$metric <- gsub("With-in", 'Within',
+                        as.character(metrics_long$metric))
+  
+# change levels, moving other to the end
+  metrics_long$metric <- factor(metrics_long$metric,
+                                c("Abundance/Density",
+                                   "Amount",
+                                   "Composition",
+                                   "Detection",
+                                   "Diversity Index",
+                                   "Evenness",
+                                   "Movement",
+                                   "Occurrence",
+                                   "Population Dynamics",
+                                   "Quality",
+                                   "Richness",
+                                   "Within Species Diversity"
+                                  ))
+  
+# check levels
+  levels(as.factor(metrics_long$metric))
+
+# get summary
+  metric_flow <- ddply(metrics_long,
+                       .(metric_type, metric, tc, sig_effect),
+                       summarize,
+                      # total count of entries     
+                        count=length(metric))
+
+# save as csv
+#  write.csv(metric_flow, paste0(tab.dir,'synthesis_sig_effects_metric_and_flow.csv'),row.names = TRUE)
+
+# sig_effects level change
+  metric_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
+                          as.character(metric_flow$sig_effect))
+  metric_flow$sig_effect <- factor(metric_flow$sig_effect,
+                             c( "Beneficial","Harmful","Changed","Not significant or unclear"))
+# telecoupling level change
+  metric_flow$tc <- factor(metric_flow$tc,
+                                c("Energy Transfer","Investment","Knowledge Transfer",
+                                 "Migration (human)","Migration (non-human)",
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
+  
+```
+
+Metric & Flow Figure code
+
+```{r}
+# Matrix of pie charts
+sig_effect_cols <- sigeff_col
+
+  metric_flow_fig <- ggplot(metric_flow) + 
+                    aes(x='', y = count, fill = sig_effect) +
+                    geom_bar(position='fill',
+                             stat='identity',
+                             width = 1,
+                             size = 0.01) +
+                    # activate for vertical or horizontal version
+                      facet_grid(metric_type ~ metric ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
+                    # convert to pie chart
+                      coord_polar(theta = 'y') +
+                    # colors
+                      scale_fill_manual(
+                        values=sig_effect_cols,
+                        guide = guide_legend(reverse = FALSE))  + 
+                        scale_y_discrete(position='right',expand=c(0,0))+
+                    # style
+                      theme_gray(base_size=8)+
+                      theme(
+                        axis.title=element_blank(),
+                        axis.line=element_blank(),
+                        axis.ticks=element_blank(),
+                        axis.text=element_blank(),
+                        panel.border = element_blank(),
+                        panel.grid=element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        plot.background = element_rect(),
+                        plot.title=element_blank(),
+                        strip.text.x = element_text(size=10,
+                                          angle=90, vjust=0, hjust = 0),
+                        strip.text.y.left = element_text(size=10,
+                                          angle=0, vjust=0, hjust = 0),
+                        strip.background = element_rect(fill='white'),
+                        panel.spacing = unit(0.1, 'lines')
+                        ) +
+                    # labels
+                      ylab('') + xlab('')
+                
+
+
+
+# display image
+#  metric_flow_fig
+
+```
+
+Metric & Flow Heatmap
+
+```{r}
+# Load data of number of studies by taxa and flow
+nr_metric_tele <- aggregate(x = metric_flow$count,
+                               by = list(metric_flow$metric_type,metric_flow$metric, metric_flow$tc),
+                               FUN = sum)
+
+ 
+
+# Rename columns
+
+names(nr_metric_tele)[1:4] <- c("type","metric", "telecoupling", "count")
+
+nr_metric_tele$metricType <- paste(nr_metric_tele$type,nr_metric_tele$metric)   
+
+# Fill the gaps
+
+mat_nr_metric_tele <-dcast(nr_metric_tele, metricType ~ telecoupling, value.var = 'count')
+filled_nr_metric_tele <- melt(mat_nr_metric_tele, id=c("metricType"))
+filled_nr_metric_tele[is.na(filled_nr_metric_tele)] <- 0
+names(filled_nr_metric_tele)[2:3] <- c("telecoupling", "count")
+
+# Create 'count' categories for representation
+
+filled_nr_metric_tele$count_factor <- cut(filled_nr_metric_tele$count,
+                                          breaks = c(-1,0,5,10,20,50,100,max(filled_nr_metric_tele$count,na.rm=T)),
+                                          labels=c("0","1-5","5-10","10-20","20-50","50-100",">100"))
+
+
+# Change order of factor levels for consistency with other figures
+
+filled_nr_metric_tele$metricType <- as.character(filled_nr_metric_tele$metricType)
+
+filled_nr_metric_tele$metricType <- factor(filled_nr_metric_tele$metricType,
+          levels=c("Habitat Quality",
+                   "Habitat Amount",
+                   "Multiple species Richness",
+                   "Multiple species Population Dynamics",
+                   "Multiple species Occurrence",
+                   "Multiple species Evenness",
+                   "Multiple species Diversity Index",
+                   "Multiple species Composition",
+                   "Multiple species Abundance/Density",
+                   "Single species Within Species Diversity",
+                   "Single species Population Dynamics",
+                   "Single species Occurrence",
+                   "Single species Movement",
+                   "Single species Abundance/Density"
+          ))
+# Heatmap plot
+
+heatmap_telemetric <- ggplot(filled_nr_metric_tele,
+                      aes(x=telecoupling, y=metricType, fill=count_factor)) +
+                      geom_tile(color = "white", size=0.25) +
+                    geom_text(aes(label = count )) +
+ scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+                                               "#4E91CC","#3F76A6","#274866"))+
+                      labs(x="",y="")+
+                      scale_y_discrete(expand=c(0,0))+
+                      theme_grey(base_size=8)+
+
+                      theme(legend.title = element_text(size = 10),
+                      legend.text = element_text(size = 10, face="bold"),
+                      plot.background=element_blank(),
+                      plot.title = element_blank(),
+                      axis.title= element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
+                                                     hjust = 0),
+                      axis.text.y.left = element_text(size=10, angle = 360, vjust=0.5,
+                                                      hjust = 0),
+                      strip.background = element_rect(fill="white"),
+                      panel.spacing = unit(0.1, "lines")) +
+                      scale_x_discrete(position = "top") +
+                      labs(fill = "number of entries")
+
+#heatmap_telemetric
+
+                   
+
+                    
+                    
+
+```
+
+
+Metric & Flow fig with sample size --CAN'T FIGURE OUT 10-19
+```{r}
+# Matrix of pie charts
+# 
+# sig_effect_cols <- sigeff_col
+# 
+# var <- metric_flow$count
+# max <- max(var, na.rm = T); max
+# min <- min(var, na.rm = T); min
+# 
+# breaks <- seq(min, max, 2); breaks; length(breaks)
+# breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
+# myPalette <- colorRampPalette((brewer.pal(8, "Purples")));# myPalette; rev
+# colors <- myPalette(length(breaks)); colors
+# 
+# metric_flow_fig <- ggplot(metric_flow) + 
+#                    aes(x='', y = count, fill = sig_effect) +
+#     
+#                    geom_bar(position='fill',
+#                             stat='identity',
+#                             width = 1,
+#                             size = 0.01) +
+#     
+#                     # activate for vertical or horizontal version
+#                       facet_grid(metric_type ~ metric ~ tc, switch='y') + #horizontal
+#                       #facet_grid(tc ~ metric, switch='y') +  #vertical
+#                     
+#                     # convert to pie chart
+#                       coord_polar(theta = 'y') +
+#                     
+#                     # colors for pies
+#                       scale_fill_manual("Pies", values=sig_effect_cols, guide = guide_legend(reverse = FALSE))  +
+#                       scale_y_discrete(position='right',expand=c(0,0)) +
+#   
+#                       new_scale("fill") +   # add new scale
+#           
+#                     # attempt at showing sample size
+#                       geom_tile(data = filled_nr_metric_tele, aes(fill = count_factor)) +
+#                       scale_fill_manual("Tiles",values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+#                                                  "#4E91CC","#3F76A6","#274866"))+
+#                    
+#                     # style
+#                       theme_gray(base_size=8)+
+#                       theme(
+#                         axis.title=element_blank(),
+#                         axis.line=element_blank(),
+#                         axis.ticks=element_blank(),
+#                         axis.text=element_blank(),
+#                         panel.border = element_blank(),
+#                         panel.grid=element_blank(),
+#                         panel.grid.major = element_blank(),
+#                         panel.grid.minor = element_blank(),
+#                         plot.background = element_rect(),
+#                         plot.title=element_blank(),
+#                         strip.text.x = element_text(size=10,
+#                                           angle=90, vjust=0, hjust = 0),
+#                         strip.text.y.left = element_text(size=10,
+#                                           angle=0, vjust=0, hjust = 0),
+#                         strip.background = element_rect(fill='white'),
+#                         panel.spacing = unit(0.1, 'lines')
+#                         ) +
+#                     # labels
+#                       ylab('') + xlab('')
+#                 
+# 
+# 
+# 
+# # display image
+#   metric_flow_fig
+# 
+```
+
+## Flow & Taxa data
+
+Convert to long format, where metric is indicated.
+
+```{r}
+
+# get summary
+  metric_flow <- ddply(metrics_long,
+                       .(taxa, tc, sig_effect),
+                       summarize,
+                      # total count of entries     
+                        count=length(metric))
+
+# save as csv
+#  write.csv(metric_flow, paste0(tab.dir,'synthesis_sig_effects_metric_and_flow.csv'),row.names = TRUE)
+
+# sig_effects level change
+  metric_flow$sig_effect <- gsub("\\s*\\([^\\)]+\\)", '',
+                          as.character(metric_flow$sig_effect))
+  metric_flow$sig_effect <- factor(metric_flow$sig_effect,
+                             c( "Beneficial","Harmful","Changed","Not significant or unclear"))
+# telecoupling level change
+  metric_flow$tc <- factor(metric_flow$tc,
+                                c("Energy Transfer","Investment","Knowledge Transfer",
+                                 "Migration (human)","Migration (non-human)",
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
+  
+```
+
+
+##Flow and taxa figure
+
+```{r}
+# Matrix of pie charts
+  sig_effect_cols <- sigeff_col
+
+  metric_flow_fig <- ggplot(metric_flow) +
+                    aes(x='', y = count, fill = sig_effect) +
+                    geom_bar(position='fill',
+                             stat='identity',
+                             width = 1,
+                             size = 0.01) +
+                    # activate for vertical or horizontal version
+                      facet_grid(taxa ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
+                    # convert to pie chart
+                      coord_polar(theta = 'y') +
+                    # colors
+                      scale_fill_manual(
+                        values=sig_effect_cols,
+                        guide = guide_legend(reverse = FALSE))  +
+                        scale_y_discrete(position='right',expand=c(0,0))+
+                    # style
+                      theme_gray(base_size=8)+
+                      theme(
+                        axis.title=element_blank(),
+                        axis.line=element_blank(),
+                        axis.ticks=element_blank(),
+                        axis.text=element_blank(),
+                        
+                        legend.position = "bottom",
+                        legend.justification='center',
+                        legend.direction='horizontal',
+                        legend.title = element_blank(),
+                        
+                        panel.border = element_blank(),
+                        panel.grid=element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        plot.background = element_rect(),
+                        plot.title=element_blank(),
+                        strip.text.x = element_text(size=10,
+                                          angle=90, vjust=0, hjust = 0),
+                        strip.text.y.left = element_text(size=10,
+                                          angle=0, vjust=0, hjust = 0),
+                        strip.background = element_rect(fill='white'),
+                        panel.spacing = unit(0.1, 'lines')
+                        ) +
+                    # labels
+                      ylab('') + xlab('')
+
+
+
+# display image
+  metric_flow_fig
+```
+
+
+Flow Taxa Heatmap
+
+```{r}
+# Load data of number of studies by taxa and flow
+nr_metric_tele <- aggregate(x = metric_flow$count,
+                               by = list(metric_flow$taxa, metric_flow$tc),
+                               FUN = sum)
+
+ 
+
+# Rename columns
+
+names(nr_metric_tele)[1:3] <- c("taxa", "telecoupling", "count")
+
+# Fill the gaps
+
+mat_nr_metric_tele <-dcast(nr_metric_tele, taxa ~ telecoupling, value.var = 'count')
+filled_nr_metric_tele <- melt(mat_nr_metric_tele, id=c("taxa"))
+filled_nr_metric_tele[is.na(filled_nr_metric_tele)] <- 0
+names(filled_nr_metric_tele)[2:3] <- c("telecoupling", "count")
+
+# Create 'count' categories for representation
+
+filled_nr_metric_tele$count_factor <- cut(filled_nr_metric_tele$count,
+                                          breaks = c(-1,0,5,10,20,50,100,max(filled_nr_metric_tele$count,na.rm=T)),
+                                          labels=c("0","1-5","5-10","10-20","20-50","50-100",">100"))
+
+
+# Change order of factor levels for consistency with other figures
+
+filled_nr_metric_tele$taxa <- factor(filled_nr_metric_tele$taxa, c('Reptiles','Plants/Trees/Shrubs','Multiple','Mammals',
+                                                                   'Invertebrates','Fish','Birds','Amphibians'))
+
+# Heatmap plot
+
+heatmap_telemetric <- ggplot(filled_nr_metric_tele,
+                      aes(x=telecoupling, y=taxa, fill=count_factor)) +
+                      geom_tile(color = "white", size=0.25) +
+                      geom_text(aes(label = count )) +
+                      scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+                                               "#4E91CC","#3F76A6","#274866"))+
+                      labs(x="",y="")+
+                      scale_y_discrete(expand=c(0,0))+
+                      theme_grey(base_size=8)+
+
+                      theme(legend.title = element_blank(),
+                      legend.text = element_blank(),
+                      legend.position = "none",
+                      plot.background=element_blank(),
+                      plot.title = element_blank(),
+                      axis.title= element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
+                                                     hjust = 0),
+                      axis.text.y.left = element_blank(),
+                      strip.background = element_rect(fill="white"),
+                      panel.spacing = unit(0.1, "lines")) +
+                      scale_x_discrete(position = "top") +
+                      labs(fill = "number of entries")
+
+heatmap_telemetric
+
+                   
+
+                    
+                    
+
+```
+
+Side by side plot
+```{r}
+
+# grid.arrange(metric_flow_fig, heatmap_telemetric, ncol=2)
+ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
+```
+
+
+
+## Country/Region Entry Effects
+
+```{r}
+# Get continents, tc_cat, and maj_eff
+ctr_tc_raw <- subset(tcRep_maj, select = c('paper_id', 'biodiv_countries', 'tc', 'maj_eff'))
+
+# remove studies w/ no biodiversity ctr (6 removed)
+ctr_tc <- ctr_tc_raw[-which(ctr_tc_raw$biodiv_countries == ""),]
+nrow(ctr_tc_raw); nrow(ctr_tc);nrow(ctr_tc_raw)-nrow(ctr_tc)
+
+#repeat ctr code
+ctr_tc_rep <- separate_rows(ctr_tc, biodiv_countries, sep=";", convert = TRUE)
+
+ctr_tc_rep$continent <- cont$continent[match(ctr_tc_rep$biodiv_countries,cont$ctr_code)]  # add continent name
+ctr_tc_rep$ctr_name <- cont$ctr_name[match(ctr_tc_rep$biodiv_countries,cont$ctr_code)]  # add country name
+
+
+ctr_tc_uni <- ctr_tc_rep[!duplicated(ctr_tc_rep[c(1)]),]
+
+
+```
+
+
+```{r}
+# sig_effects level change
+  ctr_tc_uni$maj_eff <- factor( ctr_tc_uni$maj_eff,
+                             c( "Beneficial","Harmful","Changed","Mixed","Not significant or unclear"))
+# telecoupling level change
+  ctr_tc_uni$tc <- factor(ctr_tc_uni$tc,
+                                c("Energy Transfer","Investment","Knowledge Transfer",
+                                 "Migration (human)","Migration (non-human)",
+                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
+                                ))
+  
+```
+
+
+
+```{r}
+
+ctr_tc_count <- ddply(ctr_tc_uni,
+                       .(continent, tc, maj_eff),
+                       summarize,
+                      # total count of entries     
+                        count=length(maj_eff))
+
+
+ctr_tc_fig <- ggplot(ctr_tc_count) +
+                    aes(x='', y = count, fill = maj_eff) +
+                    geom_bar(position='fill',
+                             stat='identity',
+                             width = 1,
+                             size = 0.01) +
+                    # activate for vertical or horizontal version
+                      facet_grid(continent ~ tc, switch='y') + #horizontal
+                      #facet_grid(tc ~ metric, switch='y') +  #vertical
+                    # convert to pie chart
+                      coord_polar(theta = 'y') +
+                    # colors
+                      scale_fill_manual(
+                        values=majeff_col,
+                        guide = guide_legend(reverse = FALSE))  +
+                        scale_y_discrete(position='right',expand=c(0,0))+
+                    # style
+                      theme_gray(base_size=8)+
+                      theme(
+                        axis.title=element_blank(),
+                        axis.line=element_blank(),
+                        axis.ticks=element_blank(),
+                        axis.text=element_blank(),
+                        
+                        legend.position = "bottom",
+                        legend.justification='center',
+                        legend.direction='horizontal',
+                        legend.title = element_blank(),
+                        
+                        panel.border = element_blank(),
+                        panel.grid=element_blank(),
+                        panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(),
+                        plot.background = element_rect(),
+                        plot.title=element_blank(),
+                        strip.text.x = element_text(size=10,
+                                          angle=90, vjust=0, hjust = 0),
+                        strip.text.y.left = element_text(size=10,
+                                          angle=0, vjust=0, hjust = 0),
+                        strip.background = element_rect(fill='white'),
+                        panel.spacing = unit(0.1, 'lines')
+                        ) +
+                    # labels
+                      ylab('') + xlab('')
+
+
+
+# display image
+  ctr_tc_fig
+```
+
+```{r}
+num_ctr_tele <- aggregate(x = ctr_tc_count$count,
+                               by = list(ctr_tc_count$continent, ctr_tc_count$tc),
+                               FUN = sum)
+
+
+
+names(num_ctr_tele)[1:3] <- c("continent", "telecoupling", "count")
+
+num_ctr_tele$continent <- factor(num_ctr_tele$continent,
+                                        c('South America',
+                                          'Oceania',
+                                          'North America',
+                                          'Europe',
+                                          'Asia',
+                                          'Antarctica',
+                                          'Africa'))
+
+
+# Fill the gaps
+
+mat_num_ctr_tele <-dcast(num_ctr_tele, continent ~ telecoupling, value.var = 'count')
+filled_num_ctr_tele <- melt(mat_num_ctr_tele, id=c("continent"))
+filled_num_ctr_tele[is.na(filled_num_ctr_tele)] <- 0
+names(filled_num_ctr_tele)[2:3] <- c("telecoupling", "count")
+
+# Create 'count' categories for representation
+
+filled_num_ctr_tele$count_factor <- cut(filled_num_ctr_tele$count,
+                                          breaks = c(-1,0,5,10,20,50,100,max(filled_num_ctr_tele$count,na.rm=T)),
+                                          labels=c("0","1-5","5-10","10-20","20-50","50-100",">100"))
+
+
+# Change order of factor levels for consistency with other figures
+
+#filled_num_ctr_tele$continent <- factor(filled_num_ctr_tele$continent, c('South America','Oceania',
+#'North America', 'Europe','Asia','Antarctica','Africa'))
+
+# Heatmap plot
+
+heatmap_tele_ctr <- ggplot(filled_num_ctr_tele,
+                      aes(x=telecoupling, y=continent, fill=count_factor)) +
+                      geom_tile(color = "white", size=0.25) +
+                      geom_text(aes(label = count )) +
+                      scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
+                                               "#4E91CC","#3F76A6","#274866"))+
+                      labs(x="",y="")+
+                      scale_y_discrete(expand=c(0,0))+
+                      theme_grey(base_size=8)+
+
+                      theme(legend.title = element_blank(),
+                      legend.text = element_blank(),
+                      legend.position = "none",
+                      plot.background=element_blank(),
+                      plot.title = element_blank(),
+                      axis.title= element_blank(),
+                      axis.ticks = element_blank(),
+                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
+                                                     hjust = 0),
+                      axis.text.y.left = element_blank(),
+                      strip.background = element_rect(fill="white"),
+                      panel.spacing = unit(0.1, "lines")) +
+                      scale_x_discrete(position = "top") +
+                      labs(fill = "number of entries")
+
+heatmap_tele_ctr
+```
+
+
+```{r}
+ggarrange(ctr_tc_fig, heatmap_tele_ctr, ncol=2)
+
+```
+
