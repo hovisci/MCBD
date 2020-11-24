@@ -420,9 +420,11 @@ for (i in 1:length(taxa.list)) {
   taxa.count[i] <- sum(str_count(taxa, taxa.list[i]))
     }
 
-taxa.count <- rbind(taxa.list,taxa.count)
+taxa.count <- as.data.frame(cbind(taxa.list,taxa.count))
 taxa.count
-prop.table((taxa.count))
+taxa.count$perc <- (as.numeric(taxa.count$taxa.count)/131) * 100
+taxa.count <- taxa.count[order(-taxa.count$perc),]
+taxa.count
 
 mult <- as.data.frame((table(taxEff_maj$paper_id)))
 mult <- mult[which(mult$Freq != 1),]
@@ -437,12 +439,12 @@ othTaxa <- s2[which(s2$taxa == 'Other'),]
 Flow frequency (study level, n=131)
 
 ```{r}
-desired_length <- 10 
+desired_length <- 9 
 empty_list <- vector(mode = 'list', length = desired_length)
 
 tc <- s2$tele_cat
 tc.list <-c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
+                                 "Migration (human)",
                                  "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer")
 tc.count <- empty_list
 
@@ -451,24 +453,27 @@ for (i in 1:length(tc.list)) {
   tc.count[i] <- sum(str_count(tc, tc.list[i]))
     }
 
-tc.count <- rbind(tc.list,tc.count)
+tc.count <- as.data.frame(cbind(tc.list,tc.count))
 tc.count
 
 
 # Can't get loop to count the migration values for some reason, manual input code below
 # Migration (human) n=4     # Migration (non-human) n=0
 tc.table <- table(s2$tele_cat)
+tc.table
+tc.count[4,2] <- tc.table[5] + tc.table[13]      # Migration (human) n=4     
 
-tc.count[2,4] <- tc.table[5] + tc.table[13]      # Migration (human) n=6     # Migration (non-human) n-7
-
+tc.count$perc <- (as.numeric(tc.count$tc.count)/131) * 100
+tc.count <- tc.count[order(-tc.count$perc),]
 tc.count
+
 
 #gather(tc.count)
 
 multiple <- str_count(tc, ';')
 multiple <- multiple != 0
 multiple <- table(multiple) ["TRUE"]
-multiple
+multiple/131
 
 ```
 
@@ -508,6 +513,30 @@ Number of metrics by taxa and paper
 ```
 
 ## 4.3 Biodiversity and Flow Categories by Country
+
+Continent freq n=131
+```{r}
+cont <- s23_maj$list_continents
+table(cont)
+desired_length <- 7 
+empty_list <- vector(mode = 'list', length = desired_length)
+
+cont.list <-c("North America","South America","Africa","Europe","Oceania","Asia","Antarctica")
+cont.count <- empty_list
+
+for (i in 1:length(cont.list)) {
+  
+  cont.count[i] <- sum(str_count(cont, cont.list[i]))
+    }
+
+cont.count <- as.data.frame(cbind(cont.list,cont.count))
+cont.count
+cont.count$perc <- (as.numeric(cont.count$cont.count)/131) * 100
+cont.count <- cont.count[order(-cont.count$perc),]
+cont.count
+
+```
+
 
 Biodiversity country map
 
@@ -563,48 +592,7 @@ map_theme <- ggpubr::theme_transparent()+
 
 ### - Read in Data
 
-df99 <- read.csv(paste0(dat.dir, 'survey2_cleaned.csv'))
-
-
-### - list_countries
-ctr_sys <- df99 %>%
-  select(paper_id, list_countries) %>%
-  data.frame(., do.call(rbind, str_split(.$list_countries,';'))) %>%
-  gather(key = 'key', value = list_countries, 3:ncol(.)) %>%
-  dplyr::mutate(list_countries = trimws(list_countries)) %>%
-  dplyr::distinct(paper_id, list_countries, .keep_all = T) %>%
-  filter(list_countries != '') %>%
-  arrange(paper_id) %>%
-  group_by(list_countries) %>%
-  tally()%>%
-  arrange(desc(n)) #%>%
-# str(ctr_sys)
-
-
-### join new name table
-shp_df <- shp %>%
-  left_join(., ctr_sys, by=c("iso_a3" = "list_countries"))
-
-### check the join
-shp_df_check <- merge(
-  shp, ctr_sys, by.x = "iso_a3", by.y = "list_countries", all.y=T) %>%
-  st_drop_geometry()
-
-# str(shp_df)
-unique(shp_df$n)
-
-
-### breaks and colors
-var <- shp_df$n
-max <- max(var, na.rm = T); max
-min <- min(var, na.rm = T); min
-
-breaks <- seq(min, max, 2); breaks; length(breaks)
-breaks <- sort(unique(shp_df$n)); breaks; length(breaks)
-myPalette <- colorRampPalette((brewer.pal(8, "Greens")));# myPalette; rev
-colors <- myPalette(length(breaks)); colors
-title <- 'Entire system\nNumber of papers'
-
+df99 <- s23_maj
 
 ### - biodiv_countries
 ctr_bio <- df99 %>%
@@ -1598,6 +1586,16 @@ ctr_tc_fig <- ggplot(ctr_tc_count) +
 ```
 
 ```{r}
+cont_freq <- as.data.frame(cbind(ctr_tc_count$continent,ctr_tc_count$count))
+cont_freq$V2<-as.numeric(cont_freq$V2)
+sum(as.numeric(cont_freq$V2))
+
+hi <-aggregate(x = cont_freq$V2, by = list(cont_freq$V1), FUN = sum)
+hi <- hi[order(-hi$x),]
+hi$perc <- hi$x / (sum(hi$x)) * 100
+# total papers with continents metions = 125; sounds plausible/should double check
+
+
 num_ctr_tele <- aggregate(x = ctr_tc_count$count,
                                by = list(ctr_tc_count$continent, ctr_tc_count$tc),
                                FUN = sum)
@@ -1695,5 +1693,39 @@ deyo <- ctr_tc_count %>%
   dplyr::mutate(pct_eff = n_eff/cont_total*100)
 
 
+```
+
+
+Metric types
+```{r}
+
+# subset
+  metrics2 <- subset(s23,
+                    select=c('paper_id','entry_id','taxa',
+                            'biodiv_cat_1sp',
+                            'biodiv_cat_multsp',
+                            'biodiv_cat_habitat'))
+# melt
+  metrics_long2 <- melt(metrics2, id.vars=c('paper_id','entry_id',
+                            'taxa'))
+  
+# remove NA fields
+  metrics_long2 <- metrics_long2[!is.na(metrics_long2$value),]
+
+# change colnames
+  colnames(metrics_long2)[4] <- 'metric_type'
+  colnames(metrics_long2)[5] <- 'metric'
+
+metrics_long2$metric_name <- paste0(metrics_long2$metric_type,'_', metrics_long2$metric)
+
+metric_freq<-as.data.frame(table(metrics_long2$metric_name))
+metric_freq <- metric_freq[order(-metric_freq$Freq),]
+total_met <- nrow(s23)
+metric_freq$perc <- (metric_freq$Freq/total_met)*100
+
+
+table(s23$biodiv_cat_1sp)
+abun <- s23[which(s23$biodiv_cat_1sp == 'Abundance/Density (number of individuals, individuals/unit area, biomass)'),]
+occ <- s23[which(s23$biodiv_cat_1sp == 'Occurrence (presence, range, persistence, etc., NOT detection)'),]
 ```
 

@@ -134,6 +134,8 @@ First, we change the the paper ID numbers in the assignment sheet for those with
                            assignments$REVIEWERS=='Yuqian'] <- 5010001
   assignments$STUDY_ID.1[assignments$STUDY_ID.1==379 &
                            assignments$REVIEWERS=='Ruishan'] <- 3790002
+  
+  write.csv(assignments,paste0(dat.dir,'assignments_fixed.csv'),row.names=FALSE)
 ```
 
 ### 4.2.1 Publication years

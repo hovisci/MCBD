@@ -881,6 +881,45 @@ df99 <- func_update_col(dt = bc4, col_name = 'biodiv_countries')
 
 
 
+Add biodiversity continents (CLH 11/24/2020)
+
+```{r}
+table(df99$biodiv_countries)
+
+ctr_rep <- separate_rows(df99, biodiv_countries, sep=";", convert = TRUE)
+length(unique(ctr_rep$paper_id)) # should be 131
+
+# install.packages("jsonlite", repos="https://cran.rstudio.com/")
+library("jsonlite")
+json_file <- 'https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/datapackage.json'
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+# get list of all resources:
+print(json_data$resources$name)
+
+# print all tabular data(if exists any) to 'data'
+for(i in 1:length(json_data$resources$datahub$type)){
+  if(json_data$resources$datahub$type[i]=='derived/csv'){
+    path_to_file = json_data$resources$path[i]
+    data <- read.csv(url(path_to_file))
+    print(data)
+  }
+}
+
+cont <- cbind(data$Continent_Name,data$Country_Name,data$Three_Letter_Country_Code)
+cont <- as.data.frame(cont)
+
+# Match continent and country name to biodiversity countries
+names(cont)[1:3] <- c("continent","ctr_name","ctr_code")
+
+
+ctr_rep$continent <- cont$continent[match(ctr_rep$biodiv_countries,cont$ctr_code)]  # add continent name
+ctr_rep$ctr_name <- cont$ctr_name[match(ctr_rep$biodiv_countries,cont$ctr_code)]  # add country name
+ctr_rep$bd_ctr_id <- paste0(ctr_rep$paper_id,'_',ctr_rep$continent)
+ctr_bd_table <- ctr_rep[!duplicated(ctr_rep$bd_ctr_id),c(2,34,36)]
+df99$bd_continents <- ctr_bd_table$continent[match(df99$paper_id,ctr_bd_table$paper_id)]
+```
+
+
 # 5. Save cleaned data to local
 ```{r}
 today <- format(Sys.Date(), "%Y%m%d"); today
