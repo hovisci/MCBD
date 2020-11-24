@@ -960,12 +960,12 @@ Some have entries with multiple metrics. Only one metric is allowed per entry. T
 # K_Kapsar errors
   # Paper ID 3989
     survey3$biodiv_cat_1sp[survey3$paper_id==3989 & survey3$entry_id==8
-                           ] <- 'Abundance/Density (biomass, mass, number of individuals, individuals/unit area)'
+                           ] <- 'Abundance/Density (number of individuals, individuals/unit area, biomass)'
 
   # Paper ID 4552
     survey3$biodiv_cat_1sp[survey3$paper_id==4552 &
                              survey3$entry_id==14
-                           ] <- 'Abundance/Density (biomass, mass, number of individuals, individuals/unit area)'
+                           ] <- 'Abundance/Density (number of individuals, individuals/unit area, biomass)'
 
 # M_Lei errors
   # Paper ID 523
@@ -1111,6 +1111,9 @@ survey3$effect[survey3$paper_id == '5966' & survey3$entry_id == 1] <- "Changed (
 
 # 510
 survey3$biodiv_cat_multsp[survey3$paper_id == '510' & survey3$entry_id == 2] <- "Abundance/Density (biomass, mass, number of individuals, individuals/unit area)"
+
+# 3790002
+survey3$biodiv_cat_multsp[survey3$paper_id == '3790002' & survey3$entry_id == 1] <- "Richness (number of species)"
 
 # 4257
 survey3 <- survey3[which(survey3$paper_id != '4257'),]                          # drop old entry for paper 4257

@@ -354,7 +354,7 @@ prop.table(table(taxEff_maj$maj_eff_tax))
 # Table of sig_eff
 table(s23$sig_effect)
 prop.table(table(s23$sig_effect))
-
+nrow(s23)
 ```
 
 
@@ -370,19 +370,6 @@ Total rate of **inferring** across papers.
 # get total inferring rate
   paste('inferred percent:',sum(keep$explicit_distant_impacts=='No')/nrow(keep))
   paste('explicit percent:',sum(keep$explicit_distant_impacts=='Yes')/nrow(keep))
-```
-
-Percent of papers inferred per person per person
-
-```{r}
-# get summary
-  ddply(keep, .(coder_id), summarize,
-        # total count of entries     
-        count=length(coder_id),
-        inferred=sum(explicit_distant_impacts=='No'),
-        explicit=sum(explicit_distant_impacts=='Yes'),
-        # percent inferred
-        inferred_rate=sum(explicit_distant_impacts=='No')/length(coder_id))
 ```
 
 Counts of study types (accepted papers only)
@@ -490,6 +477,8 @@ Number of metrics reported by each paper
 
 num.metric <- count(survey3$paper_id)
 mult.metric <- num.metric[num.metric$freq > 1,]
+
+nrow(mult.metric)/131
 
 range(num.metric$freq)
 sum(num.metric$freq)
@@ -814,6 +803,9 @@ Note that n=131, some papers reported metrics for multiple taxa. Maj_eff was det
 
 
 ```{r}
+taxa_tab <- as.data.frame(table(taxEff_maj$maj_eff_taxa))
+taxa_tab$perc <- (taxa_tab$Freq/sum(taxa_tab$Freq))*100
+taxa_tab
 # get summary
   a <- ddply(taxEff_maj, .(taxa, maj_eff_taxa), summarize,
           # total count of entries     
@@ -823,6 +815,7 @@ Note that n=131, some papers reported metrics for multiple taxa. Maj_eff was det
             nest() %>% 
              mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>% 
               unnest(cols = c(data, perc_per_taxa))
+
 # save as csv
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)
 
@@ -907,7 +900,6 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
 - The flow categories that showed somewhat beneficial impacts where Investment, Water Transfer, and Knowledge Transfer.
 
 ```{r}
-
 # set as character
   s23_maj$tc <- as.character(s23_maj$tc)
 
@@ -923,6 +915,9 @@ The reason for doing this is so that we can attribute biodiversity impacts to th
 
 # show levels
 #  summary(tcRep$tc)
+tc_tab <- as.data.frame(table(tcRep_maj$maj_eff))
+tc_tab$perc <- (tc_tab$Freq/sum(tc_tab$Freq))*100
+tc_tab
 
 # get summary
   a <- ddply(tcRep_maj, .(tc, maj_eff), summarize,
@@ -1515,31 +1510,17 @@ ctr_tc_raw <- subset(taxEff_maj, select = c('paper_id', 'bd_continents', 'tc', '
 
 ```{r}
 # Get continents, tc_cat, and maj_eff
-ctr_tc_raw <- subset(tcRep_maj, select = c('paper_id', 'biodiv_countries', 'tc', 'maj_eff'))
-
-# remove studies w/ no biodiversity ctr (6 removed)
-ctr_tc <- ctr_tc_raw[-which(ctr_tc_raw$biodiv_countries == ""),]
-nrow(ctr_tc_raw); nrow(ctr_tc);nrow(ctr_tc_raw)-nrow(ctr_tc)
-
-#repeat ctr code
-ctr_tc_rep <- separate_rows(ctr_tc, biodiv_countries, sep=";", convert = TRUE)
-
-ctr_tc_rep$continent <- cont$continent[match(ctr_tc_rep$biodiv_countries,cont$ctr_code)]  # add continent name
-ctr_tc_rep$ctr_name <- cont$ctr_name[match(ctr_tc_rep$biodiv_countries,cont$ctr_code)]  # add country name
-
-
-ctr_tc_uni <- ctr_tc_rep[!duplicated(ctr_tc_rep[c(1)]),]
-
+ctr_tc_raw <- subset(tcRep_maj, select = c('paper_id', 'bd_continents', 'tc', 'maj_eff'))
 
 ```
 
 
 ```{r}
 # sig_effects level change
-  ctr_tc_uni$maj_eff <- factor( ctr_tc_uni$maj_eff,
+  ctr_tc_raw$maj_eff <- factor( ctr_tc_raw$maj_eff,
                              c( "Beneficial","Harmful","Changed","Mixed","Not significant or unclear"))
 # telecoupling level change
-  ctr_tc_uni$tc <- factor(ctr_tc_uni$tc,
+  ctr_tc_raw$tc <- factor(ctr_tc_raw$tc,
                                 c("Energy Transfer","Investment","Knowledge Transfer",
                                  "Migration (human)","Migration (non-human)",
                                  "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
@@ -1551,8 +1532,8 @@ ctr_tc_uni <- ctr_tc_rep[!duplicated(ctr_tc_rep[c(1)]),]
 
 ```{r}
 
-ctr_tc_count <- ddply(ctr_tc_uni,
-                       .(continent, tc, maj_eff),
+ctr_tc_count <- ddply(ctr_tc_raw,
+                       .(bd_continents, tc, maj_eff),
                        summarize,
                       # total count of entries     
                         count=length(maj_eff))
@@ -1565,7 +1546,7 @@ ctr_tc_fig <- ggplot(ctr_tc_count) +
                              width = 1,
                              size = 0.01) +
                     # activate for vertical or horizontal version
-                      facet_grid(continent ~ tc, switch='y') + #horizontal
+                      facet_grid(bd_continents ~ tc, switch='y') + #horizontal
                       #facet_grid(tc ~ metric, switch='y') +  #vertical
                     # convert to pie chart
                       coord_polar(theta = 'y') +
@@ -1609,19 +1590,20 @@ ctr_tc_fig <- ggplot(ctr_tc_count) +
   ctr_tc_fig
 ```
 
+
+
 ```{r}
-cont_freq <- as.data.frame(cbind(ctr_tc_count$continent,ctr_tc_count$count))
+cont_freq <- as.data.frame(cbind(ctr_tc_count$bd_continents,ctr_tc_count$count))
 cont_freq$V2<-as.numeric(cont_freq$V2)
 sum(as.numeric(cont_freq$V2))
 
 hi <-aggregate(x = cont_freq$V2, by = list(cont_freq$V1), FUN = sum)
 hi <- hi[order(-hi$x),]
 hi$perc <- hi$x / (sum(hi$x)) * 100
-# total papers with continents metions = 125; sounds plausible/should double check
 
 
 num_ctr_tele <- aggregate(x = ctr_tc_count$count,
-                               by = list(ctr_tc_count$continent, ctr_tc_count$tc),
+                               by = list(ctr_tc_count$bd_continents, ctr_tc_count$tc),
                                FUN = sum)
 
 
