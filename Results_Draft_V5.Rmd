@@ -67,6 +67,7 @@ library('rgeos')
 library('ggnewscale')
 library('gridExtra')
 library('egg')
+library('svglite')
 getwd()
 
 ### Directories & Set up ###
@@ -905,7 +906,9 @@ Side by side plot
 ```{r}
 
 # grid.arrange(metric_flow_fig, heatmap_telemetric, ncol=2)
-ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
+k<-ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
+#This actually save the plot in a image
+    ggsave(file="figure2.svg", plot=k, width=10, height=8)
 ```
 
 
@@ -1096,8 +1099,9 @@ heatmap_tele_ctr
 ```
 
 ```{r}
-ggarrange(ctr_tc_fig, heatmap_tele_ctr, ncol=2)
-
+k<-ggarrange(ctr_tc_fig, heatmap_tele_ctr, ncol=2)
+#This actually save the plot in a image
+    ggsave(file="figure4.svg", plot=k, width=10, height=8)
 ```
 
 Europe (30): 31% beneficial,25% harmful,06% changed,19% mixed,19% Not sig
