@@ -578,7 +578,7 @@ tc_tab
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                 scale_fill_manual(values=majeff_col) +
                 xlab("") +
-                ylim(0,50)
+                ylim(0,60)
 
 
 
