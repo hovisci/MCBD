@@ -505,6 +505,13 @@ taxa_tab
 # save as csv
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)
 
+  q <- table(taxEff_maj$taxa)
+  q <- q[order(-(q))]
+  taxa.sorted <- names(q);taxa.sorted
+  taxa.sorted <- c(taxa.sorted,taxa.sorted[6])
+  taxa.sorted <-taxa.sorted[-6]
+  a$taxa <- factor(a$taxa,taxa.sorted)
+  
 # Stack plot (count)
   taxa_bar <- ggplot(a, aes(fill=maj_eff_taxa, y=count, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
@@ -560,6 +567,7 @@ tc_tab <- as.data.frame(table(taxEff_maj_rep$maj_eff_taxa))
 tc_tab$perc <- (tc_tab$Freq/sum(tc_tab$Freq))*100
 tc_tab
 
+
 # get summary
   a <- ddply(taxEff_maj_rep, .(tc, maj_eff_taxa), summarize,
           # total count of entries     
@@ -569,6 +577,11 @@ tc_tab
             nest() %>% 
              mutate(perc_per_tc=map(data, function(x) x$count/sum(x$count))) %>% 
               unnest(cols = c(data, perc_per_tc))
+  
+  q <- table(taxEff_maj_rep$tc)
+  q <- q[order(-(q))]
+  tc.sorted <- names(q);tc.sorted
+  a$tc <- factor(a$tc,tc.sorted)
 # save as csv
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),row.names = TRUE)
   
@@ -736,11 +749,11 @@ Convert to long format, where metric is indicated.
   metric_flow$sig_effect <- factor(metric_flow$sig_effect,
                              c( "Beneficial","Harmful","Changed","Not significant or unclear"))
 # telecoupling level change
-  metric_flow$tc <- factor(metric_flow$tc,
-                                c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
-                                ))
+  
+  q <- table(metric_flow$tc)
+  q <- q[order(-(q))]
+  tc.sorted <- names(q)
+  metric_flow$tc <- factor(metric_flow$tc,tc.sorted)
   
 ```
 
@@ -765,13 +778,15 @@ Convert to long format, where metric is indicated.
                           as.character(metric_flow$sig_effect))
   metric_flow$sig_effect <- factor(metric_flow$sig_effect,
                              c( "Beneficial","Harmful","Changed","Not significant or unclear"))
-# telecoupling level change
-  metric_flow$tc <- factor(metric_flow$tc,
-                                c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
-                                ))
+  metric_flow$tc <- factor(metric_flow$tc,tc.sorted)
   
+  q <- table(metric_flow$taxa)
+  q <- q[order(-(q))]
+  taxa.sorted <- names(q);taxa.sorted
+  taxa.sorted <- c(taxa.sorted,taxa.sorted[6])
+  taxa.sorted <-taxa.sorted[-6]
+  metric_flow$taxa <- factor(metric_flow$taxa,taxa.sorted)
+
 ```
 
 
@@ -862,9 +877,7 @@ filled_nr_metric_tele$count_factor <- cut(filled_nr_metric_tele$count,
 
 
 # Change order of factor levels for consistency with other figures
-
-filled_nr_metric_tele$taxa <- factor(filled_nr_metric_tele$taxa, c('Reptiles','Plants/Trees/Shrubs','Multiple','Mammals',
-                                                                   'Invertebrates','Fish','Birds','Amphibians'))
+filled_nr_metric_tele$taxa <- factor(filled_nr_metric_tele$taxa, rev(taxa.sorted))
 
 # Heatmap plot
 
@@ -879,8 +892,8 @@ heatmap_telemetric <- ggplot(filled_nr_metric_tele,
                       theme_grey(base_size=8)+
 
                       theme(legend.title = element_blank(),
-                      legend.text = element_blank(),
-                      legend.position = "none",
+                      # legend.text = element_blank(),
+                      legend.position = "right",
                       plot.background=element_blank(),
                       plot.title = element_blank(),
                       axis.title= element_blank(),
@@ -951,12 +964,19 @@ ctr_tc_raw <- subset(taxEff_maj_rep, select = c('paper_id', 'bd_continents', 'tc
   ctr_tc_raw$maj_eff_taxa <- factor( ctr_tc_raw$maj_eff_taxa,
                              c( "Beneficial","Harmful","Changed","Mixed","Not significant or unclear"))
 # telecoupling level change
-  ctr_tc_raw$tc <- factor(ctr_tc_raw$tc,
-                                c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
-                                ))
+
+  q <- table(ctr_tc_raw$tc)
+  q <- q[order(-(q))]
+  tc.sorted <- names(q)
+  ctr_tc_raw$tc <- factor(  ctr_tc_raw$tc,tc.sorted)
   
+# continent level change  
+  q <- table(ctr_tc_raw$bd_continents)
+  q <- q[order(-(q))]
+  cont.sorted <- names(q)
+  ctr_tc_raw$bd_continents <- factor(  ctr_tc_raw$bd_continents,cont.sorted)
+
+
 ```
 
 
@@ -1039,14 +1059,7 @@ num_ctr_tele <- aggregate(x = ctr_tc_count$count,
 
 names(num_ctr_tele)[1:3] <- c("continent", "telecoupling", "count")
 
-num_ctr_tele$continent <- factor(num_ctr_tele$continent,
-                                        c('South America',
-                                          'Oceania',
-                                          'North America',
-                                          'Europe',
-                                          'Asia',
-                                          'Antarctica',
-                                          'Africa'))
+num_ctr_tele$continent <- factor(num_ctr_tele$continent, rev(cont.sorted)                                       )
 
 
 # Fill the gaps
@@ -1081,8 +1094,8 @@ heatmap_tele_ctr <- ggplot(filled_num_ctr_tele,
                       theme_grey(base_size=8)+
 
                       theme(legend.title = element_blank(),
-                      legend.text = element_blank(),
-                      legend.position = "none",
+                      # legend.text = element_blank(),
+                      legend.position = "right",
                       plot.background=element_blank(),
                       plot.title = element_blank(),
                       axis.title= element_blank(),
