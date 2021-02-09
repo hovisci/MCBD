@@ -1,0 +1,3186 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={TCBD Results - Draft V2},
+  pdfauthor={Ciara Hovis, CSIS Lab, Michigan State University},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{TCBD Results - Draft V2}
+\author{Ciara Hovis, CSIS Lab, Michigan State University}
+\date{14 October 2020}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{4}
+\tableofcontents
+}
+\hypertarget{summary}{%
+\section{1. Summary}\label{summary}}
+
+Synthesis of results for telacoupling/biodiversity systematic review. It
+consists of response summaries and visualizations of the accepted
+papers.
+
+\hypertarget{r-setup}{%
+\section{2. R Setup}\label{r-setup}}
+
+The script presented here was done using R (version 4.0.2; R Core Team
+2020) and its packages.
+
+Load libraries, directories, and custom functions from source file.
+
+\hypertarget{load-data}{%
+\section{3. Load data}\label{load-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# surveys}
+\NormalTok{  ab_screen <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir, }\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{AbsScreen1_Merge.csv'}\NormalTok{))}
+\NormalTok{  ab_maybes <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir, }\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{AbsScreen2_maybes_to_keep.csv'}\NormalTok{))}
+\NormalTok{  ab_yeses <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,  }\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{final_sample_for_coding.csv'}\NormalTok{))}
+\NormalTok{  assignments <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'absScreening}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{Coding_MergeAssign_R1.csv'}\NormalTok{))}
+
+\NormalTok{  survey1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'survey1_cleaned.csv'}\NormalTok{))}
+\NormalTok{  s2 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'survey2_cleaned.csv'}\NormalTok{))}
+\NormalTok{  survey3 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'survey3_cleaned.csv'}\NormalTok{))}
+\NormalTok{  s23 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'s23.csv'}\NormalTok{))}
+  
+\NormalTok{  taxEff<-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(dat.dir,}\StringTok{'tax_eff.csv'}\NormalTok{))}
+  
+\CommentTok{# factor format}
+\NormalTok{  s23}\OperatorTok{$}\NormalTok{maj_eff<-}\KeywordTok{factor}\NormalTok{(s23}\OperatorTok{$}\NormalTok{maj_eff, }\KeywordTok{c}\NormalTok{(}\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Harmful"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{, }\StringTok{"Mixed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\NormalTok{  s23_maj <-}\StringTok{ }\NormalTok{s23[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(s23}\OperatorTok{$}\NormalTok{paper_id),]}
+  
+\NormalTok{  taxEff}\OperatorTok{$}\NormalTok{maj_eff_taxa<-}\KeywordTok{factor}\NormalTok{(taxEff}\OperatorTok{$}\NormalTok{maj_eff_taxa, }\KeywordTok{c}\NormalTok{(}\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Harmful"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{, }\StringTok{"Mixed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\NormalTok{  taxEff_maj <-}\StringTok{ }\NormalTok{taxEff[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(taxEff}\OperatorTok{$}\NormalTok{tax_ID),]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{survey-1-2-results}{%
+\section{4. Survey 1 \& 2 Results}\label{survey-1-2-results}}
+
+\hypertarget{sample-results}{%
+\subsection{4.1 Sample Results}\label{sample-results}}
+
+Accepted/rejected published papers over time
+
+Total number of papers at the coding stage = 591
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total numbers but also ensure both values here match}
+  \KeywordTok{nrow}\NormalTok{(survey1)}
+  \KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{paper_id))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 591
+## [1] 591
+\end{verbatim}
+
+Number of accepted and rejected papers.
+
+Accepted = 131 (22\%) , Rejected = 460 (78\%)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+  \KeywordTok{ddply}\NormalTok{(survey1, .(status), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(status))}
+\KeywordTok{sum}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{status }\OperatorTok{==}\StringTok{ 'accept'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey1)}
+\KeywordTok{sum}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{status }\OperatorTok{==}\StringTok{ 'reject'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   status count
+## 1 accept   131
+## 2 reject   460
+## [1] 0.2216582
+## [1] 0.7783418
+\end{verbatim}
+
+Visualizing accepted papers over time, including the ones from the
+abstract screening process.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# all abstract screened papers (n=7306)}
+\NormalTok{  ab_screen <-}\StringTok{ }\NormalTok{ab_screen[}\OperatorTok{!}\NormalTok{ab_screen}\OperatorTok{$}\NormalTok{PY}\OperatorTok{==}\DecValTok{2020}\NormalTok{,] }\CommentTok{#remove 2020 studies}
+\NormalTok{  ab_all <-}\StringTok{ }\NormalTok{ab_screen[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(ab_screen}\OperatorTok{$}\NormalTok{TITLE),];}\KeywordTok{nrow}\NormalTok{(ab_all)}
+
+\CommentTok{# remove the papers accepted in screening from the abstract screening list (n=6665)}
+\NormalTok{  ab_reject <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(ab_all,ab_maybes,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"TITLE"}\NormalTok{))}
+\NormalTok{  ab_reject <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(ab_reject,ab_yeses,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"TITLE"}\NormalTok{))}
+\NormalTok{  ab_reject <-}\StringTok{ }\NormalTok{ab_reject[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(ab_reject}\OperatorTok{$}\NormalTok{TITLE,ab_reject}\OperatorTok{$}\NormalTok{PY),];}\KeywordTok{nrow}\NormalTok{(ab_reject)}
+    
+\CommentTok{# all papers that were accepted from abstract screening (n=641)}
+\NormalTok{  ab_accept <-}\StringTok{ }\NormalTok{ab_yeses[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(ab_yeses}\OperatorTok{$}\NormalTok{TITLE),]}
+
+  
+\CommentTok{# accepted papers from the assignment list for full review (n=595)}
+\NormalTok{  papers_reviewed <-}\StringTok{ }\NormalTok{assignments[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(assignments}\OperatorTok{$}\NormalTok{TITLE),]}
+
+\CommentTok{# papers with PDF not available or rejected because of language (n=46)}
+\NormalTok{  paper_unavail <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(ab_accept,papers_reviewed,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"TITLE"}\NormalTok{))}
+\NormalTok{  paper_unavail <-}\StringTok{ }\NormalTok{paper_unavail[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(paper_unavail}\OperatorTok{$}\NormalTok{TITLE),]}
+  
+\CommentTok{# rejected papers or not yet reviewed (n=460)}
+  
+\NormalTok{  keep <-}\StringTok{  }\KeywordTok{subset}\NormalTok{(survey1, status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{)}
+\NormalTok{  reject <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(survey1,keep)}
+
+\NormalTok{  papers_rejected <-}\StringTok{ }\KeywordTok{anti_join}\NormalTok{(papers_reviewed,keep,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID.1"}\NormalTok{=}\StringTok{"paper_id"}\NormalTok{))}
+\NormalTok{  papers_rejected <-}\StringTok{ }\NormalTok{papers_rejected[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(papers_rejected}\OperatorTok{$}\NormalTok{TITLE),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7306
+## [1] 6665
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# show numbers:}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'original number of papers in WOS search:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_screen))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of duplicates in WOS search:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_screen)}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(ab_all))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of abstracts screened:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_all))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of accepted abstracts:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_accept))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of rejected abstracts:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(ab_reject))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of accepted papers unavailable or non-English:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(paper_unavail))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of papers available for full review:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(papers_reviewed))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of full papers accepted for synthesis:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(keep)) }
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of full papers rejected from synthesis:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(reject))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'number of full papers not yet reviewed for synthesis:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(papers_rejected)}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(reject)}\OperatorTok{-}\DecValTok{5}\NormalTok{)}
+  
+\CommentTok{# num of full papers not yet reviewed is -1, idk why. Maybe due to common papers? The check below is True so I'm not worried.    }
+  
+  
+\CommentTok{# test if they add up correctly}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'COUNT TESTS:'}\NormalTok{)}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'total full papers:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(papers_reviewed) }\OperatorTok{==}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ab_accept) }\OperatorTok{-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(paper_unavail))}
+  \KeywordTok{paste}\NormalTok{(}\StringTok{'total abstract screen:'}\NormalTok{,}
+        \KeywordTok{nrow}\NormalTok{(ab_all) }\OperatorTok{==}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ab_reject) }\OperatorTok{+}\StringTok{ }\KeywordTok{nrow}\NormalTok{(ab_accept))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "original number of papers in WOS search: 7318"
+## [1] "number of duplicates in WOS search: 12"
+## [1] "number of abstracts screened: 7306"
+## [1] "number of accepted abstracts: 641"
+## [1] "number of rejected abstracts: 6665"
+## [1] "number of accepted papers unavailable or non-English: 46"
+## [1] "number of papers available for full review: 595"
+## [1] "number of full papers accepted for synthesis: 131"
+## [1] "number of full papers rejected from synthesis: 460"
+## [1] "number of full papers not yet reviewed for synthesis: -1"
+## [1] "COUNT TESTS:"
+## [1] "total full papers: TRUE"
+## [1] "total abstract screen: TRUE"
+\end{verbatim}
+
+Next, simplify columns and combine for three tiers in the plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# select columns}
+  \CommentTok{# papers found in WOS but don't meet criteria}
+\NormalTok{    reject_abstract_level <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(ab_reject,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID"}\NormalTok{,}\StringTok{"PY"}\NormalTok{))}
+  \CommentTok{# WOS papers that meet criteria but don't directly look at coupling effects on biodiv}
+\NormalTok{    reject_paper_level <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(papers_rejected,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID.1"}\NormalTok{,}\StringTok{"PY"}\NormalTok{))}
+\NormalTok{    reject_paper_level2 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(paper_unavail,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"STUDY_ID"}\NormalTok{,}\StringTok{"PY"}\NormalTok{))}
+  \CommentTok{# papers that do look at coupling effects on biodiv}
+\NormalTok{    accept_paper_level <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(keep,}\DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{"paper_id"}\NormalTok{,}\StringTok{"year_pub"}\NormalTok{))}
+  
+\CommentTok{# rename columns}
+  \KeywordTok{colnames}\NormalTok{(reject_abstract_level) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'year_pub'}\NormalTok{)}
+  \KeywordTok{colnames}\NormalTok{(reject_paper_level) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'year_pub'}\NormalTok{)}
+  \KeywordTok{colnames}\NormalTok{(reject_paper_level2) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'year_pub'}\NormalTok{)}
+  
+\CommentTok{# add columns}
+  \CommentTok{#papers that discuss tc effects on biodiv in...}
+\NormalTok{  reject_abstract_level}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'search but not abstract'}
+\NormalTok{  reject_paper_level}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'abstract but not paper'}
+\NormalTok{  reject_paper_level2}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'abstract but not paper'}
+\NormalTok{  accept_paper_level}\OperatorTok{$}\NormalTok{type <-}\StringTok{ 'abstract and paper'}
+  
+\CommentTok{# rbind (should be 7307 rows)}
+\NormalTok{  papers <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(reject_abstract_level,reject_paper_level,}
+\NormalTok{                  reject_paper_level2, }\CommentTok{# <-- NOT SURE IF UNAVAILABLE PAPERS BELONG HERE}
+\NormalTok{                  accept_paper_level)}
+
+\CommentTok{# check}
+  \KeywordTok{nrow}\NormalTok{(papers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7306
+\end{verbatim}
+
+Plot image.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Get a count of records per year}
+\NormalTok{  paper_ct <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(papers, .(year_pub,type), summarize, }\DataTypeTok{count=}\KeywordTok{length}\NormalTok{(year_pub))}
+
+\CommentTok{# Change to factors}
+\NormalTok{  paper_ct}\OperatorTok{$}\NormalTok{year_pub <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(paper_ct}\OperatorTok{$}\NormalTok{year_pub)}
+\NormalTok{  paper_ct}\OperatorTok{$}\NormalTok{type <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(paper_ct}\OperatorTok{$}\NormalTok{type,}
+                        \DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{'search but not abstract'}\NormalTok{,}
+                                   \StringTok{'abstract but not paper'}\NormalTok{,}
+                                   \StringTok{'abstract and paper'}\NormalTok{))}
+              
+\NormalTok{  papers.fig <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(paper_ct, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{year_pub, }\DataTypeTok{y=}\NormalTok{count)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                  }\KeywordTok{geom_area}\NormalTok{(}\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{,}
+                            \KeywordTok{aes}\NormalTok{(}\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{fill =}\NormalTok{ type, }\DataTypeTok{group =}\NormalTok{ type), }\DataTypeTok{alpha=}\FloatTok{0.6}\NormalTok{) }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{count, }\DataTypeTok{color =}\NormalTok{ type, }\DataTypeTok{group =}\NormalTok{ type))}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{geom_line}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{count, }\DataTypeTok{color =}\NormalTok{ type, }\DataTypeTok{group =}\NormalTok{ type))}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label=}\NormalTok{count),}\DataTypeTok{size=}\DecValTok{3}\NormalTok{,}
+                            \DataTypeTok{position=}\KeywordTok{position_dodge}\NormalTok{(.}\DecValTok{7}\NormalTok{),}
+                            \DataTypeTok{vjust=}\OperatorTok{-}\NormalTok{.}\DecValTok{7}\NormalTok{,}
+                            \DataTypeTok{check_overlap=}\OtherTok{TRUE}\NormalTok{)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{scale_color_manual}\NormalTok{(}
+                  \DataTypeTok{name=}\KeywordTok{expression}\NormalTok{(}\KeywordTok{italic}\NormalTok{(}\StringTok{"telecoupling effects}\CharTok{\textbackslash{}n}\StringTok{on biodiversity in..."}\NormalTok{)),}
+                  \DataTypeTok{values=}\NormalTok{paper_col)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{scale_fill_manual}\NormalTok{(}
+                  \DataTypeTok{name=}\KeywordTok{expression}\NormalTok{(}\KeywordTok{italic}\NormalTok{(}\StringTok{"telecoupling effects}\CharTok{\textbackslash{}n}\StringTok{on biodiversity in..."}\NormalTok{)),}
+                  \DataTypeTok{values=}\NormalTok{paper_col)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"publication year"}\NormalTok{)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"number of articles"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{860}\NormalTok{)}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{850}\NormalTok{,}\DecValTok{100}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                  }\KeywordTok{theme_classic}\NormalTok{()}\OperatorTok{+}
+\StringTok{                  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.22}\NormalTok{,}\FloatTok{0.87}\NormalTok{))}
+  
+\CommentTok{# show here}
+\NormalTok{  papers.fig}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+Acceptance rate for abstract screening.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total abstract acceptance rate}
+  \KeywordTok{sum}\NormalTok{(ab_all}\OperatorTok{$}\NormalTok{INCLUDE}\OperatorTok{==}\StringTok{'YES'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(ab_all)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.08007117
+\end{verbatim}
+
+Acceptance rate for papers that were reviewed (\textbf{NOTE:} this
+includes the 5 common surveys).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get total paper acceptance rate}
+  \KeywordTok{sum}\NormalTok{(survey1}\OperatorTok{$}\NormalTok{status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2216582
+\end{verbatim}
+
+Acceptance rate per person (\textbf{NOTE:} this excludes the 5 common
+surveys per person, but has a rate for it on its own as ``all'').
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+\NormalTok{  acr <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(survey1, .(coder_id), summarize,}
+              \CommentTok{# total count of entries     }
+              \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(coder_id),}
+              \DataTypeTok{accept=}\KeywordTok{sum}\NormalTok{(status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{),}
+              \DataTypeTok{reject=}\KeywordTok{sum}\NormalTok{(status}\OperatorTok{==}\StringTok{'reject'}\NormalTok{),}
+              \CommentTok{# percent acceptance}
+              \DataTypeTok{accept_rate=}\KeywordTok{sum}\NormalTok{(status}\OperatorTok{==}\StringTok{'accept'}\NormalTok{)}\OperatorTok{/}\KeywordTok{length}\NormalTok{(coder_id))}
+\NormalTok{  acr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        coder_id count accept reject accept_rate
+## 1  A_Herzberger    63     20     43   0.3174603
+## 2      A_Torres    51      7     44   0.1372549
+## 3           all     5      4      1   0.8000000
+## 4       C_Hovis    92     19     73   0.2065217
+## 5        E_Dean    43      7     36   0.1627907
+## 6        E_Xing    43      9     34   0.2093023
+## 7      K_Kapsar    52     11     41   0.2115385
+## 8         M_Lei    43     15     28   0.3488372
+## 9      MG_Chung    43      5     38   0.1162791
+## 10         X_Wu    67     18     49   0.2686567
+## 11        Y_Dou     5      0      5   0.0000000
+## 12         Y_Li    32      2     30   0.0625000
+## 13      Y_Zhang    52     14     38   0.2692308
+\end{verbatim}
+
+Average per-person acceptance rates
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# mean per-person acceptance rate }
+  \KeywordTok{mean}\NormalTok{(acr}\OperatorTok{$}\NormalTok{accept_rate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.2392594
+\end{verbatim}
+
+Unique study ids for survey 2 and 3
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(s2}\OperatorTok{$}\NormalTok{paper_id)) }
+\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(survey3}\OperatorTok{$}\NormalTok{paper_id))}
+\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(s23}\OperatorTok{$}\NormalTok{paper_id))}
+
+\StringTok{`}\DataTypeTok{%notin%}\StringTok{`}\NormalTok{ <-}\StringTok{ }\KeywordTok{Negate}\NormalTok{(}\StringTok{`}\DataTypeTok{%in%}\StringTok{`}\NormalTok{)}
+
+\NormalTok{halp <-}\StringTok{ }\NormalTok{s2[}\KeywordTok{which}\NormalTok{(}\KeywordTok{unique}\NormalTok{(s2}\OperatorTok{$}\NormalTok{paper_id) }\OperatorTok{%notin%}\StringTok{ }\KeywordTok{unique}\NormalTok{(survey3}\OperatorTok{$}\NormalTok{paper_id)),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 131
+## [1] 131
+## [1] 131
+\end{verbatim}
+
+\hypertarget{general-results}{%
+\subsection{4.2 General Results}\label{general-results}}
+
+Proportion of effects at article and metric level
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Table of maj_eff}
+\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{maj_eff_taxa)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{maj_eff_tax))}
+
+\CommentTok{# Table of sig_eff}
+\KeywordTok{table}\NormalTok{(s23}\OperatorTok{$}\NormalTok{sig_effect)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(s23}\OperatorTok{$}\NormalTok{sig_effect))}
+\KeywordTok{nrow}\NormalTok{(s23)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                 Beneficial                    Harmful 
+##                         16                         67 
+##                    Changed                      Mixed 
+##                         11                          9 
+## Not significant or unclear 
+##                         33 
+## 
+##                 Beneficial                    Harmful 
+##                 0.11764706                 0.49264706 
+##                    Changed                      Mixed 
+##                 0.08088235                 0.06617647 
+## Not significant or unclear 
+##                 0.24264706 
+## 
+##                 Beneficial                    Changed 
+##                         82                        101 
+##                    Harmful Not significant or unclear 
+##                        225                        359 
+## 
+##                 Beneficial                    Changed 
+##                  0.1069100                  0.1316819 
+##                    Harmful Not significant or unclear 
+##                  0.2933507                  0.4680574 
+## [1] 767
+\end{verbatim}
+
+Habitat Frequency (study level, n= 131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{habitat.study <-}\StringTok{ }\KeywordTok{count}\NormalTok{(s23_maj, }\StringTok{'hab'}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(habitat.study)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(s23_maj}\OperatorTok{$}\NormalTok{hab))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                          hab freq
+## 1                 Freshwater   22
+## 2          Freshwater;Marine    1
+## 3                     Marine   25
+## 4 Not specified/Global study    2
+## 5                Terrestrial   75
+## 6     Terrestrial;Freshwater    4
+## 7         Terrestrial;Marine    2
+## 
+##                 Freshwater          Freshwater;Marine 
+##                0.167938931                0.007633588 
+##                     Marine Not specified/Global study 
+##                0.190839695                0.015267176 
+##                Terrestrial     Terrestrial;Freshwater 
+##                0.572519084                0.030534351 
+##         Terrestrial;Marine 
+##                0.015267176
+\end{verbatim}
+
+Taxa Frequency (study level, n=131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{desired_length <-}\StringTok{ }\DecValTok{8} 
+\NormalTok{empty_list <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =}\NormalTok{ desired_length)}
+
+\NormalTok{taxa <-}\StringTok{ }\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{taxa)}
+\KeywordTok{table}\NormalTok{(taxa)}
+\NormalTok{taxa.list <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Mammals'}\NormalTok{, }\StringTok{'Plants'}\NormalTok{, }\StringTok{'Reptiles'}\NormalTok{, }\StringTok{'Amphibians'}\NormalTok{, }\StringTok{'Birds'}\NormalTok{, }\StringTok{'Fish'}\NormalTok{, }\StringTok{'Invertebrates'}\NormalTok{, }\StringTok{'Multiple'}\NormalTok{)}
+\NormalTok{taxa.count <-}\StringTok{ }\NormalTok{empty_list}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(taxa.list)) \{}
+  
+\NormalTok{  taxa.count[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{str_count}\NormalTok{(taxa, taxa.list[i]))}
+\NormalTok{    \}}
+
+\NormalTok{taxa.count <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(taxa.list,taxa.count))}
+\NormalTok{taxa.count}
+\NormalTok{taxa.count}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(taxa.count}\OperatorTok{$}\NormalTok{taxa.count)}\OperatorTok{/}\DecValTok{131}\NormalTok{) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{taxa.count <-}\StringTok{ }\NormalTok{taxa.count[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{taxa.count}\OperatorTok{$}\NormalTok{perc),]}
+\NormalTok{taxa.count}
+
+\NormalTok{mult <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{((}\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{paper_id)))}
+\NormalTok{mult <-}\StringTok{ }\NormalTok{mult[}\KeywordTok{which}\NormalTok{(mult}\OperatorTok{$}\NormalTok{Freq }\OperatorTok{!=}\StringTok{ }\DecValTok{1}\NormalTok{),]}
+\NormalTok{num.mult <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(mult),(taxa.count[}\DecValTok{2}\NormalTok{,}\DecValTok{8}\NormalTok{])) }
+
+\CommentTok{# Others? Not a big deal since taxa is clarified in survey 3.Not a big deal.}
+
+\NormalTok{othTaxa <-}\StringTok{ }\NormalTok{s2[}\KeywordTok{which}\NormalTok{(s2}\OperatorTok{$}\NormalTok{taxa }\OperatorTok{==}\StringTok{ 'Other'}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## taxa
+##          Amphibians               Birds                Fish       Invertebrates 
+##                   1                  37                  15                  29 
+##             Mammals            Multiple Plants/Trees/Shrubs            Reptiles 
+##                  15                   5                  30                   4 
+##       taxa.list taxa.count
+## 1       Mammals         15
+## 2        Plants         30
+## 3      Reptiles          4
+## 4    Amphibians          1
+## 5         Birds         37
+## 6          Fish         15
+## 7 Invertebrates         29
+## 8      Multiple          5
+##       taxa.list taxa.count       perc
+## 5         Birds         37 28.2442748
+## 2        Plants         30 22.9007634
+## 7 Invertebrates         29 22.1374046
+## 1       Mammals         15 11.4503817
+## 6          Fish         15 11.4503817
+## 8      Multiple          5  3.8167939
+## 3      Reptiles          4  3.0534351
+## 4    Amphibians          1  0.7633588
+\end{verbatim}
+
+Flow frequency (study level, n=131)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{desired_length <-}\StringTok{ }\DecValTok{9} 
+\NormalTok{empty_list <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{'list'}\NormalTok{, }\DataTypeTok{length =}\NormalTok{ desired_length)}
+
+\NormalTok{tc <-}\StringTok{ }\NormalTok{s2}\OperatorTok{$}\NormalTok{tele_cat}
+\NormalTok{tc.list <-}\KeywordTok{c}\NormalTok{(}\StringTok{"Energy Transfer"}\NormalTok{,}\StringTok{"Investment"}\NormalTok{,}\StringTok{"Knowledge Transfer"}\NormalTok{,}
+                                 \StringTok{"Migration (human)"}\NormalTok{,}
+                                 \StringTok{"Species Dispersal"}\NormalTok{,}\StringTok{"Tourism"}\NormalTok{,}\StringTok{"Trade"}\NormalTok{,}\StringTok{"Waste Transfer"}\NormalTok{,}\StringTok{"Water Transfer"}\NormalTok{)}
+\NormalTok{tc.count <-}\StringTok{ }\NormalTok{empty_list}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(tc.list)) \{}
+  
+\NormalTok{  tc.count[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{str_count}\NormalTok{(tc, tc.list[i]))}
+\NormalTok{    \}}
+
+\NormalTok{tc.count <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(tc.list,tc.count))}
+\NormalTok{tc.count}
+
+
+\CommentTok{# Can't get loop to count the migration values for some reason, manual input code below}
+\CommentTok{# Migration (human) n=4     # Migration (non-human) n=0}
+\NormalTok{tc.table <-}\StringTok{ }\KeywordTok{table}\NormalTok{(s2}\OperatorTok{$}\NormalTok{tele_cat)}
+\NormalTok{tc.table}
+\NormalTok{tc.count[}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{tc.table[}\DecValTok{5}\NormalTok{] }\OperatorTok{+}\StringTok{ }\NormalTok{tc.table[}\DecValTok{13}\NormalTok{]      }\CommentTok{# Migration (human) n=4     }
+
+\NormalTok{tc.count}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(tc.count}\OperatorTok{$}\NormalTok{tc.count)}\OperatorTok{/}\DecValTok{131}\NormalTok{) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{tc.count <-}\StringTok{ }\NormalTok{tc.count[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{tc.count}\OperatorTok{$}\NormalTok{perc),]}
+\NormalTok{tc.count}
+
+
+\CommentTok{#gather(tc.count)}
+
+\NormalTok{multiple <-}\StringTok{ }\KeywordTok{str_count}\NormalTok{(tc, }\StringTok{';'}\NormalTok{)}
+\NormalTok{multiple <-}\StringTok{ }\NormalTok{multiple }\OperatorTok{!=}\StringTok{ }\DecValTok{0}
+\NormalTok{multiple <-}\StringTok{ }\KeywordTok{table}\NormalTok{(multiple) [}\StringTok{"TRUE"}\NormalTok{]}
+\NormalTok{multiple}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(s2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              tc.list tc.count
+## 1    Energy Transfer        9
+## 2         Investment        8
+## 3 Knowledge Transfer       13
+## 4  Migration (human)        0
+## 5  Species Dispersal       17
+## 6            Tourism       57
+## 7              Trade       34
+## 8     Waste Transfer        2
+## 9     Water Transfer        4
+## 
+##                      Energy Transfer                           Investment 
+##                                    7                                    4 
+##                   Knowledge Transfer        Knowledge Transfer;Investment 
+##                                    6                                    3 
+##                    Migration (human)                    Species Dispersal 
+##                                    3                                   13 
+## Species Dispersal;Knowledge Transfer                              Tourism 
+##                                    1                                   54 
+##                   Tourism;Investment                                Trade 
+##                                    1                                   25 
+##                Trade;Energy Transfer             Trade;Knowledge Transfer 
+##                                    1                                    2 
+##              Trade;Migration (human)              Trade;Species Dispersal 
+##                                    1                                    3 
+##                        Trade;Tourism     Trade;Tourism;Knowledge Transfer 
+##                                    1                                    1 
+##                       Waste Transfer                       Water Transfer 
+##                                    1                                    2 
+##       Water Transfer;Energy Transfer        Water Transfer;Waste Transfer 
+##                                    1                                    1 
+##              tc.list tc.count      perc
+## 6            Tourism       57 43.511450
+## 7              Trade       34 25.954198
+## 5  Species Dispersal       17 12.977099
+## 3 Knowledge Transfer       13  9.923664
+## 1    Energy Transfer        9  6.870229
+## 2         Investment        8  6.106870
+## 4  Migration (human)        4  3.053435
+## 9     Water Transfer        4  3.053435
+## 8     Waste Transfer        2  1.526718
+##      TRUE 
+## 0.1221374
+\end{verbatim}
+
+Number of metrics reported by each paper
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+  \KeywordTok{ddply}\NormalTok{(survey3, .(paper_id), summarize,}
+        \CommentTok{# total count of entries     }
+        \DataTypeTok{num_entries=}\KeywordTok{length}\NormalTok{(entry_id),}
+        \DataTypeTok{perc_dataset=}\KeywordTok{length}\NormalTok{(entry_id)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(survey3),}
+        \DataTypeTok{num_taxa=}\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(taxa))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(perc_dataset))}
+
+\NormalTok{num.metric <-}\StringTok{ }\KeywordTok{count}\NormalTok{(survey3}\OperatorTok{$}\NormalTok{paper_id)}
+\NormalTok{mult.metric <-}\StringTok{ }\NormalTok{num.metric[num.metric}\OperatorTok{$}\NormalTok{freq }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{,]}
+
+\KeywordTok{nrow}\NormalTok{(mult.metric)}\OperatorTok{/}\DecValTok{131}
+
+\KeywordTok{range}\NormalTok{(num.metric}\OperatorTok{$}\NormalTok{freq)}
+\KeywordTok{sum}\NormalTok{(num.metric}\OperatorTok{$}\NormalTok{freq)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     paper_id num_entries perc_dataset num_taxa
+## 1         84         162  0.211212516        1
+## 2       4060          57  0.074315515        1
+## 3       1551          27  0.035202086        1
+## 4       1488          24  0.031290743        1
+## 5       3772          22  0.028683181        1
+## 6       6502          21  0.027379400        1
+## 7        134          20  0.026075619        1
+## 8       4155          20  0.026075619        1
+## 9       4552          15  0.019556714        1
+## 10       479          14  0.018252934        1
+## 11      3112          13  0.016949153        1
+## 12      3989          12  0.015645372        1
+## 13      4831          11  0.014341591        1
+## 14      1007          10  0.013037810        1
+## 15      2606           9  0.011734029        1
+## 16      3924           8  0.010430248        1
+## 17      5844           8  0.010430248        1
+## 18      6254           8  0.010430248        1
+## 19      1376           7  0.009126467        2
+## 20      5756           7  0.009126467        1
+## 21      6948           7  0.009126467        1
+## 22       227           6  0.007822686        1
+## 23       264           6  0.007822686        1
+## 24      1893           6  0.007822686        2
+## 25      3122           6  0.007822686        1
+## 26      3485           6  0.007822686        1
+## 27      3849           6  0.007822686        1
+## 28      4551           6  0.007822686        1
+## 29      5076           6  0.007822686        1
+## 30      5905           6  0.007822686        1
+## 31      6511           6  0.007822686        1
+## 32       357           5  0.006518905        1
+## 33      1366           5  0.006518905        1
+## 34      1743           5  0.006518905        1
+## 35      2050           5  0.006518905        1
+## 36      2642           5  0.006518905        1
+## 37      5926           5  0.006518905        1
+## 38      6396           5  0.006518905        1
+## 39       292           4  0.005215124        1
+## 40       302           4  0.005215124        1
+## 41       471           4  0.005215124        1
+## 42       826           4  0.005215124        1
+## 43      1299           4  0.005215124        1
+## 44      1590           4  0.005215124        1
+## 45      1616           4  0.005215124        1
+## 46      2401           4  0.005215124        1
+## 47      2546           4  0.005215124        1
+## 48      2998           4  0.005215124        1
+## 49      3484           4  0.005215124        1
+## 50      4020           4  0.005215124        1
+## 51      4063           4  0.005215124        1
+## 52      4257           4  0.005215124        1
+## 53      4293           4  0.005215124        1
+## 54      5746           4  0.005215124        1
+## 55       379           3  0.003911343        1
+## 56       483           3  0.003911343        1
+## 57       518           3  0.003911343        1
+## 58      1270           3  0.003911343        1
+## 59      2345           3  0.003911343        1
+## 60      3247           3  0.003911343        1
+## 61      3361           3  0.003911343        1
+## 62      4209           3  0.003911343        1
+## 63      4445           3  0.003911343        1
+## 64      5063           3  0.003911343        1
+## 65      6321           3  0.003911343        2
+## 66        80           2  0.002607562        2
+## 67       339           2  0.002607562        2
+## 68       396           2  0.002607562        1
+## 69       425           2  0.002607562        1
+## 70       466           2  0.002607562        1
+## 71       510           2  0.002607562        1
+## 72       708           2  0.002607562        1
+## 73       713           2  0.002607562        1
+## 74      1565           2  0.002607562        1
+## 75      1799           2  0.002607562        1
+## 76      2201           2  0.002607562        1
+## 77      2670           2  0.002607562        1
+## 78      3081           2  0.002607562        1
+## 79      3151           2  0.002607562        1
+## 80      3165           2  0.002607562        1
+## 81      3456           2  0.002607562        1
+## 82      3511           2  0.002607562        1
+## 83      3583           2  0.002607562        1
+## 84      3697           2  0.002607562        1
+## 85      4760           2  0.002607562        1
+## 86      4832           2  0.002607562        1
+## 87      5175           2  0.002607562        1
+## 88      5875           2  0.002607562        1
+## 89      5966           2  0.002607562        1
+## 90      6331           2  0.002607562        1
+## 91      6655           2  0.002607562        1
+## 92      6845           2  0.002607562        1
+## 93        17           1  0.001303781        1
+## 94        44           1  0.001303781        1
+## 95        45           1  0.001303781        1
+## 96       311           1  0.001303781        1
+## 97       523           1  0.001303781        1
+## 98       654           1  0.001303781        1
+## 99       813           1  0.001303781        1
+## 100      897           1  0.001303781        1
+## 101      992           1  0.001303781        1
+## 102     1040           1  0.001303781        1
+## 103     1349           1  0.001303781        1
+## 104     1368           1  0.001303781        1
+## 105     1681           1  0.001303781        1
+## 106     1821           1  0.001303781        1
+## 107     2222           1  0.001303781        1
+## 108     2253           1  0.001303781        1
+## 109     2284           1  0.001303781        1
+## 110     3243           1  0.001303781        1
+## 111     3668           1  0.001303781        1
+## 112     3868           1  0.001303781        1
+## 113     4087           1  0.001303781        1
+## 114     4393           1  0.001303781        1
+## 115     4509           1  0.001303781        1
+## 116     4518           1  0.001303781        1
+## 117     4574           1  0.001303781        1
+## 118     4850           1  0.001303781        1
+## 119     5125           1  0.001303781        1
+## 120     5309           1  0.001303781        1
+## 121     5314           1  0.001303781        1
+## 122     5477           1  0.001303781        1
+## 123     5486           1  0.001303781        1
+## 124     5577           1  0.001303781        1
+## 125     5773           1  0.001303781        1
+## 126     5782           1  0.001303781        1
+## 127     5804           1  0.001303781        1
+## 128     5853           1  0.001303781        1
+## 129     6195           1  0.001303781        1
+## 130     6820           1  0.001303781        1
+## 131  3790002           1  0.001303781        1
+## [1] 0.7022901
+## [1]   1 162
+## [1] 767
+\end{verbatim}
+
+\hypertarget{biodiversity-and-flow-categories-by-country}{%
+\subsection{4.3 Biodiversity and Flow Categories by
+Country}\label{biodiversity-and-flow-categories-by-country}}
+
+Continent freq n=131
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cont <-}\StringTok{ }\NormalTok{s23_maj}\OperatorTok{$}\NormalTok{bd_continents}
+\KeywordTok{table}\NormalTok{(cont)}
+\NormalTok{desired_length <-}\StringTok{ }\DecValTok{7} 
+\NormalTok{empty_list <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{'list'}\NormalTok{, }\DataTypeTok{length =}\NormalTok{ desired_length)}
+
+\NormalTok{cont.list <-}\KeywordTok{c}\NormalTok{(}\StringTok{"North America"}\NormalTok{,}\StringTok{"South America"}\NormalTok{,}\StringTok{"Africa"}\NormalTok{,}\StringTok{"Europe"}\NormalTok{,}\StringTok{"Oceania"}\NormalTok{,}\StringTok{"Asia"}\NormalTok{,}\StringTok{"Antarctica"}\NormalTok{)}
+\NormalTok{cont.count <-}\StringTok{ }\NormalTok{empty_list}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(cont.list)) \{}
+  
+\NormalTok{  cont.count[i] <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{str_count}\NormalTok{(cont, cont.list[i]))}
+\NormalTok{    \}}
+
+\NormalTok{cont.count <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(cont.list,cont.count))}
+\NormalTok{cont.count}
+\NormalTok{cont.count}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(cont.count}\OperatorTok{$}\NormalTok{cont.count)}\OperatorTok{/}\DecValTok{131}\NormalTok{) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{cont.count <-}\StringTok{ }\NormalTok{cont.count[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{cont.count}\OperatorTok{$}\NormalTok{perc),]}
+\NormalTok{cont.count}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## cont
+##        Africa    Antarctica          Asia        Europe North America 
+##            10             1            25            30            22 
+##       Oceania South America 
+##            17            26 
+##       cont.list cont.count
+## 1 North America         22
+## 2 South America         26
+## 3        Africa         10
+## 4        Europe         30
+## 5       Oceania         17
+## 6          Asia         25
+## 7    Antarctica          1
+##       cont.list cont.count       perc
+## 4        Europe         30 22.9007634
+## 2 South America         26 19.8473282
+## 6          Asia         25 19.0839695
+## 1 North America         22 16.7938931
+## 5       Oceania         17 12.9770992
+## 3        Africa         10  7.6335878
+## 7    Antarctica          1  0.7633588
+\end{verbatim}
+
+Biodiversity country map
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shp <-}\StringTok{ }\KeywordTok{ne_countries}\NormalTok{(}\DataTypeTok{scale =} \DecValTok{50}\NormalTok{, }\DataTypeTok{returnclass =} \StringTok{'sf'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\CommentTok{#st_as_sf() %>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(name, iso_a3) }\OperatorTok{%>%}\StringTok{ }\CommentTok{## , economy, income_grp}
+\StringTok{  }\CommentTok{# filter(name != 'Antarctica') %>%}
+\StringTok{  }\CommentTok{# filter(name == 'France') %>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}
+    \DataTypeTok{iso_a3 =} \KeywordTok{if_else}\NormalTok{(name }\OperatorTok{==}\StringTok{ 'France'}\NormalTok{, }\StringTok{'FRA'}\NormalTok{, iso_a3),}
+    \DataTypeTok{iso_a3 =} \KeywordTok{if_else}\NormalTok{(name }\OperatorTok{==}\StringTok{ 'Norway'}\NormalTok{, }\StringTok{'NOR'}\NormalTok{, iso_a3))}
+\CommentTok{# plot(shp[1])}
+
+\NormalTok{shp }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(name }\OperatorTok{==}\StringTok{ 'Norway'}\NormalTok{)}
+
+\CommentTok{### - Read in Data}
+
+\NormalTok{df99 <-}\StringTok{ }\NormalTok{s23_maj}
+
+\CommentTok{### - biodiv_countries}
+\NormalTok{ctr_bio <-}\StringTok{ }\NormalTok{df99 }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(paper_id, biodiv_countries) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{data.frame}\NormalTok{(., }\KeywordTok{do.call}\NormalTok{(rbind, }\KeywordTok{str_split}\NormalTok{(.}\OperatorTok{$}\NormalTok{biodiv_countries,}\StringTok{';'}\NormalTok{))) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{gather}\NormalTok{(}\DataTypeTok{key =} \StringTok{'key'}\NormalTok{, }\DataTypeTok{value =}\NormalTok{ biodiv_countries, }\DecValTok{3}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(.)) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{biodiv_countries =} \KeywordTok{trimws}\NormalTok{(biodiv_countries)) }\OperatorTok{%>%}
+\StringTok{  }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{distinct}\NormalTok{(paper_id, biodiv_countries, }\DataTypeTok{.keep_all =}\NormalTok{ T) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(biodiv_countries }\OperatorTok{!=}\StringTok{ ''}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(paper_id) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(biodiv_countries) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{tally}\NormalTok{()}\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\KeywordTok{desc}\NormalTok{(n)) }\CommentTok{#%>%}
+\CommentTok{# str(ctr_bio)}
+
+\KeywordTok{table}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries)}
+
+\CommentTok{# install.packages("jsonlite", repos="https://cran.rstudio.com/")}
+\KeywordTok{library}\NormalTok{(}\StringTok{"jsonlite"}\NormalTok{)}
+\NormalTok{json_file <-}\StringTok{ 'https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/datapackage.json'}
+\NormalTok{json_data <-}\StringTok{ }\KeywordTok{fromJSON}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\KeywordTok{readLines}\NormalTok{(json_file), }\DataTypeTok{collapse=}\StringTok{""}\NormalTok{))}
+\CommentTok{# get list of all resources:}
+\KeywordTok{print}\NormalTok{(json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{name)}
+
+\CommentTok{# print all tabular data(if exists any) to 'data'}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{datahub}\OperatorTok{$}\NormalTok{type))\{}
+  \ControlFlowTok{if}\NormalTok{(json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{datahub}\OperatorTok{$}\NormalTok{type[i]}\OperatorTok{==}\StringTok{'derived/csv'}\NormalTok{)\{}
+\NormalTok{    path_to_file =}\StringTok{ }\NormalTok{json_data}\OperatorTok{$}\NormalTok{resources}\OperatorTok{$}\NormalTok{path[i]}
+\NormalTok{    data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{url}\NormalTok{(path_to_file))}
+    \KeywordTok{print}\NormalTok{(data)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\NormalTok{cont <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(data}\OperatorTok{$}\NormalTok{Continent_Name,data}\OperatorTok{$}\NormalTok{Country_Name,data}\OperatorTok{$}\NormalTok{Three_Letter_Country_Code)}
+\NormalTok{cont <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(cont)}
+
+\CommentTok{# Match continent and country name to biodiversity countries}
+\KeywordTok{names}\NormalTok{(cont)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"continent"}\NormalTok{,}\StringTok{"ctr_name"}\NormalTok{,}\StringTok{"ctr_code"}\NormalTok{)}
+
+\NormalTok{ctr_bio}\OperatorTok{$}\NormalTok{continent <-}\StringTok{ }\NormalTok{cont}\OperatorTok{$}\NormalTok{continent[}\KeywordTok{match}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries,cont}\OperatorTok{$}\NormalTok{ctr_code)]  }\CommentTok{# add continent name}
+\NormalTok{ctr_bio}\OperatorTok{$}\NormalTok{ctr_name <-}\StringTok{ }\NormalTok{cont}\OperatorTok{$}\NormalTok{ctr_name[}\KeywordTok{match}\NormalTok{(ctr_bio}\OperatorTok{$}\NormalTok{biodiv_countries,cont}\OperatorTok{$}\NormalTok{ctr_code)]  }\CommentTok{# add country name}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 1 feature and 2 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -9.098877 ymin: 58.02095 xmax: 33.6293 ymax: 80.47783
+## CRS:            +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0
+##     name iso_a3                       geometry
+## 1 Norway    NOR MULTIPOLYGON (((5.08584 60....
+## 
+## ALB ARG ATA AUS AUT BEL BEN BGR BHS BLR BOL BRA BTN BWA CAF CAN CHL CHN COL CRI 
+##   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
+## CUB CYP CZE DEU DNK ECU ESP EST FIN FRA GBR GRC HRV HUN IDN IND IRL IRN ITA KOR 
+##   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
+## LTU LUX LVA MAR MDV MEX MLT MNE MNG MWI MYS NAM NLD NPL NZL PER PHL POL PRT PRY 
+##   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
+## PYF ROU RUS SLB SVK SVN SWE THA TZA UKR URY USA ZAF ZWE 
+##   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
+## [1] "validation_report"                        
+## [2] "country-and-continent-codes-list-csv_csv" 
+## [3] "country-and-continent-codes-list-csv_json"
+## [4] "country-and-continent-codes-list_zip"     
+## [5] "country-and-continent-codes-list-csv"     
+##     Continent_Name Continent_Code
+## 1             Asia             AS
+## 2           Europe             EU
+## 3       Antarctica             AN
+## 4           Africa             AF
+## 5          Oceania             OC
+## 6           Europe             EU
+## 7           Africa             AF
+## 8    North America           <NA>
+## 9           Europe             EU
+## 10            Asia             AS
+## 11   South America             SA
+## 12         Oceania             OC
+## 13          Europe             EU
+## 14   North America           <NA>
+## 15            Asia             AS
+## 16            Asia             AS
+## 17          Europe             EU
+## 18            Asia             AS
+## 19   North America           <NA>
+## 20          Europe             EU
+## 21   North America           <NA>
+## 22            Asia             AS
+## 23   South America             SA
+## 24          Europe             EU
+## 25          Africa             AF
+## 26      Antarctica             AN
+## 27   South America             SA
+## 28   North America           <NA>
+## 29            Asia             AS
+## 30         Oceania             OC
+## 31   North America           <NA>
+## 32            Asia             AS
+## 33          Europe             EU
+## 34            Asia             AS
+## 35          Africa             AF
+## 36          Europe             EU
+## 37            Asia             AS
+## 38          Africa             AF
+## 39   North America           <NA>
+## 40          Africa             AF
+## 41   North America           <NA>
+## 42          Africa             AF
+## 43            Asia             AS
+## 44          Africa             AF
+## 45   South America             SA
+## 46            Asia             AS
+## 47            Asia             AS
+## 48            Asia             AS
+## 49            Asia             AS
+## 50   South America             SA
+## 51          Africa             AF
+## 52          Africa             AF
+## 53          Africa             AF
+## 54          Africa             AF
+## 55         Oceania             OC
+## 56   North America           <NA>
+## 57          Europe             EU
+## 58   North America           <NA>
+## 59          Europe             EU
+## 60            Asia             AS
+## 61          Europe             EU
+## 62          Africa             AF
+## 63          Europe             EU
+## 64   North America           <NA>
+## 65   North America           <NA>
+## 66   South America             SA
+## 67   North America           <NA>
+## 68          Africa             AF
+## 69          Africa             AF
+## 70          Africa             AF
+## 71          Europe             EU
+## 72          Europe             EU
+## 73   South America             SA
+## 74      Antarctica             AN
+## 75         Oceania             OC
+## 76          Europe             EU
+## 77          Europe             EU
+## 78          Europe             EU
+## 79   South America             SA
+## 80         Oceania             OC
+## 81      Antarctica             AN
+## 82          Africa             AF
+## 83          Africa             AF
+## 84          Europe             EU
+## 85            Asia             AS
+## 86          Africa             AF
+## 87            Asia             AS
+## 88          Europe             EU
+## 89          Africa             AF
+## 90          Europe             EU
+## 91         Oceania             OC
+## 92          Europe             EU
+## 93   North America           <NA>
+## 94   North America           <NA>
+## 95   North America           <NA>
+## 96         Oceania             OC
+## 97   North America           <NA>
+## 98          Africa             AF
+## 99   South America             SA
+## 100  North America           <NA>
+## 101     Antarctica             AN
+## 102         Europe             EU
+## 103  North America           <NA>
+## 104           Asia             AS
+## 105         Europe             EU
+## 106         Europe             EU
+## 107           Asia             AS
+## 108           Asia             AS
+## 109           Asia             AS
+## 110           Asia             AS
+## 111         Europe             EU
+## 112           Asia             AS
+## 113         Europe             EU
+## 114         Africa             AF
+## 115  North America           <NA>
+## 116           Asia             AS
+## 117         Europe             EU
+## 118           Asia             AS
+## 119           Asia             AS
+## 120         Africa             AF
+## 121           Asia             AS
+## 122           Asia             AS
+## 123           Asia             AS
+## 124           Asia             AS
+## 125           Asia             AS
+## 126           Asia             AS
+## 127         Africa             AF
+## 128         Europe             EU
+## 129         Africa             AF
+## 130         Africa             AF
+## 131         Europe             EU
+## 132         Europe             EU
+## 133         Europe             EU
+## 134           Asia             AS
+## 135         Africa             AF
+## 136         Africa             AF
+## 137           Asia             AS
+## 138           Asia             AS
+## 139         Africa             AF
+## 140         Europe             EU
+## 141  North America           <NA>
+## 142         Africa             AF
+## 143         Africa             AF
+## 144  North America           <NA>
+## 145         Europe             EU
+## 146           Asia             AS
+## 147         Europe             EU
+## 148         Europe             EU
+## 149  North America           <NA>
+## 150         Africa             AF
+## 151         Africa             AF
+## 152           Asia             AS
+## 153         Africa             AF
+## 154        Oceania             OC
+## 155           Asia             AS
+## 156         Europe             EU
+## 157  North America           <NA>
+## 158  North America           <NA>
+## 159  North America           <NA>
+## 160  North America           <NA>
+## 161  North America           <NA>
+## 162        Oceania             OC
+## 163        Oceania             OC
+## 164        Oceania             OC
+## 165  North America           <NA>
+## 166         Africa             AF
+## 167         Africa             AF
+## 168        Oceania             OC
+## 169        Oceania             OC
+## 170         Europe             EU
+## 171        Oceania             OC
+## 172        Oceania             OC
+## 173  North America           <NA>
+## 174        Oceania             OC
+## 175        Oceania             OC
+## 176        Oceania             OC
+## 177           Asia             AS
+## 178  North America           <NA>
+## 179        Oceania             OC
+## 180  South America             SA
+## 181  South America             SA
+## 182           Asia             AS
+## 183        Oceania             OC
+## 184         Europe             EU
+## 185         Europe             EU
+## 186         Africa             AF
+## 187           Asia             AS
+## 188  North America           <NA>
+## 189           Asia             AS
+## 190         Africa             AF
+## 191         Europe             EU
+## 192         Europe             EU
+## 193           Asia             AS
+## 194         Africa             AF
+## 195  North America           <NA>
+## 196         Africa             AF
+## 197  North America           <NA>
+## 198  North America           <NA>
+## 199  North America           <NA>
+## 200  North America           <NA>
+## 201  North America           <NA>
+## 202  North America           <NA>
+## 203         Europe             EU
+## 204         Africa             AF
+## 205           Asia             AS
+## 206         Africa             AF
+## 207         Europe             EU
+## 208         Africa             AF
+## 209         Africa             AF
+## 210           Asia             AS
+## 211         Europe             EU
+## 212           Asia             AS
+## 213         Europe             EU
+## 214         Africa             AF
+## 215         Africa             AF
+## 216         Africa             AF
+## 217         Europe             EU
+## 218         Africa             AF
+## 219         Africa             AF
+## 220         Africa             AF
+## 221  South America             SA
+## 222         Europe             EU
+## 223         Africa             AF
+## 224         Europe             EU
+## 225         Europe             EU
+## 226           Asia             AS
+## 227           Asia             AS
+## 228           Asia             AS
+## 229         Africa             AF
+## 230        Oceania             OC
+## 231        Oceania             OC
+## 232  North America           <NA>
+## 233           Asia             AS
+## 234         Africa             AF
+## 235         Europe             EU
+## 236           Asia             AS
+## 237           Asia             AS
+## 238  North America           <NA>
+## 239        Oceania             OC
+## 240         Africa             AF
+## 241         Europe             EU
+## 242         Europe             EU
+## 243         Africa             AF
+## 244         Europe             EU
+## 245         Europe             EU
+## 246         Europe             EU
+## 247         Europe             EU
+## 248         Africa             AF
+## 249  North America           <NA>
+## 250  North America           <NA>
+## 251         Africa             AF
+## 252  South America             SA
+## 253           Asia             AS
+## 254  South America             SA
+## 255        Oceania             OC
+## 256        Oceania             OC
+## 257           Asia             AS
+## 258         Africa             AF
+## 259        Oceania             OC
+## 260           Asia             AS
+## 261           Asia             AS
+## 262           Asia             AS
+##                                            Country_Name Two_Letter_Country_Code
+## 1                      Afghanistan, Islamic Republic of                      AF
+## 2                                  Albania, Republic of                      AL
+## 3          Antarctica (the territory South of 60 deg S)                      AQ
+## 4              Algeria, People's Democratic Republic of                      DZ
+## 5                                        American Samoa                      AS
+## 6                              Andorra, Principality of                      AD
+## 7                                   Angola, Republic of                      AO
+## 8                                   Antigua and Barbuda                      AG
+## 9                               Azerbaijan, Republic of                      AZ
+## 10                              Azerbaijan, Republic of                      AZ
+## 11                        Argentina, Argentine Republic                      AR
+## 12                           Australia, Commonwealth of                      AU
+## 13                                 Austria, Republic of                      AT
+## 14                         Bahamas, Commonwealth of the                      BS
+## 15                                  Bahrain, Kingdom of                      BH
+## 16                     Bangladesh, People's Republic of                      BD
+## 17                                 Armenia, Republic of                      AM
+## 18                                 Armenia, Republic of                      AM
+## 19                                             Barbados                      BB
+## 20                                  Belgium, Kingdom of                      BE
+## 21                                              Bermuda                      BM
+## 22                                   Bhutan, Kingdom of                      BT
+## 23                                 Bolivia, Republic of                      BO
+## 24                               Bosnia and Herzegovina                      BA
+## 25                                Botswana, Republic of                      BW
+## 26                            Bouvet Island (Bouvetoya)                      BV
+## 27                       Brazil, Federative Republic of                      BR
+## 28                                               Belize                      BZ
+## 29  British Indian Ocean Territory (Chagos Archipelago)                      IO
+## 30                                      Solomon Islands                      SB
+## 31                               British Virgin Islands                      VG
+## 32                                    Brunei Darussalam                      BN
+## 33                                Bulgaria, Republic of                      BG
+## 34                                    Myanmar, Union of                      MM
+## 35                                 Burundi, Republic of                      BI
+## 36                                 Belarus, Republic of                      BY
+## 37                                 Cambodia, Kingdom of                      KH
+## 38                                Cameroon, Republic of                      CM
+## 39                                               Canada                      CA
+## 40                              Cape Verde, Republic of                      CV
+## 41                                       Cayman Islands                      KY
+## 42                             Central African Republic                      CF
+## 43          Sri Lanka, Democratic Socialist Republic of                      LK
+## 44                                    Chad, Republic of                      TD
+## 45                                   Chile, Republic of                      CL
+## 46                          China, People's Republic of                      CN
+## 47                                               Taiwan                      TW
+## 48                                     Christmas Island                      CX
+## 49                              Cocos (Keeling) Islands                      CC
+## 50                                Colombia, Republic of                      CO
+## 51                                Comoros, Union of the                      KM
+## 52                                              Mayotte                      YT
+## 53                               Congo, Republic of the                      CG
+## 54                    Congo, Democratic Republic of the                      CD
+## 55                                         Cook Islands                      CK
+## 56                              Costa Rica, Republic of                      CR
+## 57                                 Croatia, Republic of                      HR
+## 58                                    Cuba, Republic of                      CU
+## 59                                  Cyprus, Republic of                      CY
+## 60                                  Cyprus, Republic of                      CY
+## 61                                       Czech Republic                      CZ
+## 62                                   Benin, Republic of                      BJ
+## 63                                  Denmark, Kingdom of                      DK
+## 64                            Dominica, Commonwealth of                      DM
+## 65                                   Dominican Republic                      DO
+## 66                                 Ecuador, Republic of                      EC
+## 67                             El Salvador, Republic of                      SV
+## 68                       Equatorial Guinea, Republic of                      GQ
+## 69             Ethiopia, Federal Democratic Republic of                      ET
+## 70                                    Eritrea, State of                      ER
+## 71                                 Estonia, Republic of                      EE
+## 72                                        Faroe Islands                      FO
+## 73                          Falkland Islands (Malvinas)                      FK
+## 74         South Georgia and the South Sandwich Islands                      GS
+## 75                   Fiji, Republic of the Fiji Islands                      FJ
+## 76                                 Finland, Republic of                      FI
+## 77                                       Ã…land Islands                      AX
+## 78                              France, French Republic                      FR
+## 79                                        French Guiana                      GF
+## 80                                     French Polynesia                      PF
+## 81                          French Southern Territories                      TF
+## 82                                Djibouti, Republic of                      DJ
+## 83                             Gabon, Gabonese Republic                      GA
+## 84                                              Georgia                      GE
+## 85                                              Georgia                      GE
+## 86                              Gambia, Republic of the                      GM
+## 87                      Palestinian Territory, Occupied                      PS
+## 88                         Germany, Federal Republic of                      DE
+## 89                                   Ghana, Republic of                      GH
+## 90                                            Gibraltar                      GI
+## 91                                Kiribati, Republic of                      KI
+## 92                            Greece, Hellenic Republic                      GR
+## 93                                            Greenland                      GL
+## 94                                              Grenada                      GD
+## 95                                           Guadeloupe                      GP
+## 96                                                 Guam                      GU
+## 97                               Guatemala, Republic of                      GT
+## 98                                  Guinea, Republic of                      GN
+## 99                     Guyana, Co-operative Republic of                      GY
+## 100                                  Haiti, Republic of                      HT
+## 101                   Heard Island and McDonald Islands                      HM
+## 102                       Holy See (Vatican City State)                      VA
+## 103                               Honduras, Republic of                      HN
+## 104   Hong Kong, Special Administrative Region of China                      HK
+## 105                                Hungary, Republic of                      HU
+## 106                                Iceland, Republic of                      IS
+## 107                                  India, Republic of                      IN
+## 108                              Indonesia, Republic of                      ID
+## 109                           Iran, Islamic Republic of                      IR
+## 110                                   Iraq, Republic of                      IQ
+## 111                                             Ireland                      IE
+## 112                                    Israel, State of                      IL
+## 113                             Italy, Italian Republic                      IT
+## 114                          Cote d'Ivoire, Republic of                      CI
+## 115                                             Jamaica                      JM
+## 116                                               Japan                      JP
+## 117                             Kazakhstan, Republic of                      KZ
+## 118                             Kazakhstan, Republic of                      KZ
+## 119                        Jordan, Hashemite Kingdom of                      JO
+## 120                                  Kenya, Republic of                      KE
+## 121              Korea, Democratic People's Republic of                      KP
+## 122                                  Korea, Republic of                      KR
+## 123                                    Kuwait, State of                      KW
+## 124                                     Kyrgyz Republic                      KG
+## 125                    Lao People's Democratic Republic                      LA
+## 126                          Lebanon, Lebanese Republic                      LB
+## 127                                 Lesotho, Kingdom of                      LS
+## 128                                 Latvia, Republic of                      LV
+## 129                                Liberia, Republic of                      LR
+## 130                              Libyan Arab Jamahiriya                      LY
+## 131                      Liechtenstein, Principality of                      LI
+## 132                              Lithuania, Republic of                      LT
+## 133                          Luxembourg, Grand Duchy of                      LU
+## 134       Macao, Special Administrative Region of China                      MO
+## 135                             Madagascar, Republic of                      MG
+## 136                                 Malawi, Republic of                      MW
+## 137                                            Malaysia                      MY
+## 138                               Maldives, Republic of                      MV
+## 139                                   Mali, Republic of                      ML
+## 140                                  Malta, Republic of                      MT
+## 141                                          Martinique                      MQ
+## 142                     Mauritania, Islamic Republic of                      MR
+## 143                              Mauritius, Republic of                      MU
+## 144                       Mexico, United Mexican States                      MX
+## 145                             Monaco, Principality of                      MC
+## 146                                            Mongolia                      MN
+## 147                                Moldova, Republic of                      MD
+## 148                             Montenegro, Republic of                      ME
+## 149                                          Montserrat                      MS
+## 150                                 Morocco, Kingdom of                      MA
+## 151                             Mozambique, Republic of                      MZ
+## 152                                  Oman, Sultanate of                      OM
+## 153                                Namibia, Republic of                    <NA>
+## 154                                  Nauru, Republic of                      NR
+## 155                                     Nepal, State of                      NP
+## 156                         Netherlands, Kingdom of the                      NL
+## 157                                Netherlands Antilles                      AN
+## 158                                            CuraÃ§ao                      CW
+## 159                                               Aruba                      AW
+## 160                          Sint Maarten (Netherlands)                      SX
+## 161                    Bonaire, Sint Eustatius and Saba                      BQ
+## 162                                       New Caledonia                      NC
+## 163                                Vanuatu, Republic of                      VU
+## 164                                         New Zealand                      NZ
+## 165                              Nicaragua, Republic of                      NI
+## 166                                  Niger, Republic of                      NE
+## 167                        Nigeria, Federal Republic of                      NG
+## 168                                                Niue                      NU
+## 169                                      Norfolk Island                      NF
+## 170                                  Norway, Kingdom of                      NO
+## 171       Northern Mariana Islands, Commonwealth of the                      MP
+## 172                United States Minor Outlying Islands                      UM
+## 173                United States Minor Outlying Islands                      UM
+## 174                     Micronesia, Federated States of                      FM
+## 175                   Marshall Islands, Republic of the                      MH
+## 176                                  Palau, Republic of                      PW
+## 177                       Pakistan, Islamic Republic of                      PK
+## 178                                 Panama, Republic of                      PA
+## 179              Papua New Guinea, Independent State of                      PG
+## 180                               Paraguay, Republic of                      PY
+## 181                                   Peru, Republic of                      PE
+## 182                        Philippines, Republic of the                      PH
+## 183                                    Pitcairn Islands                      PN
+## 184                                 Poland, Republic of                      PL
+## 185                       Portugal, Portuguese Republic                      PT
+## 186                          Guinea-Bissau, Republic of                      GW
+## 187                 Timor-Leste, Democratic Republic of                      TL
+## 188                        Puerto Rico, Commonwealth of                      PR
+## 189                                     Qatar, State of                      QA
+## 190                                             Reunion                      RE
+## 191                                             Romania                      RO
+## 192                                  Russian Federation                      RU
+## 193                                  Russian Federation                      RU
+## 194                                 Rwanda, Republic of                      RW
+## 195                                    Saint Barthelemy                      BL
+## 196                                        Saint Helena                      SH
+## 197                Saint Kitts and Nevis, Federation of                      KN
+## 198                                            Anguilla                      AI
+## 199                                         Saint Lucia                      LC
+## 200                                        Saint Martin                      MF
+## 201                           Saint Pierre and Miquelon                      PM
+## 202                    Saint Vincent and the Grenadines                      VC
+## 203                             San Marino, Republic of                      SM
+## 204       Sao Tome and Principe, Democratic Republic of                      ST
+## 205                            Saudi Arabia, Kingdom of                      SA
+## 206                                Senegal, Republic of                      SN
+## 207                                 Serbia, Republic of                      RS
+## 208                             Seychelles, Republic of                      SC
+## 209                           Sierra Leone, Republic of                      SL
+## 210                              Singapore, Republic of                      SG
+## 211                          Slovakia (Slovak Republic)                      SK
+## 212                      Vietnam, Socialist Republic of                      VN
+## 213                               Slovenia, Republic of                      SI
+## 214                            Somalia, Somali Republic                      SO
+## 215                           South Africa, Republic of                      ZA
+## 216                               Zimbabwe, Republic of                      ZW
+## 217                                   Spain, Kingdom of                      ES
+## 218                                         South Sudan                      SS
+## 219                                      Western Sahara                      EH
+## 220                                  Sudan, Republic of                      SD
+## 221                               Suriname, Republic of                      SR
+## 222                        Svalbard & Jan Mayen Islands                      SJ
+## 223                               Swaziland, Kingdom of                      SZ
+## 224                                  Sweden, Kingdom of                      SE
+## 225                    Switzerland, Swiss Confederation                      CH
+## 226                                Syrian Arab Republic                      SY
+## 227                             Tajikistan, Republic of                      TJ
+## 228                                Thailand, Kingdom of                      TH
+## 229                             Togo, Togolese Republic                      TG
+## 230                                             Tokelau                      TK
+## 231                                   Tonga, Kingdom of                      TO
+## 232                    Trinidad and Tobago, Republic of                      TT
+## 233                                United Arab Emirates                      AE
+## 234                          Tunisia, Tunisian Republic                      TN
+## 235                                 Turkey, Republic of                      TR
+## 236                                 Turkey, Republic of                      TR
+## 237                                        Turkmenistan                      TM
+## 238                            Turks and Caicos Islands                      TC
+## 239                                              Tuvalu                      TV
+## 240                                 Uganda, Republic of                      UG
+## 241                                             Ukraine                      UA
+## 242          Macedonia, The Former Yugoslav Republic of                      MK
+## 243                             Egypt, Arab Republic of                      EG
+## 244  United Kingdom of Great Britain & Northern Ireland                      GB
+## 245                              Guernsey, Bailiwick of                      GG
+## 246                                Jersey, Bailiwick of                      JE
+## 247                                         Isle of Man                      IM
+## 248                        Tanzania, United Republic of                      TZ
+## 249                            United States of America                      US
+## 250                        United States Virgin Islands                      VI
+## 251                                        Burkina Faso                      BF
+## 252                        Uruguay, Eastern Republic of                      UY
+## 253                             Uzbekistan, Republic of                      UZ
+## 254                   Venezuela, Bolivarian Republic of                      VE
+## 255                                   Wallis and Futuna                      WF
+## 256                         Samoa, Independent State of                      WS
+## 257                                               Yemen                      YE
+## 258                                 Zambia, Republic of                      ZM
+## 259                                  Disputed Territory                      XX
+## 260                      Iraq-Saudi Arabia Neutral Zone                      XE
+## 261                         United Nations Neutral Zone                      XD
+## 262                                     Spratly Islands                      XS
+##     Three_Letter_Country_Code Country_Number
+## 1                         AFG              4
+## 2                         ALB              8
+## 3                         ATA             10
+## 4                         DZA             12
+## 5                         ASM             16
+## 6                         AND             20
+## 7                         AGO             24
+## 8                         ATG             28
+## 9                         AZE             31
+## 10                        AZE             31
+## 11                        ARG             32
+## 12                        AUS             36
+## 13                        AUT             40
+## 14                        BHS             44
+## 15                        BHR             48
+## 16                        BGD             50
+## 17                        ARM             51
+## 18                        ARM             51
+## 19                        BRB             52
+## 20                        BEL             56
+## 21                        BMU             60
+## 22                        BTN             64
+## 23                        BOL             68
+## 24                        BIH             70
+## 25                        BWA             72
+## 26                        BVT             74
+## 27                        BRA             76
+## 28                        BLZ             84
+## 29                        IOT             86
+## 30                        SLB             90
+## 31                        VGB             92
+## 32                        BRN             96
+## 33                        BGR            100
+## 34                        MMR            104
+## 35                        BDI            108
+## 36                        BLR            112
+## 37                        KHM            116
+## 38                        CMR            120
+## 39                        CAN            124
+## 40                        CPV            132
+## 41                        CYM            136
+## 42                        CAF            140
+## 43                        LKA            144
+## 44                        TCD            148
+## 45                        CHL            152
+## 46                        CHN            156
+## 47                        TWN            158
+## 48                        CXR            162
+## 49                        CCK            166
+## 50                        COL            170
+## 51                        COM            174
+## 52                        MYT            175
+## 53                        COG            178
+## 54                        COD            180
+## 55                        COK            184
+## 56                        CRI            188
+## 57                        HRV            191
+## 58                        CUB            192
+## 59                        CYP            196
+## 60                        CYP            196
+## 61                        CZE            203
+## 62                        BEN            204
+## 63                        DNK            208
+## 64                        DMA            212
+## 65                        DOM            214
+## 66                        ECU            218
+## 67                        SLV            222
+## 68                        GNQ            226
+## 69                        ETH            231
+## 70                        ERI            232
+## 71                        EST            233
+## 72                        FRO            234
+## 73                        FLK            238
+## 74                        SGS            239
+## 75                        FJI            242
+## 76                        FIN            246
+## 77                        ALA            248
+## 78                        FRA            250
+## 79                        GUF            254
+## 80                        PYF            258
+## 81                        ATF            260
+## 82                        DJI            262
+## 83                        GAB            266
+## 84                        GEO            268
+## 85                        GEO            268
+## 86                        GMB            270
+## 87                        PSE            275
+## 88                        DEU            276
+## 89                        GHA            288
+## 90                        GIB            292
+## 91                        KIR            296
+## 92                        GRC            300
+## 93                        GRL            304
+## 94                        GRD            308
+## 95                        GLP            312
+## 96                        GUM            316
+## 97                        GTM            320
+## 98                        GIN            324
+## 99                        GUY            328
+## 100                       HTI            332
+## 101                       HMD            334
+## 102                       VAT            336
+## 103                       HND            340
+## 104                       HKG            344
+## 105                       HUN            348
+## 106                       ISL            352
+## 107                       IND            356
+## 108                       IDN            360
+## 109                       IRN            364
+## 110                       IRQ            368
+## 111                       IRL            372
+## 112                       ISR            376
+## 113                       ITA            380
+## 114                       CIV            384
+## 115                       JAM            388
+## 116                       JPN            392
+## 117                       KAZ            398
+## 118                       KAZ            398
+## 119                       JOR            400
+## 120                       KEN            404
+## 121                       PRK            408
+## 122                       KOR            410
+## 123                       KWT            414
+## 124                       KGZ            417
+## 125                       LAO            418
+## 126                       LBN            422
+## 127                       LSO            426
+## 128                       LVA            428
+## 129                       LBR            430
+## 130                       LBY            434
+## 131                       LIE            438
+## 132                       LTU            440
+## 133                       LUX            442
+## 134                       MAC            446
+## 135                       MDG            450
+## 136                       MWI            454
+## 137                       MYS            458
+## 138                       MDV            462
+## 139                       MLI            466
+## 140                       MLT            470
+## 141                       MTQ            474
+## 142                       MRT            478
+## 143                       MUS            480
+## 144                       MEX            484
+## 145                       MCO            492
+## 146                       MNG            496
+## 147                       MDA            498
+## 148                       MNE            499
+## 149                       MSR            500
+## 150                       MAR            504
+## 151                       MOZ            508
+## 152                       OMN            512
+## 153                       NAM            516
+## 154                       NRU            520
+## 155                       NPL            524
+## 156                       NLD            528
+## 157                       ANT            530
+## 158                       CUW            531
+## 159                       ABW            533
+## 160                       SXM            534
+## 161                       BES            535
+## 162                       NCL            540
+## 163                       VUT            548
+## 164                       NZL            554
+## 165                       NIC            558
+## 166                       NER            562
+## 167                       NGA            566
+## 168                       NIU            570
+## 169                       NFK            574
+## 170                       NOR            578
+## 171                       MNP            580
+## 172                       UMI            581
+## 173                       UMI            581
+## 174                       FSM            583
+## 175                       MHL            584
+## 176                       PLW            585
+## 177                       PAK            586
+## 178                       PAN            591
+## 179                       PNG            598
+## 180                       PRY            600
+## 181                       PER            604
+## 182                       PHL            608
+## 183                       PCN            612
+## 184                       POL            616
+## 185                       PRT            620
+## 186                       GNB            624
+## 187                       TLS            626
+## 188                       PRI            630
+## 189                       QAT            634
+## 190                       REU            638
+## 191                       ROU            642
+## 192                       RUS            643
+## 193                       RUS            643
+## 194                       RWA            646
+## 195                       BLM            652
+## 196                       SHN            654
+## 197                       KNA            659
+## 198                       AIA            660
+## 199                       LCA            662
+## 200                       MAF            663
+## 201                       SPM            666
+## 202                       VCT            670
+## 203                       SMR            674
+## 204                       STP            678
+## 205                       SAU            682
+## 206                       SEN            686
+## 207                       SRB            688
+## 208                       SYC            690
+## 209                       SLE            694
+## 210                       SGP            702
+## 211                       SVK            703
+## 212                       VNM            704
+## 213                       SVN            705
+## 214                       SOM            706
+## 215                       ZAF            710
+## 216                       ZWE            716
+## 217                       ESP            724
+## 218                       SSD            728
+## 219                       ESH            732
+## 220                       SDN            736
+## 221                       SUR            740
+## 222                       SJM            744
+## 223                       SWZ            748
+## 224                       SWE            752
+## 225                       CHE            756
+## 226                       SYR            760
+## 227                       TJK            762
+## 228                       THA            764
+## 229                       TGO            768
+## 230                       TKL            772
+## 231                       TON            776
+## 232                       TTO            780
+## 233                       ARE            784
+## 234                       TUN            788
+## 235                       TUR            792
+## 236                       TUR            792
+## 237                       TKM            795
+## 238                       TCA            796
+## 239                       TUV            798
+## 240                       UGA            800
+## 241                       UKR            804
+## 242                       MKD            807
+## 243                       EGY            818
+## 244                       GBR            826
+## 245                       GGY            831
+## 246                       JEY            832
+## 247                       IMN            833
+## 248                       TZA            834
+## 249                       USA            840
+## 250                       VIR            850
+## 251                       BFA            854
+## 252                       URY            858
+## 253                       UZB            860
+## 254                       VEN            862
+## 255                       WLF            876
+## 256                       WSM            882
+## 257                       YEM            887
+## 258                       ZMB            894
+## 259                                       NA
+## 260                                       NA
+## 261                                       NA
+## 262                                       NA
+\end{verbatim}
+
+\hypertarget{telecoupling-impact-by-taxa}{%
+\section{5. Telecoupling Impact by
+Taxa}\label{telecoupling-impact-by-taxa}}
+
+Note that n=136, some papers reported metrics for multiple taxa.
+Maj\_eff was determined based on paper and taxa for these figures.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxa_tab <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{maj_eff_taxa))}
+\NormalTok{taxa_tab}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{(taxa_tab}\OperatorTok{$}\NormalTok{Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(taxa_tab}\OperatorTok{$}\NormalTok{Freq))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{taxa_tab}
+\CommentTok{# get summary}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(taxEff_maj, .(taxa, maj_eff_taxa), summarize,}
+          \CommentTok{# total count of entries     }
+          \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(taxa)) }\OperatorTok{%>%}
+\StringTok{          }\CommentTok{# percents of effects within totals per taxa}
+\StringTok{          }\KeywordTok{group_by}\NormalTok{(taxa) }\OperatorTok{%>%}
+\StringTok{            }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{perc_per_taxa=}\KeywordTok{map}\NormalTok{(data, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{count}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{$}\NormalTok{count))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(data, perc_per_taxa))}
+
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_taxa.csv'),row.names = TRUE)}
+
+\NormalTok{  q <-}\StringTok{ }\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{taxa)}
+\NormalTok{  q <-}\StringTok{ }\NormalTok{q[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{(q))]}
+\NormalTok{  taxa.sorted <-}\StringTok{ }\KeywordTok{names}\NormalTok{(q);taxa.sorted}
+\NormalTok{  taxa.sorted <-}\StringTok{ }\KeywordTok{c}\NormalTok{(taxa.sorted,taxa.sorted[}\DecValTok{6}\NormalTok{])}
+\NormalTok{  taxa.sorted <-taxa.sorted[}\OperatorTok{-}\DecValTok{6}\NormalTok{]}
+\NormalTok{  a}\OperatorTok{$}\NormalTok{taxa <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(a}\OperatorTok{$}\NormalTok{taxa,taxa.sorted)}
+\NormalTok{  taxa.bar.data <-}\StringTok{ }\NormalTok{a}
+\CommentTok{# Stack plot (count)}
+\NormalTok{  taxa_bar <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff_taxa, }\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{x=}\NormalTok{taxa)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{50}\NormalTok{) }\OperatorTok{+}
+\StringTok{               }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}\DataTypeTok{legend.justification=}\StringTok{'center'}\NormalTok{,   }
+                     \DataTypeTok{legend.direction=}\StringTok{'horizontal'}\NormalTok{,}\DataTypeTok{legend.title =} \KeywordTok{element_blank}\NormalTok{())}
+\NormalTok{taxa_bar}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{verbatim}
+##                         Var1 Freq      perc
+## 1                 Beneficial   16 11.764706
+## 2                    Harmful   67 49.264706
+## 3                    Changed   11  8.088235
+## 4                      Mixed    9  6.617647
+## 5 Not significant or unclear   33 24.264706
+## [1] "Birds"               "Plants/Trees/Shrubs" "Invertebrates"      
+## [4] "Fish"                "Mammals"             "Multiple"           
+## [7] "Reptiles"            "Amphibians"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Stack plot (percentage)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff_taxa, }\DataTypeTok{y=}\NormalTok{perc_per_taxa, }\DataTypeTok{x=}\NormalTok{taxa)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+\NormalTok{quick_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-22-1.pdf}
+
+\hypertarget{telecoupling-impact-by-flow}{%
+\section{7. Telecoupling Impact by
+Flow}\label{telecoupling-impact-by-flow}}
+
+Duplicate rows with multiple flow types. This means that effects and
+other results will be \emph{duplicated} as well.
+
+The reason for doing this is so that we can attribute biodiversity
+impacts to the specific flows that may have been studied together, and
+whose individual impacts cannot be decoupled.
+
+\begin{itemize}
+\tightlist
+\item
+  Tourism and Trade were the most represented in our sample and both had
+  majority Harmful imapcts reported.
+\item
+  The flow categories that showed somewhat beneficial impacts where
+  Investment, Water Transfer, and Knowledge Transfer.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# set as character}
+\NormalTok{taxEff_maj}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{tc)}
+
+\CommentTok{# show original length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Original number of rows:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(taxEff_maj)))}
+
+\CommentTok{# split multiple flows listed in a row into other new rows}
+\NormalTok{  taxEff_maj_rep <-}\StringTok{ }\KeywordTok{separate_rows}\NormalTok{(taxEff_maj, tc, }\DataTypeTok{sep=}\StringTok{";"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{  taxEff_maj_rep}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(taxEff_maj_rep}\OperatorTok{$}\NormalTok{tc)}
+
+\CommentTok{# show new length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Number of rows after separating multiple flows per paper:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(taxEff_maj_rep)))}
+
+\CommentTok{# show levels}
+\CommentTok{#  summary(tcRep$tc)}
+\NormalTok{tc_tab <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(taxEff_maj_rep}\OperatorTok{$}\NormalTok{maj_eff_taxa))}
+\NormalTok{tc_tab}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{(tc_tab}\OperatorTok{$}\NormalTok{Freq}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(tc_tab}\OperatorTok{$}\NormalTok{Freq))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{tc_tab}
+
+
+\CommentTok{# get summary}
+\NormalTok{  a <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(taxEff_maj_rep, .(tc, maj_eff_taxa), summarize,}
+          \CommentTok{# total count of entries     }
+          \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(tc)) }\OperatorTok{%>%}
+\StringTok{          }\CommentTok{# percents of effects within totals per tc}
+\StringTok{          }\KeywordTok{group_by}\NormalTok{(tc) }\OperatorTok{%>%}
+\StringTok{            }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{             }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{perc_per_tc=}\KeywordTok{map}\NormalTok{(data, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{count}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{$}\NormalTok{count))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{              }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(data, perc_per_tc))}
+  
+\NormalTok{  q <-}\StringTok{ }\KeywordTok{table}\NormalTok{(taxEff_maj_rep}\OperatorTok{$}\NormalTok{tc)}
+\NormalTok{  q <-}\StringTok{ }\NormalTok{q[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{(q))]}
+\NormalTok{  tc.sorted <-}\StringTok{ }\KeywordTok{names}\NormalTok{(q);tc.sorted}
+\NormalTok{  a}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(a}\OperatorTok{$}\NormalTok{tc,tc.sorted)}
+\NormalTok{  flow_bar_data <-}\StringTok{ }\NormalTok{a}
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),row.names = TRUE)}
+  
+\CommentTok{# Stack plot (count)}
+\NormalTok{  flow_bar <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff_taxa, }\DataTypeTok{y=}\NormalTok{count, }\DataTypeTok{x=}\NormalTok{tc)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{60}\NormalTok{)}
+
+
+
+\CommentTok{# view}
+\NormalTok{  flow_bar}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-23-1.pdf}
+
+\begin{verbatim}
+## [1] "Original number of rows: 136"
+## [1] "Number of rows after separating multiple flows per paper: 153"
+##                         Var1 Freq      perc
+## 1                 Beneficial   19 12.418301
+## 2                    Harmful   72 47.058824
+## 3                    Changed   12  7.843137
+## 4                      Mixed   11  7.189542
+## 5 Not significant or unclear   39 25.490196
+## [1] "Tourism"            "Trade"              "Species Dispersal" 
+## [4] "Knowledge Transfer" "Investment"         "Energy Transfer"   
+## [7] "Migration (human)"  "Water Transfer"     "Waste Transfer"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Stack plot (percent)}
+\NormalTok{  quick_plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(a, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill=}\NormalTok{maj_eff_taxa, }\DataTypeTok{y=}\NormalTok{perc_per_tc, }\DataTypeTok{x=}\NormalTok{tc)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{"stack"}\NormalTok{, }\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{                }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{45}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\NormalTok{majeff_col) }\OperatorTok{+}
+\StringTok{                }\KeywordTok{xlab}\NormalTok{(}\StringTok{""}\NormalTok{)}
+
+\NormalTok{quick_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+Side by side plot of taxa barchart and flow barchart
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxa_bar2 <-}\StringTok{ }\NormalTok{taxa_bar }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{'none'}\NormalTok{) }
+
+\NormalTok{flow_bar2 <-}\StringTok{ }\NormalTok{flow_bar }\OperatorTok{+}\StringTok{ }\KeywordTok{ylab}\NormalTok{(}\KeywordTok{element_blank}\NormalTok{()) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{'none'}\NormalTok{) }
+  
+  
+  
+\CommentTok{# theme(legend.position = "bottom",legend.justification='center',   }
+\CommentTok{# legend.direction='horizontal',legend.title = element_blank())}
+
+\CommentTok{#extract legend}
+\CommentTok{#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs}
+\NormalTok{g_legend<-}\ControlFlowTok{function}\NormalTok{(a.gplot)\{}
+\NormalTok{  tmp <-}\StringTok{ }\KeywordTok{ggplot_gtable}\NormalTok{(}\KeywordTok{ggplot_build}\NormalTok{(a.gplot))}
+\NormalTok{  leg <-}\StringTok{ }\KeywordTok{which}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(tmp}\OperatorTok{$}\NormalTok{grobs, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{name) }\OperatorTok{==}\StringTok{ "guide-box"}\NormalTok{)}
+\NormalTok{  legend <-}\StringTok{ }\NormalTok{tmp}\OperatorTok{$}\NormalTok{grobs[[leg]]}
+  \KeywordTok{return}\NormalTok{(legend)\}}
+
+\NormalTok{mylegend<-}\KeywordTok{g_legend}\NormalTok{(taxa_bar)}
+
+\NormalTok{merge_bar <-}\StringTok{ }\KeywordTok{grid.arrange}\NormalTok{(}\KeywordTok{arrangeGrob}\NormalTok{(taxa_bar2,flow_bar2,}\DataTypeTok{nrow=}\DecValTok{1}\NormalTok{),mylegend, }\DataTypeTok{nrow=}\DecValTok{2}\NormalTok{,}\DataTypeTok{heights=}\KeywordTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#merge_bar <- ggarrange(taxa_bar2, flow_bar2, mylegend,ncol=2, nrow=2,labels = c('a', 'b'))}
+\CommentTok{#merge_bar}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{telecoupling-impacts-by-at-the-entry-level}{%
+\section{8. Telecoupling impacts by at the entry
+level}\label{telecoupling-impacts-by-at-the-entry-level}}
+
+Replicate TC flows by entry
+
+\begin{itemize}
+\tightlist
+\item
+  This figure shows the direction of telecoupling impacts at the entry
+  level (i.e.~all 700+ metrics recorded)
+\item
+  Most studies report multiple species richness and abundance.
+\item
+  Most habitat metrics were significantly Harmful, except in the case of
+  knowledge transfer telecouplings.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# set as character}
+\NormalTok{  s23}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(s23}\OperatorTok{$}\NormalTok{tc)}
+\NormalTok{  poo<-s23[}\KeywordTok{is.na}\NormalTok{(s23}\OperatorTok{$}\NormalTok{tc),]}
+  
+  
+\CommentTok{# show original length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Original number of rows:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(s23)))}
+
+\CommentTok{# split multiple flows listed in a row into other new rows}
+\NormalTok{  tcRep <-}\StringTok{ }\KeywordTok{separate_rows}\NormalTok{(s23, tc, }\DataTypeTok{sep=}\StringTok{";"}\NormalTok{, }\DataTypeTok{convert =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{  tcRep}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(tcRep}\OperatorTok{$}\NormalTok{tc)}
+
+\CommentTok{# show new length of rows}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{'Number of rows after separating multiple flows per paper:'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(tcRep)))}
+  
+\NormalTok{  tcRep_maj <-}\StringTok{ }\NormalTok{tcRep[}\OperatorTok{!}\KeywordTok{duplicated}\NormalTok{(tcRep}\OperatorTok{$}\NormalTok{paper_id),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Original number of rows: 767"
+## [1] "Number of rows after separating multiple flows per paper: 807"
+\end{verbatim}
+
+\hypertarget{impacts-by-metric}{%
+\subsection{Impacts by metric}\label{impacts-by-metric}}
+
+Convert to long format, where metric is indicated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# subset}
+\NormalTok{  metrics <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(tcRep,}
+                    \DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'entry_id'}\NormalTok{,}
+                            \StringTok{'taxa'}\NormalTok{,}\StringTok{'tc'}\NormalTok{,}\StringTok{'sig_effect'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_1sp'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_multsp'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_habitat'}\NormalTok{))}
+\CommentTok{# melt}
+\NormalTok{  metrics_long <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(metrics, }\DataTypeTok{id.vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'entry_id'}\NormalTok{,}
+                            \StringTok{'taxa'}\NormalTok{,}\StringTok{'tc'}\NormalTok{,}\StringTok{'sig_effect'}\NormalTok{))}
+  
+\CommentTok{# remove NA fields}
+\NormalTok{  metrics_long <-}\StringTok{ }\NormalTok{metrics_long[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{value),]}
+
+\CommentTok{# change colnames}
+  \KeywordTok{colnames}\NormalTok{(metrics_long)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ 'metric_type'}
+  \KeywordTok{colnames}\NormalTok{(metrics_long)[}\DecValTok{7}\NormalTok{] <-}\StringTok{ 'metric'}
+
+
+\CommentTok{# change levels}
+  \KeywordTok{levels}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric_type) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'Single species'}\NormalTok{,}
+                                        \StringTok{'Multiple species'}\NormalTok{,}
+                                        \StringTok{'Habitat'}\NormalTok{)}
+
+  \KeywordTok{levels}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+
+\CommentTok{# remove parentheses}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s*}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{([^}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)]+}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{, }\StringTok{''}\NormalTok{,}
+                          \KeywordTok{as.character}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+
+\CommentTok{# capitalize each word}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\NormalTok{tools}\OperatorTok{::}\KeywordTok{toTitleCase}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric)}
+  
+\CommentTok{# adjust name}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"With-in"}\NormalTok{, }\StringTok{'Within'}\NormalTok{,}
+                        \KeywordTok{as.character}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+  
+\CommentTok{# change levels, moving other to the end}
+\NormalTok{  metrics_long}\OperatorTok{$}\NormalTok{metric <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric,}
+                                \KeywordTok{c}\NormalTok{(}\StringTok{"Abundance/Density"}\NormalTok{,}
+                                   \StringTok{"Amount"}\NormalTok{,}
+                                   \StringTok{"Composition"}\NormalTok{,}
+                                   \StringTok{"Detection"}\NormalTok{,}
+                                   \StringTok{"Diversity Index"}\NormalTok{,}
+                                   \StringTok{"Evenness"}\NormalTok{,}
+                                   \StringTok{"Movement"}\NormalTok{,}
+                                   \StringTok{"Occurrence"}\NormalTok{,}
+                                   \StringTok{"Population Dynamics"}\NormalTok{,}
+                                   \StringTok{"Quality"}\NormalTok{,}
+                                   \StringTok{"Richness"}\NormalTok{,}
+                                   \StringTok{"Within Species Diversity"}
+\NormalTok{                                  ))}
+  
+\CommentTok{# check levels}
+  \KeywordTok{levels}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(metrics_long}\OperatorTok{$}\NormalTok{metric))}
+
+\CommentTok{# get summary}
+\NormalTok{  metric_flow <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(metrics_long,}
+\NormalTok{                       .(metric_type, metric, tc, sig_effect),}
+\NormalTok{                       summarize,}
+                      \CommentTok{# total count of entries     }
+                        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(metric))}
+
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(metric_flow, paste0(tab.dir,'synthesis_sig_effects_metric_and_flow.csv'),row.names = TRUE)}
+
+\CommentTok{# sig_effects level change}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{sig_effect <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s*}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{([^}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)]+}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{, }\StringTok{''}\NormalTok{,}
+                          \KeywordTok{as.character}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{sig_effect))}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{sig_effect <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{sig_effect,}
+                             \KeywordTok{c}\NormalTok{( }\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Harmful"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\CommentTok{# telecoupling level change}
+  
+\NormalTok{  q <-}\StringTok{ }\KeywordTok{table}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{tc)}
+\NormalTok{  q <-}\StringTok{ }\NormalTok{q[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{(q))]}
+\NormalTok{  tc.sorted <-}\StringTok{ }\KeywordTok{names}\NormalTok{(q)}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{tc,tc.sorted)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Abundance/Density (biomass, mass, number of individuals, individuals/unit area)"
+##  [2] "Abundance/Density (number of individuals, individuals/unit area, biomass)"      
+##  [3] "Amount (e.g. land use change from non-habitat to habitat)"                      
+##  [4] "Composition (what species?)"                                                    
+##  [5] "Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)"           
+##  [6] "Evenness"                                                                       
+##  [7] "Movement"                                                                       
+##  [8] "Occurrence"                                                                     
+##  [9] "Occurrence (presence, range, persistence, etc., NOT detection)"                 
+## [10] "Population dynamics (survival, fitness, reproduction, mortality, etc.)"         
+## [11] "Quality (pollution, connectence, disturbance, etc.)"                            
+## [12] "Richness (number of species)"                                                   
+## [13] "With-in species diversity (genetic diversity, age structure, etc.)"             
+##  [1] "Abundance/Density"        "Amount"                  
+##  [3] "Composition"              "Detection"               
+##  [5] "Diversity Index"          "Evenness"                
+##  [7] "Movement"                 "Occurrence"              
+##  [9] "Population Dynamics"      "Quality"                 
+## [11] "Richness"                 "Within Species Diversity"
+\end{verbatim}
+
+\hypertarget{flow-taxa-data}{%
+\subsection{Flow \& Taxa data}\label{flow-taxa-data}}
+
+Convert to long format, where metric is indicated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# get summary}
+\NormalTok{  metric_flow <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(metrics_long,}
+\NormalTok{                       .(taxa, tc, sig_effect),}
+\NormalTok{                       summarize,}
+                      \CommentTok{# total count of entries     }
+                        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(metric))}
+
+\CommentTok{# save as csv}
+\CommentTok{#  write.csv(metric_flow, paste0(tab.dir,'synthesis_sig_effects_metric_and_flow.csv'),row.names = TRUE)}
+
+\CommentTok{# sig_effects level change}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{sig_effect <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{s*}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{([^}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)]+}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}\NormalTok{, }\StringTok{''}\NormalTok{,}
+                          \KeywordTok{as.character}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{sig_effect))}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{sig_effect <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{sig_effect,}
+                             \KeywordTok{c}\NormalTok{( }\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Harmful"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{tc,tc.sorted)}
+  
+\NormalTok{  q <-}\StringTok{ }\KeywordTok{table}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{taxa)}
+\NormalTok{  q <-}\StringTok{ }\NormalTok{q[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{(q))]}
+\NormalTok{  taxa.sorted <-}\StringTok{ }\KeywordTok{names}\NormalTok{(q);taxa.sorted}
+\NormalTok{  taxa.sorted <-}\StringTok{ }\KeywordTok{c}\NormalTok{(taxa.sorted,taxa.sorted[}\DecValTok{6}\NormalTok{])}
+\NormalTok{  taxa.sorted <-taxa.sorted[}\OperatorTok{-}\DecValTok{6}\NormalTok{]}
+\NormalTok{  metric_flow}\OperatorTok{$}\NormalTok{taxa <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{taxa,taxa.sorted)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Birds"               "Plants/Trees/Shrubs" "Fish"               
+## [4] "Invertebrates"       "Mammals"             "Multiple"           
+## [7] "Reptiles"            "Amphibians"
+\end{verbatim}
+
+\#\#Flow and taxa figure
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Matrix of pie charts}
+\NormalTok{  sig_effect_cols <-}\StringTok{ }\NormalTok{sigeff_col}
+
+\NormalTok{  metric_flow_fig <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(metric_flow) }\OperatorTok{+}
+\StringTok{                    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\StringTok{''}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ count, }\DataTypeTok{fill =}\NormalTok{ sig_effect) }\OperatorTok{+}
+\StringTok{                    }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{'fill'}\NormalTok{,}
+                             \DataTypeTok{stat=}\StringTok{'identity'}\NormalTok{,}
+                             \DataTypeTok{width =} \DecValTok{1}\NormalTok{,}
+                             \DataTypeTok{size =} \FloatTok{0.01}\NormalTok{) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# activate for vertical or horizontal version}
+\StringTok{                      }\KeywordTok{facet_grid}\NormalTok{(taxa }\OperatorTok{~}\StringTok{ }\NormalTok{tc, }\DataTypeTok{switch=}\StringTok{'y'}\NormalTok{) }\OperatorTok{+}\StringTok{ }\CommentTok{#horizontal}
+\StringTok{                      }\CommentTok{#facet_grid(tc ~ metric, switch='y') +  #vertical}
+\StringTok{                    }\CommentTok{# convert to pie chart}
+\StringTok{                      }\KeywordTok{coord_polar}\NormalTok{(}\DataTypeTok{theta =} \StringTok{'y'}\NormalTok{) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# colors}
+\StringTok{                      }\KeywordTok{scale_fill_manual}\NormalTok{(}
+                        \DataTypeTok{values=}\NormalTok{sig_effect_cols,}
+                        \DataTypeTok{guide =} \KeywordTok{guide_legend}\NormalTok{(}\DataTypeTok{reverse =} \OtherTok{FALSE}\NormalTok{))  }\OperatorTok{+}
+\StringTok{                        }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{position=}\StringTok{'right'}\NormalTok{,}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                    }\CommentTok{# style}
+\StringTok{                      }\KeywordTok{theme_gray}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}
+                        \DataTypeTok{axis.title=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.line=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.ticks=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.text=}\KeywordTok{element_blank}\NormalTok{(),}
+                        
+                        \DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}
+                        \DataTypeTok{legend.justification=}\StringTok{'center'}\NormalTok{,}
+                        \DataTypeTok{legend.direction=}\StringTok{'horizontal'}\NormalTok{,}
+                        \DataTypeTok{legend.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                        
+                        \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid.major =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid.minor =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(),}
+                        \DataTypeTok{plot.title=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{strip.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{,}
+                                          \DataTypeTok{angle=}\DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                        \DataTypeTok{strip.text.y.left =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{,}
+                                          \DataTypeTok{angle=}\DecValTok{0}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                        \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{'white'}\NormalTok{),}
+                        \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{'lines'}\NormalTok{)}
+\NormalTok{                        ) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# labels}
+\StringTok{                      }\KeywordTok{ylab}\NormalTok{(}\StringTok{''}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{xlab}\NormalTok{(}\StringTok{''}\NormalTok{)}
+
+
+
+\CommentTok{# display image}
+\NormalTok{  metric_flow_fig}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+Flow Taxa Heatmap
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Load data of number of studies by taxa and flow}
+\NormalTok{nr_metric_tele <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ metric_flow}\OperatorTok{$}\NormalTok{count,}
+                               \DataTypeTok{by =} \KeywordTok{list}\NormalTok{(metric_flow}\OperatorTok{$}\NormalTok{taxa, metric_flow}\OperatorTok{$}\NormalTok{tc),}
+                               \DataTypeTok{FUN =}\NormalTok{ sum)}
+
+ 
+
+\CommentTok{# Rename columns}
+
+\KeywordTok{names}\NormalTok{(nr_metric_tele)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"taxa"}\NormalTok{, }\StringTok{"telecoupling"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\CommentTok{# Fill the gaps}
+
+\NormalTok{mat_nr_metric_tele <-}\KeywordTok{dcast}\NormalTok{(nr_metric_tele, taxa }\OperatorTok{~}\StringTok{ }\NormalTok{telecoupling, }\DataTypeTok{value.var =} \StringTok{'count'}\NormalTok{)}
+\NormalTok{filled_nr_metric_tele <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(mat_nr_metric_tele, }\DataTypeTok{id=}\KeywordTok{c}\NormalTok{(}\StringTok{"taxa"}\NormalTok{))}
+\NormalTok{filled_nr_metric_tele[}\KeywordTok{is.na}\NormalTok{(filled_nr_metric_tele)] <-}\StringTok{ }\DecValTok{0}
+\KeywordTok{names}\NormalTok{(filled_nr_metric_tele)[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"telecoupling"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\CommentTok{# Create 'count' categories for representation}
+
+\NormalTok{filled_nr_metric_tele}\OperatorTok{$}\NormalTok{count_factor <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{count,}
+                                          \DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{20}\NormalTok{,}\DecValTok{50}\NormalTok{,}\DecValTok{100}\NormalTok{,}\KeywordTok{max}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{count,}\DataTypeTok{na.rm=}\NormalTok{T)),}
+                                          \DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"0"}\NormalTok{,}\StringTok{"1-5"}\NormalTok{,}\StringTok{"5-10"}\NormalTok{,}\StringTok{"10-20"}\NormalTok{,}\StringTok{"20-50"}\NormalTok{,}\StringTok{"50-100"}\NormalTok{,}\StringTok{">100"}\NormalTok{))}
+
+
+\CommentTok{# Change order of factor levels for consistency with other figures}
+\NormalTok{filled_nr_metric_tele}\OperatorTok{$}\NormalTok{taxa <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(filled_nr_metric_tele}\OperatorTok{$}\NormalTok{taxa, }\KeywordTok{rev}\NormalTok{(taxa.sorted))}
+
+\CommentTok{# Heatmap plot}
+
+\NormalTok{heatmap_telemetric <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(filled_nr_metric_tele,}
+                      \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{telecoupling, }\DataTypeTok{y=}\NormalTok{taxa, }\DataTypeTok{fill=}\NormalTok{count_factor)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_tile}\NormalTok{(}\DataTypeTok{color =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ count )) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\KeywordTok{c}\NormalTok{(}\StringTok{"grey90"}\NormalTok{,}\StringTok{"#BCDDF5"}\NormalTok{,}\StringTok{"#8FCBF5"}\NormalTok{,}\StringTok{"#4EA6E6"}\NormalTok{,}
+                                               \StringTok{"#4E91CC"}\NormalTok{,}\StringTok{"#3F76A6"}\NormalTok{,}\StringTok{"#274866"}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{""}\NormalTok{,}\DataTypeTok{y=}\StringTok{""}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme_grey}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \CommentTok{# legend.text = element_blank(),}
+                      \DataTypeTok{legend.position =} \StringTok{"right"}\NormalTok{,}
+                      \DataTypeTok{plot.background=}\KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{plot.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.title=} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.text.x.top =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{,}
+                                                     \DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                      \DataTypeTok{axis.text.y.left =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{),}
+                      \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{"lines"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{position =} \StringTok{"top"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"number of entries"}\NormalTok{)}
+
+\NormalTok{heatmap_telemetric}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-30-1.pdf}
+
+Side by side plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# grid.arrange(metric_flow_fig, heatmap_telemetric, ncol=2)}
+\NormalTok{k<-}\KeywordTok{ggarrange}\NormalTok{(metric_flow_fig, heatmap_telemetric, }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-31-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#This actually save the plot in a image}
+    \KeywordTok{ggsave}\NormalTok{(}\DataTypeTok{file=}\StringTok{"figure2.svg"}\NormalTok{, }\DataTypeTok{plot=}\NormalTok{k, }\DataTypeTok{width=}\DecValTok{10}\NormalTok{, }\DataTypeTok{height=}\DecValTok{8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{countryregion-entry-effects}{%
+\subsection{Country/Region Entry
+Effects}\label{countryregion-entry-effects}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Get continents, tc_cat, and maj_eff}
+\NormalTok{ctr_tc_raw <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(taxEff_maj_rep, }\DataTypeTok{select =} \KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{, }\StringTok{'bd_continents'}\NormalTok{, }\StringTok{'tc'}\NormalTok{, }\StringTok{'maj_eff_taxa'}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# sig_effects level change}
+\NormalTok{  ctr_tc_raw}\OperatorTok{$}\NormalTok{maj_eff_taxa <-}\StringTok{ }\KeywordTok{factor}\NormalTok{( ctr_tc_raw}\OperatorTok{$}\NormalTok{maj_eff_taxa,}
+                             \KeywordTok{c}\NormalTok{( }\StringTok{"Beneficial"}\NormalTok{,}\StringTok{"Harmful"}\NormalTok{,}\StringTok{"Changed"}\NormalTok{,}\StringTok{"Mixed"}\NormalTok{,}\StringTok{"Not significant or unclear"}\NormalTok{))}
+\CommentTok{# telecoupling level change}
+
+\NormalTok{  q <-}\StringTok{ }\KeywordTok{table}\NormalTok{(ctr_tc_raw}\OperatorTok{$}\NormalTok{tc)}
+\NormalTok{  q <-}\StringTok{ }\NormalTok{q[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{(q))]}
+\NormalTok{  tc.sorted <-}\StringTok{ }\KeywordTok{names}\NormalTok{(q)}
+\NormalTok{  ctr_tc_raw}\OperatorTok{$}\NormalTok{tc <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(  ctr_tc_raw}\OperatorTok{$}\NormalTok{tc,tc.sorted)}
+  
+\CommentTok{# continent level change  }
+\NormalTok{  q <-}\StringTok{ }\KeywordTok{table}\NormalTok{(ctr_tc_raw}\OperatorTok{$}\NormalTok{bd_continents)}
+\NormalTok{  q <-}\StringTok{ }\NormalTok{q[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{(q))]}
+\NormalTok{  cont.sorted <-}\StringTok{ }\KeywordTok{names}\NormalTok{(q)}
+\NormalTok{  ctr_tc_raw}\OperatorTok{$}\NormalTok{bd_continents <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(  ctr_tc_raw}\OperatorTok{$}\NormalTok{bd_continents,cont.sorted)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ctr_tc_count <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(ctr_tc_raw,}
+\NormalTok{                       .(bd_continents, tc, maj_eff_taxa),}
+\NormalTok{                       summarize,}
+                      \CommentTok{# total count of entries     }
+                        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(maj_eff_taxa))}
+\NormalTok{cont_impact <-}\StringTok{ }\KeywordTok{ddply}\NormalTok{(ctr_tc_raw,}
+\NormalTok{                       .(bd_continents, maj_eff_taxa),}
+\NormalTok{                       summarize,}
+                      \CommentTok{# total count of entries     }
+                        \DataTypeTok{count=}\KeywordTok{length}\NormalTok{(maj_eff_taxa)) }\OperatorTok{%>%}
+\StringTok{                       }\KeywordTok{group_by}\NormalTok{(bd_continents) }\OperatorTok{%>%}
+\StringTok{                       }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                        }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{perc_per_taxa=}\KeywordTok{map}\NormalTok{(data, }\ControlFlowTok{function}\NormalTok{(x) x}\OperatorTok{$}\NormalTok{count}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(x}\OperatorTok{$}\NormalTok{count))) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{                          }\KeywordTok{unnest}\NormalTok{(}\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(data, perc_per_taxa))}
+
+\NormalTok{ctr_tc_fig <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(ctr_tc_count) }\OperatorTok{+}
+\StringTok{                    }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\StringTok{''}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ count, }\DataTypeTok{fill =}\NormalTok{ maj_eff_taxa) }\OperatorTok{+}
+\StringTok{                    }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{position=}\StringTok{'fill'}\NormalTok{,}
+                             \DataTypeTok{stat=}\StringTok{'identity'}\NormalTok{,}
+                             \DataTypeTok{width =} \DecValTok{1}\NormalTok{,}
+                             \DataTypeTok{size =} \FloatTok{0.01}\NormalTok{) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# activate for vertical or horizontal version}
+\StringTok{                      }\KeywordTok{facet_grid}\NormalTok{(bd_continents }\OperatorTok{~}\StringTok{ }\NormalTok{tc, }\DataTypeTok{switch=}\StringTok{'y'}\NormalTok{) }\OperatorTok{+}\StringTok{ }\CommentTok{#horizontal}
+\StringTok{                      }\CommentTok{#facet_grid(tc ~ metric, switch='y') +  #vertical}
+\StringTok{                    }\CommentTok{# convert to pie chart}
+\StringTok{                      }\KeywordTok{coord_polar}\NormalTok{(}\DataTypeTok{theta =} \StringTok{'y'}\NormalTok{) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# colors}
+\StringTok{                      }\KeywordTok{scale_fill_manual}\NormalTok{(}
+                        \DataTypeTok{values=}\NormalTok{majeff_col,}
+                        \DataTypeTok{guide =} \KeywordTok{guide_legend}\NormalTok{(}\DataTypeTok{reverse =} \OtherTok{FALSE}\NormalTok{))  }\OperatorTok{+}
+\StringTok{                        }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{position=}\StringTok{'right'}\NormalTok{,}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                    }\CommentTok{# style}
+\StringTok{                      }\KeywordTok{theme_gray}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}
+                        \DataTypeTok{axis.title=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.line=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.ticks=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{axis.text=}\KeywordTok{element_blank}\NormalTok{(),}
+                        
+                        \DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{,}
+                        \DataTypeTok{legend.justification=}\StringTok{'center'}\NormalTok{,}
+                        \DataTypeTok{legend.direction=}\StringTok{'horizontal'}\NormalTok{,}
+                        \DataTypeTok{legend.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                        
+                        \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid.major =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{panel.grid.minor =} \KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{plot.background =} \KeywordTok{element_rect}\NormalTok{(),}
+                        \DataTypeTok{plot.title=}\KeywordTok{element_blank}\NormalTok{(),}
+                        \DataTypeTok{strip.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{,}
+                                          \DataTypeTok{angle=}\DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                        \DataTypeTok{strip.text.y.left =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{,}
+                                          \DataTypeTok{angle=}\DecValTok{0}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                        \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{'white'}\NormalTok{),}
+                        \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{'lines'}\NormalTok{)}
+\NormalTok{                        ) }\OperatorTok{+}
+\StringTok{                    }\CommentTok{# labels}
+\StringTok{                      }\KeywordTok{ylab}\NormalTok{(}\StringTok{''}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{xlab}\NormalTok{(}\StringTok{''}\NormalTok{)}
+
+
+
+\CommentTok{# display image}
+\NormalTok{  ctr_tc_fig}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cont_freq <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(ctr_tc_count}\OperatorTok{$}\NormalTok{bd_continents,ctr_tc_count}\OperatorTok{$}\NormalTok{count))}
+\NormalTok{cont_freq}\OperatorTok{$}\NormalTok{V2<-}\KeywordTok{as.numeric}\NormalTok{(cont_freq}\OperatorTok{$}\NormalTok{V2)}
+\KeywordTok{sum}\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(cont_freq}\OperatorTok{$}\NormalTok{V2))}
+
+\NormalTok{hi <-}\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ cont_freq}\OperatorTok{$}\NormalTok{V2, }\DataTypeTok{by =} \KeywordTok{list}\NormalTok{(cont_freq}\OperatorTok{$}\NormalTok{V1), }\DataTypeTok{FUN =}\NormalTok{ sum)}
+\NormalTok{hi <-}\StringTok{ }\NormalTok{hi[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{hi}\OperatorTok{$}\NormalTok{x),]}
+\NormalTok{hi}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{hi}\OperatorTok{$}\NormalTok{x }\OperatorTok{/}\StringTok{ }\NormalTok{(}\KeywordTok{sum}\NormalTok{(hi}\OperatorTok{$}\NormalTok{x)) }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+
+
+\NormalTok{num_ctr_tele <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ ctr_tc_count}\OperatorTok{$}\NormalTok{count,}
+                               \DataTypeTok{by =} \KeywordTok{list}\NormalTok{(ctr_tc_count}\OperatorTok{$}\NormalTok{bd_continents, ctr_tc_count}\OperatorTok{$}\NormalTok{tc),}
+                               \DataTypeTok{FUN =}\NormalTok{ sum)}
+
+
+
+\KeywordTok{names}\NormalTok{(num_ctr_tele)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"continent"}\NormalTok{, }\StringTok{"telecoupling"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\NormalTok{num_ctr_tele}\OperatorTok{$}\NormalTok{continent <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(num_ctr_tele}\OperatorTok{$}\NormalTok{continent, }\KeywordTok{rev}\NormalTok{(cont.sorted)                                       )}
+
+
+\CommentTok{# Fill the gaps}
+
+\NormalTok{mat_num_ctr_tele <-}\KeywordTok{dcast}\NormalTok{(num_ctr_tele, continent }\OperatorTok{~}\StringTok{ }\NormalTok{telecoupling, }\DataTypeTok{value.var =} \StringTok{'count'}\NormalTok{)}
+\NormalTok{filled_num_ctr_tele <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(mat_num_ctr_tele, }\DataTypeTok{id=}\KeywordTok{c}\NormalTok{(}\StringTok{"continent"}\NormalTok{))}
+\NormalTok{filled_num_ctr_tele[}\KeywordTok{is.na}\NormalTok{(filled_num_ctr_tele)] <-}\StringTok{ }\DecValTok{0}
+\KeywordTok{names}\NormalTok{(filled_num_ctr_tele)[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"telecoupling"}\NormalTok{, }\StringTok{"count"}\NormalTok{)}
+
+\CommentTok{# Create 'count' categories for representation}
+
+\NormalTok{filled_num_ctr_tele}\OperatorTok{$}\NormalTok{count_factor <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(filled_num_ctr_tele}\OperatorTok{$}\NormalTok{count,}
+                                          \DataTypeTok{breaks =} \KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{20}\NormalTok{,}\DecValTok{50}\NormalTok{,}\DecValTok{100}\NormalTok{,}\KeywordTok{max}\NormalTok{(filled_num_ctr_tele}\OperatorTok{$}\NormalTok{count,}\DataTypeTok{na.rm=}\NormalTok{T)),}
+                                          \DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"0"}\NormalTok{,}\StringTok{"1-5"}\NormalTok{,}\StringTok{"5-10"}\NormalTok{,}\StringTok{"10-20"}\NormalTok{,}\StringTok{"20-50"}\NormalTok{,}\StringTok{"50-100"}\NormalTok{,}\StringTok{">100"}\NormalTok{))}
+
+
+\CommentTok{# Change order of factor levels for consistency with other figures}
+
+\CommentTok{#filled_num_ctr_tele$continent <- factor(filled_num_ctr_tele$continent, c('South America','Oceania',}
+\CommentTok{#'North America', 'Europe','Asia','Antarctica','Africa'))}
+
+\CommentTok{# Heatmap plot}
+
+\NormalTok{heatmap_tele_ctr <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(filled_num_ctr_tele,}
+                      \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{telecoupling, }\DataTypeTok{y=}\NormalTok{continent, }\DataTypeTok{fill=}\NormalTok{count_factor)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_tile}\NormalTok{(}\DataTypeTok{color =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{size=}\FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{geom_text}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{label =}\NormalTok{ count )) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values=}\KeywordTok{c}\NormalTok{(}\StringTok{"grey90"}\NormalTok{,}\StringTok{"#BCDDF5"}\NormalTok{,}\StringTok{"#8FCBF5"}\NormalTok{,}\StringTok{"#4EA6E6"}\NormalTok{,}
+                                               \StringTok{"#4E91CC"}\NormalTok{,}\StringTok{"#3F76A6"}\NormalTok{,}\StringTok{"#274866"}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{""}\NormalTok{,}\DataTypeTok{y=}\StringTok{""}\NormalTok{)}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_y_discrete}\NormalTok{(}\DataTypeTok{expand=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{))}\OperatorTok{+}
+\StringTok{                      }\KeywordTok{theme_grey}\NormalTok{(}\DataTypeTok{base_size=}\DecValTok{8}\NormalTok{)}\OperatorTok{+}
+
+\StringTok{                      }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \CommentTok{# legend.text = element_blank(),}
+                      \DataTypeTok{legend.position =} \StringTok{"right"}\NormalTok{,}
+                      \DataTypeTok{plot.background=}\KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{plot.title =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.title=} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{axis.text.x.top =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size=}\DecValTok{10}\NormalTok{, }\DataTypeTok{angle =} \DecValTok{90}\NormalTok{, }\DataTypeTok{vjust=}\DecValTok{0}\NormalTok{,}
+                                                     \DataTypeTok{hjust =} \DecValTok{0}\NormalTok{),}
+                      \DataTypeTok{axis.text.y.left =} \KeywordTok{element_blank}\NormalTok{(),}
+                      \DataTypeTok{strip.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{),}
+                      \DataTypeTok{panel.spacing =} \KeywordTok{unit}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\StringTok{"lines"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{position =} \StringTok{"top"}\NormalTok{) }\OperatorTok{+}
+\StringTok{                      }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"number of entries"}\NormalTok{)}
+
+\NormalTok{heatmap_tele_ctr}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-35-1.pdf}
+
+\begin{verbatim}
+## [1] 153
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k<-}\KeywordTok{ggarrange}\NormalTok{(ctr_tc_fig, heatmap_tele_ctr, }\DataTypeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Results_Draft_V5_files/figure-latex/unnamed-chunk-36-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#This actually save the plot in a image}
+    \KeywordTok{ggsave}\NormalTok{(}\DataTypeTok{file=}\StringTok{"figure4.svg"}\NormalTok{, }\DataTypeTok{plot=}\NormalTok{k, }\DataTypeTok{width=}\DecValTok{10}\NormalTok{, }\DataTypeTok{height=}\DecValTok{8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Europe (30): 31\% beneficial,25\% harmful,06\% changed,19\% mixed,19\%
+Not sig North America (22): 07\% beneficial,43\% harmful,00\%
+changed,14\% mixed,36\% Not sig Asia (25): 17\% beneficial,42\%
+harmful,17\% changed,08\% mixed,17\% Not sig South America (26): 17\%
+beneficial,25\% harmful,25\% changed,17\% mixed,17\% Not sig Africa(10):
+22\% beneficial,33\% harmful,22\% changed,00\% mixed,22\% Not sig
+Oceania (11):13\% beneficial,50\% harmful,13\% changed,00\% mixed,25\%
+Not sig Antarctica(1): 0\% beneficial,100\% harmful,00\% changed,00\%
+mixed,00\% Not sig
+
+Metric types
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# subset}
+\NormalTok{  metrics2 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(s23,}
+                    \DataTypeTok{select=}\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'entry_id'}\NormalTok{,}\StringTok{'taxa'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_1sp'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_multsp'}\NormalTok{,}
+                            \StringTok{'biodiv_cat_habitat'}\NormalTok{))}
+\CommentTok{# melt}
+\NormalTok{  metrics_long2 <-}\StringTok{ }\KeywordTok{melt}\NormalTok{(metrics2, }\DataTypeTok{id.vars=}\KeywordTok{c}\NormalTok{(}\StringTok{'paper_id'}\NormalTok{,}\StringTok{'entry_id'}\NormalTok{,}
+                            \StringTok{'taxa'}\NormalTok{))}
+  
+\CommentTok{# remove NA fields}
+\NormalTok{  metrics_long2 <-}\StringTok{ }\NormalTok{metrics_long2[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(metrics_long2}\OperatorTok{$}\NormalTok{value),]}
+
+\CommentTok{# change colnames}
+  \KeywordTok{colnames}\NormalTok{(metrics_long2)[}\DecValTok{4}\NormalTok{] <-}\StringTok{ 'metric_type'}
+  \KeywordTok{colnames}\NormalTok{(metrics_long2)[}\DecValTok{5}\NormalTok{] <-}\StringTok{ 'metric'}
+
+\NormalTok{metrics_long2}\OperatorTok{$}\NormalTok{metric_name <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(metrics_long2}\OperatorTok{$}\NormalTok{metric_type,}\StringTok{'_'}\NormalTok{, metrics_long2}\OperatorTok{$}\NormalTok{metric)}
+
+\NormalTok{metric_freq<-}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{table}\NormalTok{(metrics_long2}\OperatorTok{$}\NormalTok{metric_name))}
+\NormalTok{metric_freq <-}\StringTok{ }\NormalTok{metric_freq[}\KeywordTok{order}\NormalTok{(}\OperatorTok{-}\NormalTok{metric_freq}\OperatorTok{$}\NormalTok{Freq),]}
+\NormalTok{total_met <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(s23)}
+\NormalTok{metric_freq}\OperatorTok{$}\NormalTok{perc <-}\StringTok{ }\NormalTok{(metric_freq}\OperatorTok{$}\NormalTok{Freq}\OperatorTok{/}\NormalTok{total_met)}\OperatorTok{*}\DecValTok{100}
+
+
+\KeywordTok{table}\NormalTok{(s23}\OperatorTok{$}\NormalTok{biodiv_cat_1sp)}
+\NormalTok{abun <-}\StringTok{ }\NormalTok{s23[}\KeywordTok{which}\NormalTok{(s23}\OperatorTok{$}\NormalTok{biodiv_cat_1sp }\OperatorTok{==}\StringTok{ 'Abundance/Density (number of individuals, individuals/unit area, biomass)'}\NormalTok{),]}
+\NormalTok{occ <-}\StringTok{ }\NormalTok{s23[}\KeywordTok{which}\NormalTok{(s23}\OperatorTok{$}\NormalTok{biodiv_cat_1sp }\OperatorTok{==}\StringTok{ 'Occurrence (presence, range, persistence, etc., NOT detection)'}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Abundance/Density (number of individuals, individuals/unit area, biomass) 
+##                                                                       188 
+##                                                                  Movement 
+##                                                                         5 
+##            Occurrence (presence, range, persistence, etc., NOT detection) 
+##                                                                       186 
+##    Population dynamics (survival, fitness, reproduction, mortality, etc.) 
+##                                                                         5 
+##        With-in species diversity (genetic diversity, age structure, etc.) 
+##                                                                        32
+\end{verbatim}
+
+\newpage
+
+\hypertarget{number-check-for-manuscript}{%
+\section{Number check for
+Manuscript}\label{number-check-for-manuscript}}
+
+\hypertarget{abstract}{%
+\subsection{Abstract}\label{abstract}}
+
+\hypertarget{percentage-of-impacts}{%
+\subsubsection{Percentage of impacts}\label{percentage-of-impacts}}
+
+Numbers with repeating tc, n=153
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(taxEff_maj_rep)}
+\KeywordTok{table}\NormalTok{(taxEff_maj_rep}\OperatorTok{$}\NormalTok{maj_eff_taxa)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(taxEff_maj_rep}\OperatorTok{$}\NormalTok{maj_eff_taxa))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 153
+## 
+##                 Beneficial                    Harmful 
+##                         19                         72 
+##                    Changed                      Mixed 
+##                         12                         11 
+## Not significant or unclear 
+##                         39 
+## 
+##                 Beneficial                    Harmful 
+##                 0.12418301                 0.47058824 
+##                    Changed                      Mixed 
+##                 0.07843137                 0.07189542 
+## Not significant or unclear 
+##                 0.25490196
+\end{verbatim}
+
+Numbers with no repeating tc, n=136 USED FOR MS
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(taxEff_maj)}
+\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{maj_eff_taxa)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{maj_eff_tax))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 136
+## 
+##                 Beneficial                    Harmful 
+##                         16                         67 
+##                    Changed                      Mixed 
+##                         11                          9 
+## Not significant or unclear 
+##                         33 
+## 
+##                 Beneficial                    Harmful 
+##                 0.11764706                 0.49264706 
+##                    Changed                      Mixed 
+##                 0.08088235                 0.06617647 
+## Not significant or unclear 
+##                 0.24264706
+\end{verbatim}
+
+\hypertarget{results}{%
+\subsection{Results}\label{results}}
+
+\hypertarget{paragraph-1---impacts-on-biodiversity-metric-level}{%
+\subsubsection{Paragraph 1 - Impacts on Biodiversity,
+Metric-Level}\label{paragraph-1---impacts-on-biodiversity-metric-level}}
+
+Number of entries/metrics, n=767
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(s23)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 767
+\end{verbatim}
+
+Percentage impact type among metrics/entries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(s23}\OperatorTok{$}\NormalTok{sig_effect)}
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(s23}\OperatorTok{$}\NormalTok{sig_effect)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                 Beneficial                    Changed 
+##                         82                        101 
+##                    Harmful Not significant or unclear 
+##                        225                        359 
+## 
+##                 Beneficial                    Changed 
+##                  0.1069100                  0.1316819 
+##                    Harmful Not significant or unclear 
+##                  0.2933507                  0.4680574
+\end{verbatim}
+
+Freq of metric type
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{metric_freq }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                                                                 Var1
+## 1           biodiv_cat_1sp_Abundance/Density (number of individuals, individuals/unit area, biomass)
+## 3                      biodiv_cat_1sp_Occurrence (presence, range, persistence, etc., NOT detection)
+## 8  biodiv_cat_multsp_Abundance/Density (biomass, mass, number of individuals, individuals/unit area)
+## 14                                                    biodiv_cat_multsp_Richness (number of species)
+## 10            biodiv_cat_multsp_Diversity index (Shannon-Weiner, Simpson's, Inverse Simpson's, etc.)
+## 9                                                      biodiv_cat_multsp_Composition (what species?)
+## 5                  biodiv_cat_1sp_With-in species diversity (genetic diversity, age structure, etc.)
+## 13          biodiv_cat_multsp_Population dynamics (survival, fitness, reproduction, mortality, etc.)
+## 7                             biodiv_cat_habitat_Quality (pollution, connectence, disturbance, etc.)
+## 6                       biodiv_cat_habitat_Amount (e.g. land use change from non-habitat to habitat)
+## 12                                                                      biodiv_cat_multsp_Occurrence
+## 2                                                                            biodiv_cat_1sp_Movement
+## 4              biodiv_cat_1sp_Population dynamics (survival, fitness, reproduction, mortality, etc.)
+## 11                                                                        biodiv_cat_multsp_Evenness
+##    Freq       perc
+## 1   188 24.5110821
+## 3   186 24.2503259
+## 8   110 14.3415906
+## 14  107 13.9504563
+## 10   54  7.0404172
+## 9    38  4.9543677
+## 5    32  4.1720991
+## 13   13  1.6949153
+## 7     9  1.1734029
+## 6     8  1.0430248
+## 12    7  0.9126467
+## 2     5  0.6518905
+## 4     5  0.6518905
+## 11    5  0.6518905
+\end{verbatim}
+
+\hypertarget{paragraph-2---multiple-bd-metrics}{%
+\subsubsection{Paragraph 2 - Multiple bd
+metrics}\label{paragraph-2---multiple-bd-metrics}}
+
+Percent of articles reporting mult bd metrics
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{num.metric <-}\StringTok{ }\KeywordTok{count}\NormalTok{(survey3}\OperatorTok{$}\NormalTok{paper_id)}
+\NormalTok{mult.metric <-}\StringTok{ }\NormalTok{num.metric[num.metric}\OperatorTok{$}\NormalTok{freq }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{,]}
+\KeywordTok{nrow}\NormalTok{(mult.metric)}\OperatorTok{/}\DecValTok{131}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7022901
+\end{verbatim}
+
+Range of metric number
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{range}\NormalTok{(num.metric}\OperatorTok{$}\NormalTok{freq)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]   1 162
+\end{verbatim}
+
+\hypertarget{paragraph-3---impacts-on-biodiversity-study-level}{%
+\subsubsection{Paragraph 3 - Impacts on biodiversity,
+Study-Level}\label{paragraph-3---impacts-on-biodiversity-study-level}}
+
+Percent impact of study level vs metric level
+
+Table of study level
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(taxEff_maj}\OperatorTok{$}\NormalTok{maj_eff_tax)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                 Beneficial                    Harmful 
+##                 0.11764706                 0.49264706 
+##                    Changed                      Mixed 
+##                 0.08088235                 0.06617647 
+## Not significant or unclear 
+##                 0.24264706
+\end{verbatim}
+
+Table of metric level
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(s23}\OperatorTok{$}\NormalTok{sig_effect)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                 Beneficial                    Changed 
+##                  0.1069100                  0.1316819 
+##                    Harmful Not significant or unclear 
+##                  0.2933507                  0.4680574
+\end{verbatim}
+
+Percent impact at study level for taxa
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxa.bar.data[}\KeywordTok{which}\NormalTok{(taxa.bar.data}\OperatorTok{$}\NormalTok{taxa }\OperatorTok{==}\StringTok{ 'Mammals'}\NormalTok{),] }
+\NormalTok{taxa.bar.data[}\KeywordTok{which}\NormalTok{(taxa.bar.data}\OperatorTok{$}\NormalTok{taxa }\OperatorTok{==}\StringTok{ 'Birds'}\NormalTok{),] }
+\NormalTok{taxa.bar.data[}\KeywordTok{which}\NormalTok{(taxa.bar.data}\OperatorTok{$}\NormalTok{taxa }\OperatorTok{==}\StringTok{ 'Plants/Trees/Shrubs'}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 4
+## # Groups:   taxa [1]
+##   taxa    maj_eff_taxa               count perc_per_taxa
+##   <fct>   <fct>                      <int>         <dbl>
+## 1 Mammals Beneficial                     1        0.0667
+## 2 Mammals Harmful                       12        0.8   
+## 3 Mammals Not significant or unclear     2        0.133 
+## # A tibble: 5 x 4
+## # Groups:   taxa [1]
+##   taxa  maj_eff_taxa               count perc_per_taxa
+##   <fct> <fct>                      <int>         <dbl>
+## 1 Birds Beneficial                     7        0.189 
+## 2 Birds Harmful                       16        0.432 
+## 3 Birds Changed                        2        0.0541
+## 4 Birds Mixed                          4        0.108 
+## 5 Birds Not significant or unclear     8        0.216 
+## # A tibble: 5 x 4
+## # Groups:   taxa [1]
+##   taxa                maj_eff_taxa               count perc_per_taxa
+##   <fct>               <fct>                      <int>         <dbl>
+## 1 Plants/Trees/Shrubs Beneficial                     5        0.167 
+## 2 Plants/Trees/Shrubs Harmful                       13        0.433 
+## 3 Plants/Trees/Shrubs Changed                        3        0.1   
+## 4 Plants/Trees/Shrubs Mixed                          2        0.0667
+## 5 Plants/Trees/Shrubs Not significant or unclear     7        0.233
+\end{verbatim}
+
+\hypertarget{paragraph-4---percent-impact-at-study-level-for-flow}{%
+\subsubsection{Paragraph 4 - Percent impact at study level for
+flow}\label{paragraph-4---percent-impact-at-study-level-for-flow}}
+
+Impact percentages by flow
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Tourism'}\NormalTok{),] }
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Trade'}\NormalTok{),] }
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Species Dispersal'}\NormalTok{),] }
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Investment'}\NormalTok{),] }
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Knowledge Transfer'}\NormalTok{),] }
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Water Transfer'}\NormalTok{),] }
+\NormalTok{flow_bar_data[}\KeywordTok{which}\NormalTok{(flow_bar_data}\OperatorTok{$}\NormalTok{tc }\OperatorTok{==}\StringTok{ 'Energy Transfer'}\NormalTok{),] }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 4
+## # Groups:   tc [1]
+##   tc      maj_eff_taxa               count perc_per_tc
+##   <fct>   <fct>                      <int>       <dbl>
+## 1 Tourism Beneficial                     5      0.0847
+## 2 Tourism Harmful                       32      0.542 
+## 3 Tourism Changed                        3      0.0508
+## 4 Tourism Mixed                          3      0.0508
+## 5 Tourism Not significant or unclear    16      0.271 
+## # A tibble: 5 x 4
+## # Groups:   tc [1]
+##   tc    maj_eff_taxa               count perc_per_tc
+##   <fct> <fct>                      <int>       <dbl>
+## 1 Trade Beneficial                     4      0.114 
+## 2 Trade Harmful                       19      0.543 
+## 3 Trade Changed                        3      0.0857
+## 4 Trade Mixed                          1      0.0286
+## 5 Trade Not significant or unclear     8      0.229 
+## # A tibble: 4 x 4
+## # Groups:   tc [1]
+##   tc                maj_eff_taxa               count perc_per_tc
+##   <fct>             <fct>                      <int>       <dbl>
+## 1 Species Dispersal Beneficial                     2      0.118 
+## 2 Species Dispersal Harmful                        8      0.471 
+## 3 Species Dispersal Changed                        1      0.0588
+## 4 Species Dispersal Not significant or unclear     6      0.353 
+## # A tibble: 4 x 4
+## # Groups:   tc [1]
+##   tc         maj_eff_taxa               count perc_per_tc
+##   <fct>      <fct>                      <int>       <dbl>
+## 1 Investment Beneficial                     2         0.2
+## 2 Investment Harmful                        3         0.3
+## 3 Investment Mixed                          3         0.3
+## 4 Investment Not significant or unclear     2         0.2
+## # A tibble: 5 x 4
+## # Groups:   tc [1]
+##   tc                 maj_eff_taxa               count perc_per_tc
+##   <fct>              <fct>                      <int>       <dbl>
+## 1 Knowledge Transfer Beneficial                     4      0.308 
+## 2 Knowledge Transfer Harmful                        3      0.231 
+## 3 Knowledge Transfer Changed                        1      0.0769
+## 4 Knowledge Transfer Mixed                          2      0.154 
+## 5 Knowledge Transfer Not significant or unclear     3      0.231 
+## # A tibble: 3 x 4
+## # Groups:   tc [1]
+##   tc             maj_eff_taxa count perc_per_tc
+##   <fct>          <fct>        <int>       <dbl>
+## 1 Water Transfer Harmful          1        0.25
+## 2 Water Transfer Changed          1        0.25
+## 3 Water Transfer Mixed            2        0.5 
+## # A tibble: 4 x 4
+## # Groups:   tc [1]
+##   tc              maj_eff_taxa               count perc_per_tc
+##   <fct>           <fct>                      <int>       <dbl>
+## 1 Energy Transfer Beneficial                     2       0.222
+## 2 Energy Transfer Harmful                        2       0.222
+## 3 Energy Transfer Changed                        3       0.333
+## 4 Energy Transfer Not significant or unclear     2       0.222
+\end{verbatim}
+
+\hypertarget{paragraph-5---percent-impact-by-region}{%
+\subsubsection{Paragraph 5 - Percent impact by
+region}\label{paragraph-5---percent-impact-by-region}}
+
+Frequency of Regions, tc repeated (USE ctr\_tc\_count for tc specific
+numbers)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(ctr_tc_raw}\OperatorTok{$}\NormalTok{bd_continents)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##        Europe          Asia South America North America       Oceania 
+##   0.222222222   0.202614379   0.196078431   0.169934641   0.117647059 
+##        Africa    Antarctica 
+##   0.084967320   0.006535948
+\end{verbatim}
+
+Impact percent for Regions, tc repeated (USE ctr\_tc\_count for tc
+specific numbers)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'Europe'}\NormalTok{),]}
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'Asia'}\NormalTok{),]}
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'South America'}\NormalTok{),]}
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'North America'}\NormalTok{),]}
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'Oceania'}\NormalTok{),]}
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'Africa'}\NormalTok{),]}
+\NormalTok{cont_impact[}\KeywordTok{which}\NormalTok{(cont_impact}\OperatorTok{$}\NormalTok{bd_continents }\OperatorTok{==}\StringTok{ 'Antarctica'}\NormalTok{),]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa               count perc_per_taxa
+##   <fct>         <fct>                      <int>         <dbl>
+## 1 Europe        Beneficial                     7        0.206 
+## 2 Europe        Harmful                       14        0.412 
+## 3 Europe        Changed                        2        0.0588
+## 4 Europe        Mixed                          4        0.118 
+## 5 Europe        Not significant or unclear     7        0.206 
+## # A tibble: 5 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa               count perc_per_taxa
+##   <fct>         <fct>                      <int>         <dbl>
+## 1 Asia          Beneficial                     2        0.0645
+## 2 Asia          Harmful                       17        0.548 
+## 3 Asia          Changed                        2        0.0645
+## 4 Asia          Mixed                          2        0.0645
+## 5 Asia          Not significant or unclear     8        0.258 
+## # A tibble: 5 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa               count perc_per_taxa
+##   <fct>         <fct>                      <int>         <dbl>
+## 1 South America Beneficial                     2        0.0667
+## 2 South America Harmful                       17        0.567 
+## 3 South America Changed                        5        0.167 
+## 4 South America Mixed                          2        0.0667
+## 5 South America Not significant or unclear     4        0.133 
+## # A tibble: 4 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa               count perc_per_taxa
+##   <fct>         <fct>                      <int>         <dbl>
+## 1 North America Beneficial                     3         0.115
+## 2 North America Harmful                        7         0.269
+## 3 North America Mixed                          3         0.115
+## 4 North America Not significant or unclear    13         0.5  
+## # A tibble: 4 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa               count perc_per_taxa
+##   <fct>         <fct>                      <int>         <dbl>
+## 1 Oceania       Beneficial                     2        0.111 
+## 2 Oceania       Harmful                       11        0.611 
+## 3 Oceania       Changed                        1        0.0556
+## 4 Oceania       Not significant or unclear     4        0.222 
+## # A tibble: 4 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa               count perc_per_taxa
+##   <fct>         <fct>                      <int>         <dbl>
+## 1 Africa        Beneficial                     3         0.231
+## 2 Africa        Harmful                        5         0.385
+## 3 Africa        Changed                        2         0.154
+## 4 Africa        Not significant or unclear     3         0.231
+## # A tibble: 1 x 4
+## # Groups:   bd_continents [1]
+##   bd_continents maj_eff_taxa count perc_per_taxa
+##   <fct>         <fct>        <int>         <dbl>
+## 1 Antarctica    Harmful          1             1
+\end{verbatim}
+
+\hypertarget{paragraph-6---search-result}{%
+\subsubsection{Paragraph 6 - Search
+result}\label{paragraph-6---search-result}}
+
+Number of articles from search
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(ab_all) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7306
+\end{verbatim}
+
+Number of articles in sample
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(s2) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 131
+\end{verbatim}
+
+\hypertarget{paragraph-7---flow-freq-in-sample}{%
+\subsubsection{Paragraph 7 - Flow freq in
+sample}\label{paragraph-7---flow-freq-in-sample}}
+
+Number of articles in sample
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(s2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 131
+\end{verbatim}
+
+Flow frequency
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tc.count}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              tc.list tc.count      perc
+## 6            Tourism       57 43.511450
+## 7              Trade       34 25.954198
+## 5  Species Dispersal       17 12.977099
+## 3 Knowledge Transfer       13  9.923664
+## 1    Energy Transfer        9  6.870229
+## 2         Investment        8  6.106870
+## 4  Migration (human)        4  3.053435
+## 9     Water Transfer        4  3.053435
+## 8     Waste Transfer        2  1.526718
+\end{verbatim}
+
+Percentage of multiple tc
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{multiple}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(s2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      TRUE 
+## 0.1221374
+\end{verbatim}
+
+\hypertarget{paragraph-8---habitat-and-taxa-freq-in-sample}{%
+\subsubsection{Paragraph 8 - Habitat and taxa freq in
+sample}\label{paragraph-8---habitat-and-taxa-freq-in-sample}}
+
+Habitat freq
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{prop.table}\NormalTok{(}\KeywordTok{table}\NormalTok{(s23_maj}\OperatorTok{$}\NormalTok{hab)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                 Freshwater          Freshwater;Marine 
+##                0.167938931                0.007633588 
+##                     Marine Not specified/Global study 
+##                0.190839695                0.015267176 
+##                Terrestrial     Terrestrial;Freshwater 
+##                0.572519084                0.030534351 
+##         Terrestrial;Marine 
+##                0.015267176
+\end{verbatim}
+
+Taxa freq
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{taxa.count}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       taxa.list taxa.count       perc
+## 5         Birds         37 28.2442748
+## 2        Plants         30 22.9007634
+## 7 Invertebrates         29 22.1374046
+## 1       Mammals         15 11.4503817
+## 6          Fish         15 11.4503817
+## 8      Multiple          5  3.8167939
+## 3      Reptiles          4  3.0534351
+## 4    Amphibians          1  0.7633588
+\end{verbatim}
+
+\hypertarget{paragraph-9---region-freq-in-sample}{%
+\subsubsection{Paragraph 9 - Region freq in
+sample}\label{paragraph-9---region-freq-in-sample}}
+
+Table of country freq
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ctr_bio}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 74 x 4
+##    biodiv_countries     n continent     ctr_name                      
+##    <chr>            <int> <chr>         <chr>                         
+##  1 BRA                 19 South America Brazil, Federative Republic of
+##  2 USA                 13 North America United States of America      
+##  3 CHN                 10 Asia          China, People's Republic of   
+##  4 AUS                  8 Oceania       Australia, Commonwealth of    
+##  5 ESP                  8 Europe        Spain, Kingdom of             
+##  6 ITA                  7 Europe        Italy, Italian Republic       
+##  7 FRA                  6 Europe        France, French Republic       
+##  8 DEU                  5 Europe        Germany, Federal Republic of  
+##  9 IND                  5 Asia          India, Republic of            
+## 10 ZAF                  5 Africa        South Africa, Republic of     
+## # ... with 64 more rows
+\end{verbatim}
+
+Table of continent freq, n=131
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cont.count }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       cont.list cont.count       perc
+## 4        Europe         30 22.9007634
+## 2 South America         26 19.8473282
+## 6          Asia         25 19.0839695
+## 1 North America         22 16.7938931
+## 5       Oceania         17 12.9770992
+## 3        Africa         10  7.6335878
+## 7    Antarctica          1  0.7633588
+\end{verbatim}
+
+\end{document}

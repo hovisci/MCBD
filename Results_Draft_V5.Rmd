@@ -389,7 +389,7 @@ taxa.count
 
 mult <- as.data.frame((table(taxEff_maj$paper_id)))
 mult <- mult[which(mult$Freq != 1),]
-num.mult <- sum(nrow(mult),(taxa.count[2,8])) # WHATEVER ITS 10
+num.mult <- sum(nrow(mult),(taxa.count[2,8])) 
 
 # Others? Not a big deal since taxa is clarified in survey 3.Not a big deal.
 
@@ -434,7 +434,7 @@ tc.count
 multiple <- str_count(tc, ';')
 multiple <- multiple != 0
 multiple <- table(multiple) ["TRUE"]
-multiple/131
+multiple/nrow(s2)
 
 ```
 
@@ -483,6 +483,67 @@ cont.count <- cont.count[order(-cont.count$perc),]
 cont.count
 
 ```
+Biodiversity country map
+
+```{r}
+shp <- ne_countries(scale = 50, returnclass = 'sf') %>% #st_as_sf() %>%
+  select(name, iso_a3) %>% ## , economy, income_grp
+  # filter(name != 'Antarctica') %>%
+  # filter(name == 'France') %>%
+  dplyr::mutate(
+    iso_a3 = if_else(name == 'France', 'FRA', iso_a3),
+    iso_a3 = if_else(name == 'Norway', 'NOR', iso_a3))
+# plot(shp[1])
+
+shp %>% filter(name == 'Norway')
+
+### - Read in Data
+
+df99 <- s23_maj
+
+### - biodiv_countries
+ctr_bio <- df99 %>%
+  select(paper_id, biodiv_countries) %>%
+  data.frame(., do.call(rbind, str_split(.$biodiv_countries,';'))) %>%
+  gather(key = 'key', value = biodiv_countries, 3:ncol(.)) %>%
+  dplyr::mutate(biodiv_countries = trimws(biodiv_countries)) %>%
+  dplyr::distinct(paper_id, biodiv_countries, .keep_all = T) %>%
+  filter(biodiv_countries != '') %>%
+  arrange(paper_id) %>%
+  group_by(biodiv_countries) %>%
+  tally()%>%
+  arrange(desc(n)) #%>%
+# str(ctr_bio)
+
+table(ctr_bio$biodiv_countries)
+
+# install.packages("jsonlite", repos="https://cran.rstudio.com/")
+library("jsonlite")
+json_file <- 'https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/datapackage.json'
+json_data <- fromJSON(paste(readLines(json_file), collapse=""))
+# get list of all resources:
+print(json_data$resources$name)
+
+# print all tabular data(if exists any) to 'data'
+for(i in 1:length(json_data$resources$datahub$type)){
+  if(json_data$resources$datahub$type[i]=='derived/csv'){
+    path_to_file = json_data$resources$path[i]
+    data <- read.csv(url(path_to_file))
+    print(data)
+  }
+}
+
+cont <- cbind(data$Continent_Name,data$Country_Name,data$Three_Letter_Country_Code)
+cont <- as.data.frame(cont)
+
+# Match continent and country name to biodiversity countries
+names(cont)[1:3] <- c("continent","ctr_name","ctr_code")
+
+ctr_bio$continent <- cont$continent[match(ctr_bio$biodiv_countries,cont$ctr_code)]  # add continent name
+ctr_bio$ctr_name <- cont$ctr_name[match(ctr_bio$biodiv_countries,cont$ctr_code)]  # add country name
+
+
+```
 
 # 5. Telecoupling Impact by Taxa 
 
@@ -511,7 +572,7 @@ taxa_tab
   taxa.sorted <- c(taxa.sorted,taxa.sorted[6])
   taxa.sorted <-taxa.sorted[-6]
   a$taxa <- factor(a$taxa,taxa.sorted)
-  
+  taxa.bar.data <- a
 # Stack plot (count)
   taxa_bar <- ggplot(a, aes(fill=maj_eff_taxa, y=count, x=taxa)) + 
                 geom_bar(position="stack", stat="identity") +
@@ -582,6 +643,7 @@ tc_tab
   q <- q[order(-(q))]
   tc.sorted <- names(q);tc.sorted
   a$tc <- factor(a$tc,tc.sorted)
+  flow_bar_data <- a
 # save as csv
 #  write.csv(a, paste0(tab.dir,'survey3_summary_effects_by_flow.csv'),row.names = TRUE)
   
@@ -602,7 +664,7 @@ tc_tab
 
 ```{r}
 # Stack plot (percent)
-  quick_plot <- ggplot(a, aes(fill=maj_eff, y=perc_per_tc, x=tc)) + 
+  quick_plot <- ggplot(a, aes(fill=maj_eff_taxa, y=perc_per_tc, x=tc)) + 
                 geom_bar(position="stack", stat="identity") +
                 theme_classic() +
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -612,7 +674,7 @@ tc_tab
 quick_plot
 ```
 
-Side by side♣ plot of taxa barchart and flow barchart
+Side by side plot of taxa barchart and flow barchart
 
 ```{r}
 
@@ -754,7 +816,6 @@ Convert to long format, where metric is indicated.
   q <- q[order(-(q))]
   tc.sorted <- names(q)
   metric_flow$tc <- factor(metric_flow$tc,tc.sorted)
-  
 ```
 
 ## Flow & Taxa data
@@ -925,31 +986,6 @@ k<-ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
 ```
 
 
-
-## Country/Region Entry Effects  
-
-```{r}
-# Get continents, tc_cat, and maj_eff
-ctr_tc_raw <- subset(taxEff_maj, select = c('paper_id', 'bd_continents', 'tc', 'maj_eff_taxa'))
-
-```
-
-
-```{r}
-# sig_effects level change
-  ctr_tc_raw$maj_eff_taxa <- factor( ctr_tc_raw$maj_eff_taxa,
-                             c( "Beneficial","Harmful","Changed","Mixed","Not significant or unclear"))
-# telecoupling level change
-  ctr_tc_raw$tc <- factor(ctr_tc_raw$tc,
-                                c("Energy Transfer","Investment","Knowledge Transfer",
-                                 "Migration (human)","Migration (non-human)",
-                                 "Species Dispersal","Tourism","Trade","Waste Transfer","Water Transfer"
-                                ))
-  
-  
-```
-
-
 ## Country/Region Entry Effects
 
 ```{r}
@@ -987,7 +1023,15 @@ ctr_tc_count <- ddply(ctr_tc_raw,
                        summarize,
                       # total count of entries     
                         count=length(maj_eff_taxa))
-
+cont_impact <- ddply(ctr_tc_raw,
+                       .(bd_continents, maj_eff_taxa),
+                       summarize,
+                      # total count of entries     
+                        count=length(maj_eff_taxa)) %>%
+                       group_by(bd_continents) %>%
+                       nest() %>% 
+                        mutate(perc_per_taxa=map(data, function(x) x$count/sum(x$count))) %>% 
+                          unnest(cols = c(data, perc_per_taxa))
 
 ctr_tc_fig <- ggplot(ctr_tc_count) +
                     aes(x='', y = count, fill = maj_eff_taxa) +
@@ -1157,5 +1201,165 @@ metric_freq$perc <- (metric_freq$Freq/total_met)*100
 table(s23$biodiv_cat_1sp)
 abun <- s23[which(s23$biodiv_cat_1sp == 'Abundance/Density (number of individuals, individuals/unit area, biomass)'),]
 occ <- s23[which(s23$biodiv_cat_1sp == 'Occurrence (presence, range, persistence, etc., NOT detection)'),]
+```
+
+
+\newpage
+# Number check for Manuscript
+
+## Abstract
+
+### Percentage of impacts
+
+Numbers with repeating tc, n=153
+```{r message = FALSE, warning=FALSE}
+nrow(taxEff_maj_rep)
+table(taxEff_maj_rep$maj_eff_taxa)
+prop.table(table(taxEff_maj_rep$maj_eff_taxa))
+```
+
+Numbers with no repeating tc, n=136 USED FOR MS
+```{r message = FALSE, warning=FALSE}
+nrow(taxEff_maj)
+table(taxEff_maj$maj_eff_taxa)
+prop.table(table(taxEff_maj$maj_eff_tax))
+```
+
+## Results
+
+### Paragraph 1 - Impacts on Biodiversity, Metric-Level
+Number of entries/metrics, n=767
+```{r message = FALSE, warning=FALSE}
+nrow(s23)
+```
+
+Percentage impact type among metrics/entries
+```{r message = FALSE, warning=FALSE}
+table(s23$sig_effect)
+prop.table(table(s23$sig_effect)) 
+```
+
+Freq of metric type
+```{r message = FALSE, warning=FALSE, size='tiny'}
+metric_freq 
+```
+
+### Paragraph 2 - Multiple bd metrics
+Percent of articles reporting mult bd metrics
+```{r message = FALSE, warning=FALSE}
+num.metric <- count(survey3$paper_id)
+mult.metric <- num.metric[num.metric$freq > 1,]
+nrow(mult.metric)/131
+```
+
+Range of metric number
+```{r message = FALSE, warning=FALSE}
+range(num.metric$freq)
+```
+
+### Paragraph 3 - Impacts on biodiversity, Study-Level
+
+Percent impact of study level vs metric level
+
+Table of study level
+```{r message = FALSE, warning=FALSE}
+prop.table(table(taxEff_maj$maj_eff_tax)) 
+```
+
+Table of metric level
+```{r message = FALSE, warning=FALSE}
+prop.table(table(s23$sig_effect)) 
+```
+
+Percent impact at study level for taxa
+```{r message = FALSE, warning=FALSE}
+
+taxa.bar.data[which(taxa.bar.data$taxa == 'Mammals'),] 
+taxa.bar.data[which(taxa.bar.data$taxa == 'Birds'),] 
+taxa.bar.data[which(taxa.bar.data$taxa == 'Plants/Trees/Shrubs'),]
+```
+
+### Paragraph 4 - Percent impact at study level for flow
+
+Impact percentages by flow
+```{r message = FALSE, warning=FALSE}
+flow_bar_data[which(flow_bar_data$tc == 'Tourism'),] 
+flow_bar_data[which(flow_bar_data$tc == 'Trade'),] 
+flow_bar_data[which(flow_bar_data$tc == 'Species Dispersal'),] 
+flow_bar_data[which(flow_bar_data$tc == 'Investment'),] 
+flow_bar_data[which(flow_bar_data$tc == 'Knowledge Transfer'),] 
+flow_bar_data[which(flow_bar_data$tc == 'Water Transfer'),] 
+flow_bar_data[which(flow_bar_data$tc == 'Energy Transfer'),] 
+```
+
+### Paragraph 5 - Percent impact by region 
+
+Frequency of Regions, tc repeated (USE ctr_tc_count for tc specific numbers)
+```{r message = FALSE, warning=FALSE}
+prop.table(table(ctr_tc_raw$bd_continents)) 
+```
+
+Impact percent for Regions, tc repeated (USE ctr_tc_count for tc specific numbers)
+```{r message = FALSE, warning=FALSE}
+cont_impact[which(cont_impact$bd_continents == 'Europe'),]
+cont_impact[which(cont_impact$bd_continents == 'Asia'),]
+cont_impact[which(cont_impact$bd_continents == 'South America'),]
+cont_impact[which(cont_impact$bd_continents == 'North America'),]
+cont_impact[which(cont_impact$bd_continents == 'Oceania'),]
+cont_impact[which(cont_impact$bd_continents == 'Africa'),]
+cont_impact[which(cont_impact$bd_continents == 'Antarctica'),]
+```
+
+### Paragraph 6 - Search result
+
+Number of articles from search
+```{r message = FALSE, warning=FALSE}
+nrow(ab_all) 
+```
+
+Number of articles in sample
+```{r message = FALSE, warning=FALSE}
+nrow(s2) 
+```
+
+### Paragraph 7 - Flow freq in sample
+
+Number of articles in sample
+```{r message = FALSE, warning=FALSE}
+nrow(s2)
+```
+
+Flow frequency
+```{r message = FALSE, warning=FALSE}
+tc.count
+```
+
+Percentage of multiple tc
+```{r message = FALSE, warning=FALSE}
+multiple/nrow(s2)
+```
+
+### Paragraph 8 - Habitat and taxa freq in sample
+
+Habitat freq
+```{r message = FALSE, warning=FALSE}
+prop.table(table(s23_maj$hab)) 
+```
+
+Taxa freq
+```{r message = FALSE, warning=FALSE}
+taxa.count
+```
+
+### Paragraph 9 - Region freq in sample
+
+Table of country freq
+```{r message = FALSE, warning=FALSE}
+ctr_bio
+```
+
+Table of continent freq, n=131
+```{r message = FALSE, warning=FALSE}
+cont.count 
 ```
 
