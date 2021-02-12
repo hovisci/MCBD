@@ -90,14 +90,16 @@ getwd()
  tab.check.dir <- paste0(dir,'/issues/',date(Sys.Date()),'/')
 
 # custom colors
-# Color blind     gray        orange    l.blue    green       yellow      d.blue    orange     pink                   
+# Color blind     gray       l.orange   l.blue    green      yellow      d.blue    d.orange     pink                   
  cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
  
   paper_col <- c('#DDCC77','#009988','#882255')
-  effect_cols <- c('#9A709E','#999999','#A50026','#FDB366','#6EA6CD')
+  effect_cols <- c('#9A709E','#56B4E9','#A50026','#FDB366','#6EA6CD')
   
-  sigeff_col <- c("#009E73", "#D55E00","#E69F00", "#999999")
-  majeff_col <- c("#009E73","#D55E00","#E69F00","#56B4E9","#999999")
+  sigeff_col <- c("#009E73", "#D55E00","#E69F00", "#56B4E9")
+  majeff_col <- c("#009E73","#D55E00","#E69F00","#0072B2","#56B4E9")
+  
+  heat_col <- c("#f7f7f7","#d9d9d9","#bdbdbd","#969696","#737373","#525252","#252525")
 
 ## customized theme (I just copied this from app3) ##
 
@@ -946,8 +948,7 @@ heatmap_telemetric <- ggplot(filled_nr_metric_tele,
                       aes(x=telecoupling, y=taxa, fill=count_factor)) +
                       geom_tile(color = "white", size=0.25) +
                       geom_text(aes(label = count )) +
-                      scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
-                                               "#4E91CC","#3F76A6","#274866"))+
+                      scale_fill_manual(values=heat_col)+
                       labs(x="",y="")+
                       scale_y_discrete(expand=c(0,0))+
                       theme_grey(base_size=8)+
@@ -982,7 +983,10 @@ Side by side plot
 # grid.arrange(metric_flow_fig, heatmap_telemetric, ncol=2)
 k<-ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
 #This actually save the plot in a image
-    ggsave(file="figure2.svg", plot=k, width=10, height=8)
+    ggsave(file="figure2_Pies.svg", plot=metric_flow_fig, width=10, height=8)
+    ggsave(file="figure2_Heat.svg", plot=heatmap_telemetric, width=10, height=8)
+    ggsave(file="figure2_Full.svg", plot=k, width=10, height=8)
+
 ```
 
 
@@ -1073,8 +1077,8 @@ ctr_tc_fig <- ggplot(ctr_tc_count) +
                         strip.text.y.left = element_text(size=10,
                                           angle=0, vjust=0, hjust = 0),
                         strip.background = element_rect(fill='white'),
-                        panel.spacing = unit(0.1, 'lines')
-                        ) +
+                        panel.spacing = unit(0.1, 'lines'),
+                        aspect.ratio = 1) +
                     # labels
                       ylab('') + xlab('')
 
@@ -1131,8 +1135,7 @@ heatmap_tele_ctr <- ggplot(filled_num_ctr_tele,
                       aes(x=telecoupling, y=continent, fill=count_factor)) +
                       geom_tile(color = "white", size=0.25) +
                       geom_text(aes(label = count )) +
-                      scale_fill_manual(values=c("grey90","#BCDDF5","#8FCBF5","#4EA6E6",
-                                               "#4E91CC","#3F76A6","#274866"))+
+                      scale_fill_manual(values=heat_col)+
                       labs(x="",y="")+
                       scale_y_discrete(expand=c(0,0))+
                       theme_grey(base_size=8)+
@@ -1144,11 +1147,11 @@ heatmap_tele_ctr <- ggplot(filled_num_ctr_tele,
                       plot.title = element_blank(),
                       axis.title= element_blank(),
                       axis.ticks = element_blank(),
-                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,
-                                                     hjust = 0),
+                      axis.text.x.top = element_text(size=10, angle = 90, vjust=0,hjust = 0),
                       axis.text.y.left = element_blank(),
                       strip.background = element_rect(fill="white"),
-                      panel.spacing = unit(0.1, "lines")) +
+                      panel.spacing = unit(0.1, "lines"),
+                      aspect.ratio = 1) +
                       scale_x_discrete(position = "top") +
                       labs(fill = "number of entries")
 
@@ -1158,16 +1161,11 @@ heatmap_tele_ctr
 ```{r}
 k<-ggarrange(ctr_tc_fig, heatmap_tele_ctr, ncol=2)
 #This actually save the plot in a image
-    ggsave(file="figure4.svg", plot=k, width=10, height=8)
-```
+    ggsave(file="figure4_Pies.svg", plot=ctr_tc_fig, width=10, height=8)
+    ggsave(file="figure4_Heat.svg", plot=heatmap_tele_ctr, width=10, height=8)
+    ggsave(file="figure4_Full.svg", plot=k, width=10, height=8)
 
-Europe (30): 31% beneficial,25% harmful,06% changed,19% mixed,19% Not sig
-North America (22): 07% beneficial,43% harmful,00% changed,14% mixed,36% Not sig
-Asia (25): 17% beneficial,42% harmful,17% changed,08% mixed,17% Not sig
-South America (26): 17% beneficial,25% harmful,25% changed,17% mixed,17% Not sig
-Africa(10): 22% beneficial,33% harmful,22% changed,00% mixed,22% Not sig
-Oceania (11):13% beneficial,50% harmful,13% changed,00% mixed,25% Not sig
-Antarctica(1): 0% beneficial,100% harmful,00% changed,00% mixed,00% Not sig
+```
 
 
 Metric types
