@@ -440,6 +440,40 @@ multiple/nrow(s2)
 
 ```
 
+Habitat Freq (Supp. Figure)
+
+```{r}
+
+
+# get summary
+  a <- ddply(s23_maj, .(hab, maj_eff), summarize,
+          # total count of entries     
+          count=length(hab)) %>%
+          # percents of effects within totals per hab
+          group_by(hab) %>%
+            nest() %>% 
+             mutate(perc_per_hab=map(data, function(x) x$count/sum(x$count))) %>% 
+              unnest(cols = c(data, perc_per_hab))
+  
+
+a$hab <- factor(a$hab,c( "Terrestrial","Marine", "Freshwater",
+                         "Terrestrial;Freshwater","Terrestrial;Marine","Freshwater;Marine",
+                         "Not specified/Global study"
+                         ))
+
+
+# Stack plot (count)
+  quick_plot <- ggplot(a, aes(fill=maj_eff, y=count, x=hab)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=majeff_col) +
+                xlab("")
+
+# view
+  quick_plot
+```
+
 Number of metrics reported by each paper
 
 ```{r}
@@ -470,7 +504,7 @@ table(cont)
 desired_length <- 7 
 empty_list <- vector(mode = 'list', length = desired_length)
 
-cont.list <-c("North America","South America","Africa","Europe","Oceania","Asia","Antarctica")
+cont.list <-c("North America","South America","Africa","Europe","Oceania","Asia","Antarctica","Global")
 cont.count <- empty_list
 
 for (i in 1:length(cont.list)) {
@@ -544,6 +578,8 @@ names(cont)[1:3] <- c("continent","ctr_name","ctr_code")
 ctr_bio$continent <- cont$continent[match(ctr_bio$biodiv_countries,cont$ctr_code)]  # add continent name
 ctr_bio$ctr_name <- cont$ctr_name[match(ctr_bio$biodiv_countries,cont$ctr_code)]  # add country name
 
+ctr_bio$continent[which(ctr_bio$biodiv_countries == 'GLO')]<- 'Global'
+ctr_bio$ctr_name[which(ctr_bio$biodiv_countries == 'GLO')]<- 'Global'
 
 ```
 
@@ -656,7 +692,7 @@ tc_tab
                 theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
                 scale_fill_manual(values=majeff_col) +
                 xlab("") +
-                ylim(0,60)
+                ylim(0,65)
 
 
 
@@ -701,6 +737,7 @@ mylegend<-g_legend(taxa_bar)
 
 merge_bar <- grid.arrange(arrangeGrob(taxa_bar2,flow_bar2,nrow=1),mylegend, nrow=2,heights=c(10, 1))
 
+ggsave(file="figure3_Full.svg", plot=merge_bar, width=10, height=8)
 
 #merge_bar <- ggarrange(taxa_bar2, flow_bar2, mylegend,ncol=2, nrow=2,labels = c('a', 'b'))
 #merge_bar
@@ -992,9 +1029,19 @@ k<-ggarrange(metric_flow_fig, heatmap_telemetric, ncol=2)
 
 ## Country/Region Entry Effects
 
+NOTE: Needed to repeat one of the rows because one study contained two continents, this makes the n go from 153 to 154
+
 ```{r}
 # Get continents, tc_cat, and maj_eff
 ctr_tc_raw <- subset(taxEff_maj_rep, select = c('paper_id', 'bd_continents', 'tc', 'maj_eff_taxa'))
+ 
+print(paste('Original number of rows:',nrow(ctr_tc_raw)))
+
+# split multiple flows listed in a row into other new rows
+  ctr_tc_raw <- separate_rows(ctr_tc_raw, bd_continents, sep=";", convert = TRUE)
+
+# show new length of rows
+  print(paste('Number of rows after separating multiple flows per paper:',nrow(ctr_tc_raw)))
 
 ```
 
@@ -1014,7 +1061,8 @@ ctr_tc_raw <- subset(taxEff_maj_rep, select = c('paper_id', 'bd_continents', 'tc
   q <- table(ctr_tc_raw$bd_continents)
   q <- q[order(-(q))]
   cont.sorted <- names(q)
-  ctr_tc_raw$bd_continents <- factor(  ctr_tc_raw$bd_continents,cont.sorted)
+  cont.sorted <- c(cont.sorted[-7],cont.sorted[7])
+  ctr_tc_raw$bd_continents <- factor(ctr_tc_raw$bd_continents,cont.sorted)
 
 
 ```
@@ -1158,6 +1206,39 @@ heatmap_tele_ctr <- ggplot(filled_num_ctr_tele,
 heatmap_tele_ctr
 ```
 
+Continent color scheme
+
+```{r}
+# get summary
+
+a<-s23_maj$bd_continents
+table(a)
+length(a)
+a <- a[-which(a=='Europe;Africa')]
+a<-c(a,'Europe','Africa')
+length(a)
+c<-as.data.frame(table(a));c
+
+c$a <- factor(c$a,c('Europe', 'South America', 'Asia', 'North America', 'Oceania', 'Africa', 'Antarctica', 'Global'))
+
+c$Freq_factor <- cut(c$Freq,breaks = c(0,5,10,15,20,25,30,max(c$Freqt,na.rm=T)),
+                                          labels=c("0","1-5","5-10","10-15","15-20","20-25","25-30"))
+cont_col <- c(heat_col[2],heat_col[4],heat_col[6], heat_col[7])
+
+c$Freq<-as.numeric(c$Freq)
+  cont.color <- ggplot(c, aes(y=Freq, x=a, fill=Freq_factor)) + 
+                geom_bar(position="stack", stat="identity") +
+                theme_classic() +
+                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                scale_fill_manual(values=cont_col)+
+                xlab("") 
+
+cont.color
+
+    ggsave(file="cont_colors.svg", plot=cont.color, width=10, height=8)
+
+```
+
 ```{r}
 k<-ggarrange(ctr_tc_fig, heatmap_tele_ctr, ncol=2)
 #This actually save the plot in a image
@@ -1275,6 +1356,12 @@ Percent impact at study level for taxa
 taxa.bar.data[which(taxa.bar.data$taxa == 'Mammals'),] 
 taxa.bar.data[which(taxa.bar.data$taxa == 'Birds'),] 
 taxa.bar.data[which(taxa.bar.data$taxa == 'Plants/Trees/Shrubs'),]
+taxa.bar.data[which(taxa.bar.data$taxa == 'Fish'),]
+taxa.bar.data[which(taxa.bar.data$taxa == 'Invertebrates'),]
+taxa.bar.data[which(taxa.bar.data$taxa == 'Reptiles'),]
+taxa.bar.data[which(taxa.bar.data$taxa == 'Amphibians'),]
+taxa.bar.data[which(taxa.bar.data$taxa == 'Multiple'),]
+
 ```
 
 ### Paragraph 4 - Percent impact at study level for flow
@@ -1306,6 +1393,8 @@ cont_impact[which(cont_impact$bd_continents == 'North America'),]
 cont_impact[which(cont_impact$bd_continents == 'Oceania'),]
 cont_impact[which(cont_impact$bd_continents == 'Africa'),]
 cont_impact[which(cont_impact$bd_continents == 'Antarctica'),]
+cont_impact[which(cont_impact$bd_continents == 'Global'),]
+
 ```
 
 ### Paragraph 6 - Search result

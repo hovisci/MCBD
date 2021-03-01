@@ -132,6 +132,64 @@ s23$tc[which(s23$paper_id == 3081 & s23$entry_id == 2)] <- 'Tourism'            
   
 ```
 
+Final Sample Check Fixes Needed (16 Feb 2021-CLH)
+
+```{r}
+s23$bd_continents[which(s23$paper_id == 1349)]
+
+#1349 - region should be global
+s23$biodiv_countries[which(s23$paper_id == 1349)] <- 'GLO'  
+s23$bd_continents[which(s23$paper_id == 1349)] <- 'Global'
+
+#1821 - region should be global
+s23$biodiv_countries[which(s23$paper_id == 1821)] <- 'GLO'  
+s23$bd_continents[which(s23$paper_id == 1821)] <- 'Global'
+
+
+#2222 - region should be global
+s23$biodiv_countries[which(s23$paper_id == 2222)] <- 'GLO'  
+s23$bd_continents[which(s23$paper_id == 2222)] <- 'Global'
+
+#227 - region should be global
+s23$biodiv_countries[which(s23$paper_id == 227)] <- 'GLO'  
+s23$bd_continents[which(s23$paper_id == 227)] <- 'Global'
+
+#292 - taxa should be invertebrates, also need to delete one of the metrics
+s23$taxa[which(s23$paper_id == 292)] <- 'Invertebrates'
+s23<-s23[-which(s23$paper_id == 292 & s23$entry_id == 3),] #remove incorrect metric
+s23$entry_id[which(s23$paper_id == 292 & s23$entry_id == 4)] <- 3  # rename metric 4 to metric 3
+
+#3668 - add Algeria, change taxa to reptiles
+s23$taxa[which(s23$paper_id == 3668)] <- 'Reptiles'
+s23$biodiv_countries[which(s23$paper_id == 3668)] <- 'FRA;ESP;DZA'
+s23$bd_continents[which(s23$paper_id == 3668)] <- 'Europe;Africa'
+
+#4209 - region should be antarctica
+s23$biodiv_countries[which(s23$paper_id == 4209)] <- 'ATA'  
+s23$bd_continents[which(s23$paper_id == 4209)] <- 'Antarctica'
+
+#471 - tc should be tourism
+s23$tc[which(s23$paper_id == 471)] <- 'Tourism'  
+
+#523 - region should be global
+s23$biodiv_countries[which(s23$paper_id == 523)] <- 'GLO'  
+s23$bd_continents[which(s23$paper_id == 523)] <- 'Global'
+
+#6195 - tc should be Trade
+s23$tc[which(s23$paper_id == 6195)] <- 'Trade'  
+
+#6820 - country should be St. Lucia (LCA)
+s23$biodiv_countries[which(s23$paper_id == 6820)] <- 'LCA'  
+
+#80
+s23$tc[which(s23$paper_id == 80)] <- 'Tourism'  
+
+#813
+s23$taxa[which(s23$paper_id == 813)] <- 'Invertebrates'
+
+ 
+```
+
 # 6. Classify Impact and Significance Category
 
 To simplify our results, we opted classify impacts into 4 categories:  Positive, Negative, Comp. Change, No relation or unclear.
@@ -348,6 +406,8 @@ taxID$maj_eff_taxa <- maj_effect3$V2[match(taxID$tax_ID, maj_effect3$V1)]
 
 
 ```
+
+
 
 # 7. Export table
 
